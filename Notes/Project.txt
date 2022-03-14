@@ -1,0 +1,62 @@
+/// <summary> 
+/// The game model (No UI component). Manipulates our collection of DotLines. The class lets us manage the lines using 
+/// square ids and sides instead of dot numbers and segment ids (It manipulates our DotLine class for us). 
+/// The top left square has id=0. The bottom right square has id=squareCount-1. Each square has four 
+/// sides; Top, Right, Bottom, and Left. If the square is complete it has an owner of Player1 or Player2. 
+/// All horizontal lines are numbered sequentially from the top left to the bottom right. The top segment 
+/// of square zero is numbered zero, the top segment of square one is one, the bottom segment of square 
+/// squareCount-1 is numbered (squareCount-1)+gameSize; Vertical lines are then numbered sequentially starting 
+/// with the left side of square zero (The line id is squareCount+gameSize). However, vertical lines are not 
+/// numbered sequentially all the 
+/// way to the last column. Instead, the numbering ends at the right side of the square just before the 
+/// last column. The vertical lines composing the outer right edge of the dot game board are not assigned numbers 
+/// until all the other vertical lines are assigned. Then the right edge is numbered from top to bottom. So, for a 
+/// four by four game board, the right sides of squares 3,7,11,15 are numbered 36,37,38,39. The left sides of these 
+/// squares are numbered 23,27,31,35. 
+/// x----x----x----x----x 
+/// |  0 |  1 |  2 |  3 |    For 4x4 game board, gameSize is 4. squareCount is 16. Squares are numbered 0-15. 
+/// x----x----x----x----x    Horizontal lines on top edge of game board are numbered 0-3. Horizontal lines on 
+/// |  4 |  5 |  6 |  7 |    bottom edge of game board are numbered 16-19. Vertical lines on the left edge are 
+/// x----x----x----x----x    numbered 20,24,28,32. Vertical lines on the right edge of the game board are numbered 
+/// |  8 |  9 | 10 | 11 |    36,37,38,39. Vertical lines on the first row of the gameboard are numbered 20,21,22,23,36. 
+/// x----x----x----x----x    The second row of vertical lines are numbered 24,25,26,27,37. The numbering scheme makes 
+/// | 12 | 13 | 14 | 15 |    formulas for computing related squares and lines easier. The formulas are in class DotLine. 
+/// x----x----x----x----x 
+/// </summary>
+
+     /// <summary>
+    /// Obtain the line array index for the specified square side.
+    /// </summary>
+    /// <param name="square"></param>
+    /// <param name="side"></param>
+    /// <returns></returns>
+    private int LineIndex(int square, Side side)
+    {
+        int index = 0;
+        switch (side)
+        {
+            case Side.Top:
+                index = square;
+                break;
+            case Side.Right:
+                // There are two formulas depending on whether the square is on the right edge of the board or not.
+                if ((square + 1) % this.squaresPerSide == 0)
+                {
+                    index = this.squareCount + ((square + 1) / this.squaresPerSide) + (this.squaresPerSide * (this.squaresPerSide + 1)) - 1;
+                }
+                else
+                {
+                    index = square + 1 + this.squaresPerSide * (this.squaresPerSide + 1);
+                }
+
+                break;
+            case Side.Bottom:
+                index = square + this.squaresPerSide;
+                break;
+            case Side.Left:
+                index = square + (this.squaresPerSide * (this.squaresPerSide + 1));
+                break;
+        }
+
+        return index;
+    }

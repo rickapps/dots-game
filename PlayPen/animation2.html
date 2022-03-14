@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+@keyframes fadein_left {
+from {
+	left: 0;
+}
+to {
+	left: 40%;
+}
+}
+
+#start:before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0%;
+opacity: 0.7;
+height: 25px;
+background: #fff;
+animation: fadein_left 5s;
+}
+</style>
+</head>
+<body>
+
+<div id="start">
+<b>geeksforgeeks geeksforgeeks geeksforgeeks
+	geeksforgeeks geeksforgeeks
+geeksforgeeks</b>
+</div>
+
+</body>
+</html>

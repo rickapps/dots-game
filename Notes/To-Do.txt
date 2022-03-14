@@ -1,0 +1,6 @@
+1) Create array using divs. Boxes should not rearrange when screen is resized. Be nice if Boxes
+would resize with screen size. 
+2) Use flex to create the array dynamically.
+3) Use CSS to change the style of the divs.
+4) Use transforms and keyframes to animate the grid.
+
