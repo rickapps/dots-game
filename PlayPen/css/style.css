@@ -3,18 +3,41 @@
     margin: 0 auto;
     background-color: aqua;
 }
-.container {
+#content {
+  /* Contains the panel and the gameboard */
+  background-color: rebeccapurple;
   display: flex;
-  flex-flow: row wrap;
+  flex-grow: 1;
 }
 #gameboard {
     order: 2;
     flex-grow: 1;
     background-color: blue;
 }
-#back {
+#square {
+  width: 350px;
+  height: 350px;
   background-color: wheat;
 }
+#panel {
+    order: 1;
+    width: 300px;
+    background-color: blueviolet;
+}
+#footer {
+    background-color: red;
+}
+.container {
+  display: flex;
+  flex-flow: row wrap;
+}
+.dot {
+  background-color: lightblue;
+  height: 20%;
+  width: 20%;
+  border-radius: 50%;
+}
+
 .square {
   width: 100%;
   height: 0;
@@ -25,19 +48,5 @@
   position: absolute;
   top: 0;
   left: 0;
-}
-#panel {
-    order: 1;
-    width: 300px;
-    background-color: blueviolet;
-}
-#footer {
-    background-color: red;
-}
-.dot {
-  background-color: lightblue;
-  height: 20%;
-  width: 20%;
-  border-radius: 50%;
 }
 

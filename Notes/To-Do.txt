@@ -4,3 +4,10 @@ would resize with screen size.
 3) Use CSS to change the style of the divs.
 4) Use transforms and keyframes to animate the grid.
 
+New approach:
+Make the game a fixed size. Use transforms to grow and shrink game board 
+as needed.
+
+Typical resolution on mobile phone is 360 X 740 but there is lots of variation.
+Typical resolution for tablet is 768 X 1024 
+Desktop might be 1920 X 1080
