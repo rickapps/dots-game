@@ -5,26 +5,22 @@
 }
 #content {
   /* Contains the panel and the gameboard */
-  background-color: rebeccapurple;
-  display: flex;
-  flex-grow: 1;
+  background-color: yellow;
+  width: 70%;
+  float: right;
+}
+#panel {
+  float: left;
+  width: 30%;
+  background-color: blueviolet;
 }
 #gameboard {
-    order: 2;
-    flex-grow: 1;
-    background-color: blue;
-}
-#square {
   width: 350px;
   height: 350px;
   background-color: wheat;
 }
-#panel {
-    order: 1;
-    width: 300px;
-    background-color: blueviolet;
-}
 #footer {
+    clear: both;
     background-color: red;
 }
 .container {
@@ -38,15 +34,15 @@
   border-radius: 50%;
 }
 
-.square {
-  width: 100%;
-  height: 0;
-  padding-top: 100%;
-  position: relative;
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  #panel {
+    width: 100%;
+  }
+  #content {
+    width: 100%;
+  }
 }
-.sqcontent {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
+
+/* Stuff for slider controls */
 
