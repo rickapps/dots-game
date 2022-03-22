@@ -7,7 +7,28 @@ would resize with screen size.
 New approach:
 Make the game a fixed size. Use transforms to grow and shrink game board 
 as needed.
+Second Try - Added a slider and use javascript to change height and width of div square.
+The dots in the square resize because diameter is set to a percent of square width. Problem -
+the percentage needs to change depending on the number of dots in the square.
+We will set three game sizes: easy 5x5, medium 8x8, expert 10x10.
+Easy: 20%, Medium: 12.5%, Expert: 10%
 
 Typical resolution on mobile phone is 360 X 740 but there is lots of variation.
 Typical resolution for tablet is 768 X 1024 
 Desktop might be 1920 X 1080
+
+Three types of Divs - Claim, Line, and Dot. These are placed in three layers, Bottom, Middle, Top.
+Top overlaps all other layers.  5x5 dots has 4x4 claims, 4x5 horizontals, 4x5 verticals
+
+POST gameboard to server and the current move. Server responds with updated gameboard and an
+array of moves. Javascript processes the array in order. It waits for animations to complete 
+before starting the next move.
+
+1) Drop down to load different style sheets
+2) Create Layout for a box corner
+3) Create transitions for a box corner
+4) Javascript to fire a transitions
+5) Post request to server
+6) Javascript function to process array of transistions
+7) How to serialize gameboard class. Can same class be used for Javascript? Gameboard class uses
+box numbers and sides instead of dots and lines.

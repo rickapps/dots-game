@@ -1,0 +1,46 @@
+#wrapper {
+    width: 90%;
+    margin: 0 auto;
+    background-color: aqua;
+}
+#gameboard {
+  width: 350px;
+  height: 350px;
+  background-color: wheat;
+  margin: 0 auto;
+}
+.dot {
+  background-color: lightblue;
+  height: 20%;
+  width: 20%;
+  border-radius: 50%;
+}
+.box-back {
+    height: 90%;
+    width: 90%;
+    box-sizing: content-box;
+    border-style: solid;
+    border-width: 20px 0 0 20px;
+    border-color: black;
+    background-color: blue;
+}
+.box-corner {
+  height: 100%;
+  width: 100%;
+}
+.text-center {
+  text-align: center;
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  #panel {
+    width: 100%;
+  }
+  #content {
+    width: 100%;
+  }
+}
+
+/* Stuff for slider controls */
+
