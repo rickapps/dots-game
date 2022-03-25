@@ -15,6 +15,26 @@
   width: 20%;
   border-radius: 50%;
 }
+.top-left {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+}
+.top-right {
+  position: absolute;
+  top: -10%;
+  right: -10%;
+}
+.bottom-left {
+  position: absolute;
+  bottom: -10%;
+  left: -10%;
+}
+.bottom-right {
+  position: absolute;
+  bottom: -10%;
+  right: -10%;
+}
 .box-back {
     height: 90%;
     width: 90%;
@@ -38,6 +58,7 @@
   padding: 20px;
 }
 .grid-item {
+  position: relative;
   background-color: rgba(255, 255, 255, 0.8);
   border-top: 3px solid blue;
   border-left: 3px solid blue;
