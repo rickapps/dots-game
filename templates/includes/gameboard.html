@@ -1,0 +1,17 @@
+{% block body %}
+<div class="grid-container">
+    {% for i in range(0,size*size) %}
+    {# Let's see what kind of square we have #}
+    {% set type = 0 %}
+    {# Do we have a right edge? #}
+    {% if (i+1)%size == 0 %}
+    {% set type = type + 1 %}
+    {% endif %}
+    {# Do we have a bottom edge? #}
+
+    <div class="grid-item">
+        <div class="dot top-left"></div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

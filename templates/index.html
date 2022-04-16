@@ -9,20 +9,12 @@
 </head>
 <body>
     <div id="wrapper">
-        <div id="branding"><h2>My Title</h2></div>
+        {% include 'includes/header.html' %}
         <main id="content">
-            <div id="gameboard" class="container">
-                {% for i in range(0,100) %}
-                    <div class="dot"></div>
-                {% endfor %}
-            </div>
+            {% include 'includes/gameboard.html' %}
         </main>
-        <div id="panel">
-            <div class="slidecontainer">
-                <input type="range" min="0" max="100" value="0" class="slider" id="myRange">
-            </div>
-        </div>
-        <div id="footer"><span>RickApps</span></div>
+        {% include 'includes/panel.html' %}
+        {% include 'includes/footer.html' %}
     </div>
     <script src="/static/js/divboard.js"></script>
 </body>
