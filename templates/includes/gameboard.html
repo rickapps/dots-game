@@ -1,17 +1,30 @@
 {% block body %}
 <div class="grid-container">
-    {% for i in range(0,size*size) %}
+    {% for boxType in boxes %}
     {# Let's see what kind of square we have #}
-    {% set type = 0 %}
-    {# Do we have a right edge? #}
-    {% if (i+1)%size == 0 %}
-    {% set type = type + 1 %}
-    {% endif %}
-    {# Do we have a bottom edge? #}
-
-    <div class="grid-item">
+    {% if boxType == 'Normal' %}
+        <div class="grid-item">
+            <div class="dot top-left"></div>
+        </div>
+    {% elif boxType == 'Right' %}
+    <div class="grid-item right-edge">
         <div class="dot top-left"></div>
-    </div>
+        <div class="dot top-right"></div>
+    </div> 
+    {% elif boxType == 'Bottom' %}
+    <div class="grid-item bottom-edge">
+        <div class="dot top-left"></div>
+        <div class="dot bottom-left"></div>
+    </div> 
+    {% elif boxType == 'Both' %}
+    <div class="grid-item right-edge bottom-edge">
+        <div class="dot top-left"></div>
+        <div class="dot top-right"></div>
+        <div class="dot bottom-left"></div>
+        <div class="dot bottom-right"></div>
+    </div> 
+    {% endif %}
+
     {% endfor %}
 </div>
 {% endblock %}
