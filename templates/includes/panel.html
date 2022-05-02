@@ -1,7 +1,31 @@
 {% block body %}
 <div id="panel">
-    <div class="slidecontainer">
-        <input type="range" min="0" max="100" value="0" class="slider" id="myRange">
-    </div>
-</div>
+    <fieldset>
+        <legend>Score:</legend>
+        <label for="play1">You:</label>
+        <input type="text" id="play1" name="play1"><br><br>
+        <label for="play2">Computer:</label>
+        <input type="text" id="play2" name="play2"><br><br>
+    </fieldset>
+    <form action="/new/" method="POST">
+        <fieldset>
+         <legend>Options:</legend>
+         <label for="glevel">Level:</label>
+         <select id="glevel" name="glevel">
+             <option value="4">Easy</option>
+             <option value="5">Medium</option>
+             <option value="7">Difficult</option>
+             <option value="10">Expert</option>
+         </select><br><br>
+         <label for="gcolors">Colors:</label>
+         <select type="text" id="gcolors" name="gcolors">
+             <option value="spring">Spring</option>
+             <option value="summer">Hot</option>
+             <option value="fall">Fall</option>
+             <option value="winter">Snow</option>
+         </select><br><br>
+         <input type="submit" value="New Game">
+        </fieldset>
+       </form>
+       </div>
 {% endblock %}
