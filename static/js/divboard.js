@@ -8,3 +8,10 @@ bodyStyles.setProperty('--gridSize', columns);
 var sizeDropDown = document.getElementById("glevel");
 sizeDropDown.value = columns;
 
+// Define a function to change our css theme
+const setTheme = theme => document.documentElement.className = theme;
+// Set the theme when the dropdown changes
+colorDropDown = document.getElementById("gcolors");
+colorDropDown.onchange = function() {
+    setTheme(this.value);
+}
