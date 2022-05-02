@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 app = Flask(__name__)
 
+# Initialize our box array. The box array is used to draw the gameboard.
 def initGame(size):
     boxes = []
     
@@ -17,12 +18,14 @@ def initGame(size):
 
     return boxes
 
+# Start the game with default values
 @app.route("/")
 def home():
     size = 3
     boxes = initGame(size)
     return render_template('index.html', size=size, boxes = boxes)
 
+# Start a new game with user values
 @app.route("/new/", methods = ['POST', 'GET'])
 def newgame():
     if request.method == 'GET':
@@ -35,10 +38,4 @@ def newgame():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-@app.context_processor
-def utility_processor():
-    def box_type():
-        return 'cat'
-    return dict(box_type=box_type)
 

@@ -1,10 +1,5 @@
-var slider = document.getElementById("myRange");
-var side = document.getElementById("gameboard");
-
-// Update the current slider value (each time you drag the slider handle)
-slider.oninput = function() {
-  var myside = 350 + 5 * this.value + 'px';
-  side.style.width = myside;
-  side.style.height = myside;
-
-} 
+// Set up the proper number of columns for our boxes
+var columns = document.getElementById("gameSize").value;
+var bodyStyles = document.body.style;
+// Set variables in our style sheet.
+bodyStyles.setProperty('--gridSize', columns);

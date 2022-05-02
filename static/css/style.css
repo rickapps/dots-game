@@ -1,75 +1,77 @@
+:root {
+  --gridSize: 3;
+}
+
+/* Container for header, content, panel, and footer */
 #wrapper {
     width: 90%;
     margin: 0 auto;
     background-color: aqua;
 }
-#content {
-  /* Contains the panel and the gameboard */
+
+/* Contains the gameboard */
+  #content {
   background-color: yellow;
   width: 70%;
   float: right;
 }
+
 #panel {
   float: left;
   width: 30%;
   background-color: blueviolet;
 }
+
 #footer {
     clear: both;
     background-color: red;
 }
-.container {
-  display: flex;
-  flex-flow: row wrap;
-}
+
 .dot {
   background-color: lightblue;
   height: 20%;
   width: 20%;
   border-radius: 50%;
 }
+
+/* Next four specify the position of the dot relative to the box */
 .top-left {
   position: absolute;
   top: -10%;
   left: -10%;
 }
+
 .top-right {
   position: absolute;
   top: -10%;
   right: -10%;
 }
+
 .bottom-left {
   position: absolute;
   bottom: -10%;
   left: -10%;
 }
+
 .bottom-right {
   position: absolute;
   bottom: -10%;
   right: -10%;
 }
-.box-back {
-    height: 90%;
-    width: 90%;
-    box-sizing: content-box;
-    border-style: solid;
-    border-width: 20px 0 0 20px;
-    border-color: black;
-    background-color: blue;
-}
-.box-corner {
-  height: 100%;
-  width: 100%;
-}
+
 .text-center {
   text-align: center;
 }
+
+/* We specify the number of columns here. */
 .grid-container {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: repeat(var(--gridSize), auto);
   background-color: #21f333;
   padding: 20px;
 }
+
+/* Each box on the board is a grid-item */
 .grid-item {
   position: relative;
   background-color: rgba(255, 255, 255, 0.8);
@@ -77,6 +79,8 @@
   border-left: 3px solid blue;
   aspect-ratio: 1;
 }
+
+/* grid-item turns on top and left lines. Some boxes need bottom and right lines */
 .right-edge {
   border-right: 3px solid blue;
 }
@@ -94,5 +98,4 @@
   }
 }
 
-/* Stuff for slider controls */
 
