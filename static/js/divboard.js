@@ -10,8 +10,15 @@ sizeDropDown.value = columns;
 
 // Define a function to change our css theme
 const setTheme = theme => document.documentElement.className = theme;
+// Set the theme to whatever it was before.
+var theme = localStorage.getItem('theme');
+if (theme === null) theme = 'theme1';
+setTheme(theme);
 // Set the theme when the dropdown changes
 colorDropDown = document.getElementById("gcolors");
+colorDropDown.value = theme;
 colorDropDown.onchange = function() {
     setTheme(this.value);
+    // Save the value of the theme so we can retrieve it after a POST
+    localStorage.setItem('theme', this.value);
 }

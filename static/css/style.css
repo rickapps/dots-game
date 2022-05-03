@@ -5,7 +5,7 @@
   --panel-color: blueviolet;
   --footer-color: red;
   --dot-color: red;
-  --box-background-color: rgba(255, 255, 255, 0.395);
+  --box-background-color: rgba(255, 255, 255, 0.609);
   --box-border-color: blue;
 }
 /* Only define the vars you want to override for each theme */
@@ -16,6 +16,15 @@
 }
 :root.theme2 {
   --dot-color: green;
+  --box-border-color: violet;
+}
+:root.theme3 {
+  --panel-color: pink;
+  --footer-color: orange;
+}
+:root.theme4 {
+  --box-border-color: white;
+  --box-background-color: brown;
 }
 
 /* Container for header, content, panel, and footer */
