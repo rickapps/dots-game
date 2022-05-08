@@ -1,0 +1,40 @@
+/* ----------------------------------------------------------------------------
+Themes for Dots Game. These variables are used in style.css
+Author: RickApps
+Website: https://github.com/rickapps/dots-game
+Email: rick@rickapps.com
+-----------------------------------------------------------------------------*/
+
+/* Default values for all game themes. Override any of these in a specific theme
+---------------------------------------------------------------------------------*/
+:root, 
+:root.all-vars {
+  --gridSize: 3;                  
+  --wrapper-color: aqua;
+  --panel-color: blueviolet;
+  --footer-color: red;
+  --dot-color: red;
+  --box-background-color: rgba(255, 255, 255, 0.609);
+  --box-border-color: blue;
+}
+
+/* Create specific themes below.
+Only define the vars you want to override for each theme 
+Otherwise, the value defined in all-vars will be used 
+---------------------------------------------------------------------------------*/
+:root.theme1 {
+  --dot-color: lightblue;
+  --box-background-color: yellow;
+}
+:root.theme2 {
+  --dot-color: green;
+  --box-border-color: violet;
+}
+:root.theme3 {
+  --panel-color: pink;
+  --footer-color: orange;
+}
+:root.theme4 {
+  --box-border-color: white;
+  --box-background-color: brown;
+}

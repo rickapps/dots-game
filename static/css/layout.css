@@ -1,0 +1,42 @@
+/* ----------------------------------------------------------------------------
+Page layout for Dots Game. 
+Author: RickApps
+Website: https://github.com/rickapps/dots-game
+Email: rick@rickapps.com
+-----------------------------------------------------------------------------*/
+
+/* Container for header, content, panel, and footer */
+#wrapper {
+    width: 90%;
+    margin: 0 auto;
+    background-color: var(--wrapper-color);
+}
+
+/* Contains the gameboard */
+  #content {
+  background-color: yellow;
+  width: 70%;
+  float: right;
+}
+
+#panel {
+  float: left;
+  width: 30%;
+  background-color: var(--panel-color);
+}
+
+#footer {
+    clear: both;
+    background-color: var(--footer-color);
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  #panel {
+    width: 100%;
+  }
+  #content {
+    width: 100%;
+  }
+}
+

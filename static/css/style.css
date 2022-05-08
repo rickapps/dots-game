@@ -1,57 +1,16 @@
-:root, 
-:root.all-vars {
-  --gridSize: 3;
-  --wrapper-color: aqua;
-  --panel-color: blueviolet;
-  --footer-color: red;
-  --dot-color: red;
-  --box-background-color: rgba(255, 255, 255, 0.609);
-  --box-border-color: blue;
-}
-/* Only define the vars you want to override for each theme */
-/* Otherwise, the value defined in all-vars will be used */
-:root.theme1 {
-  --dot-color: lightblue;
-  --box-background-color: yellow;
-}
-:root.theme2 {
-  --dot-color: green;
-  --box-border-color: violet;
-}
-:root.theme3 {
-  --panel-color: pink;
-  --footer-color: orange;
-}
-:root.theme4 {
-  --box-border-color: white;
-  --box-background-color: brown;
+/* ----------------------------------------------------------------------------
+Styles for specific Dots game elements. 
+Author: RickApps
+Website: https://github.com/rickapps/dots-game
+Email: rick@rickapps.com
+-----------------------------------------------------------------------------*/
+
+.text-center {
+  text-align: center;
 }
 
-/* Container for header, content, panel, and footer */
-#wrapper {
-    width: 90%;
-    margin: 0 auto;
-    background-color: var(--wrapper-color);
-}
-
-/* Contains the gameboard */
-  #content {
-  background-color: yellow;
-  width: 70%;
-  float: right;
-}
-
-#panel {
-  float: left;
-  width: 30%;
-  background-color: var(--panel-color);
-}
-
-#footer {
-    clear: both;
-    background-color: var(--footer-color);
-}
-
+/* Styles for the dots on the game board
+----------------------------------------------------------------------------*/
 .dot {
   background-color: var(--dot-color);
   height: 20%;
@@ -84,11 +43,9 @@
   right: -10%;
 }
 
-.text-center {
-  text-align: center;
-}
-
-/* We specify the number of columns here. */
+/* Styles for our gameboard
+   We specify the number of columns here. 
+------------------------------------------------------------------------------*/
 .grid-container {
   display: grid;
   grid-template-columns: repeat(var(--gridSize), auto);
@@ -97,6 +54,7 @@
 }
 
 /* Each box on the board is a grid-item */
+/* Every box has its top and left border visible */
 .grid-item {
   position: relative;
   background-color: var(--box-background-color);
@@ -105,7 +63,8 @@
   aspect-ratio: 1;
 }
 
-/* grid-item turns on top and left lines. Some boxes need bottom and right lines */
+/* The grid-item class always makes the top and left box borders visible. */
+/* Some grid boxes need their bottom and right borders visible */
 .right-edge {
   border-right: 3px solid var(--box-border-color);
 }
@@ -113,14 +72,23 @@
   border-bottom: 3px solid var(--box-border-color);
 }
 
-/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 600px) {
-  #panel {
-    width: 100%;
-  }
-  #content {
-    width: 100%;
-  }
+/*----------------------------------------------------------------------------------
+Styles for the lines connecting the dots. We use anchor tags for the lines.
+-----------------------------------------------------------------------------------*/
+a:link, a:visited {
+  background-color: white;
+  color: black;
+  border: 2px solid green;
+  padding: 40px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
 }
+
+a:hover, a:active {
+  background-color: green;
+  color: white;
+}
+
 
 
