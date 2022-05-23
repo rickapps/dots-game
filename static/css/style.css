@@ -74,20 +74,56 @@ Email: rick@rickapps.com
 
 /*----------------------------------------------------------------------------------
 Styles for the lines connecting the dots. We use anchor tags for the lines.
+We only want to affect the anchor tags that are within class .grid-item 
 -----------------------------------------------------------------------------------*/
-a:link, a:visited {
+.grid-item a:link, a:visited {
   background-color: white;
   color: black;
   border: 2px solid green;
-  padding: 40px 10px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
 }
 
-a:hover, a:active {
+.grid-item a:hover, a:active {
   background-color: green;
   color: white;
+}
+
+.line-top {
+  position: absolute;
+  top: -10px;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.line-bottom {
+  position: absolute;
+  bottom: -10px;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.line-left {
+  position: absolute;
+  left: -10px;
+  height: 100%;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.line-right {
+  position: absolute;
+  right: -10px;
+  height: 100%;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+/* The line has been drawn. Turn off hover and any other effects */
+.selected {
+  background-color: green;
+  color: white;
+  pointer-events: none;
 }
 
 
