@@ -16,6 +16,9 @@ Email: rick@rickapps.com
   --dot-color: red;
   --box-background-color: rgba(255, 255, 255, 0.609);
   --box-border-color: blue;
+  --line-available-color: transparent;
+  --line-selected-color: green;
+  --line-hover-color: orange;
 }
 
 /* Create specific themes below.
@@ -29,12 +32,16 @@ Otherwise, the value defined in all-vars will be used
 :root.theme2 {
   --dot-color: green;
   --box-border-color: violet;
+  --line-hover-color: purple;
+  --line-selected-color: skyblue;
 }
 :root.theme3 {
   --panel-color: pink;
   --footer-color: orange;
+  --line-hover-color: brown;
 }
 :root.theme4 {
   --box-border-color: white;
   --box-background-color: brown;
+  --line-hover-color: skyblue;
 }
