@@ -1,38 +1,38 @@
 {% block body %}
 <div class="grid-container">
-    {% for boxType in boxes %}
+    {% for box in boxes %}
     {# Let's see what kind of square we have #}
-    {% if boxType == 'Normal' %}
-    <div class="grid-item">
+    {% if box['boxType'] == 'Normal' %}
+    <div id="{{box['boxID']}}" class="grid-item">
         <div class="dot top-left"></div>
-        <a href="" class="line-top" onclick="return false;"></a>
-        <a href="" class="line-left" onclick="return false;"></a>
+        <a id="{{box['top']}}" href="" class="line-top" onclick="return false;"></a>
+        <a id="{{box['left']}}" href="" class="line-left" onclick="return false;"></a>
     </div>
-    {% elif boxType == 'Right' %}
-    <div class="grid-item right-edge">
+    {% elif box['boxType'] == 'Right' %}
+    <div id="{{box['boxID']}}" class="grid-item right-edge">
         <div class="dot top-left"></div>
-        <a href="" class="line-top" onclick="return false;"></a>
-        <a href="" class="line-left" onclick="return false;"></a>
+        <a id="{{box['top']}}" href="" class="line-top" onclick="return false;"></a>
+        <a id="{{box['left']}}" href="" class="line-left" onclick="return false;"></a>
         <div class="dot top-right"></div>
-        <a href="" class="line-right" onclick="return false;"></a>
+        <a id="{{box['right']}}" href="" class="line-right" onclick="return false;"></a>
     </div> 
-    {% elif boxType == 'Bottom' %}
-    <div class="grid-item bottom-edge">
+    {% elif box['boxType'] == 'Bottom' %}
+    <div id="{{box['boxID']}}" class="grid-item bottom-edge">
         <div class="dot top-left"></div>
-        <a href="" class="line-top" onclick="return false;"></a>
-        <a href="" class="line-left" onclick="return false;"></a>
+        <a id="{{box['top']}}" href="" class="line-top" onclick="return false;"></a>
+        <a id="{{box['left']}}" href="" class="line-left" onclick="return false;"></a>
         <div class="dot bottom-left"></div>
-        <a href="" class="line-bottom" onclick="return false;"></a>
+        <a id="{{box['bottom']}}" href="" class="line-bottom" onclick="return false;"></a>
     </div> 
-    {% elif boxType == 'Both' %}
-    <div class="grid-item right-edge bottom-edge">
+    {% elif box['boxType'] == 'Both' %}
+    <div id="{{box['boxID']}}" class="grid-item right-edge bottom-edge">
         <div class="dot top-left"></div>
-        <a href="" class="line-top" onclick="return false;"></a>
-        <a href="" class="line-left" onclick="return false;"></a>
+        <a id="{{box['top']}}" href="" class="line-top" onclick="return false;"></a>
+        <a id="{{box['left']}}" href="" class="line-left" onclick="return false;"></a>
         <div class="dot top-right"></div>
-        <a href="" class="line-right" onclick="return false;"></a>
+        <a id="{{box['right']}}" href="" class="line-right" onclick="return false;"></a>
         <div class="dot bottom-left"></div>
-        <a href="" class="line-bottom" onclick="return false;"></a>
+        <a id="{{box['bottom']}}" href="" class="line-bottom" onclick="return false;"></a>
         <div class="dot bottom-right"></div>
     </div> 
     {% endif %}

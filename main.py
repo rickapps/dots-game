@@ -6,6 +6,8 @@ def initGame(size):
     boxes = []
     
     for i in range(size * size):
+        box = {}
+        box['boxID'] = "B-" + str(i)
         boxType = 'Normal'
         if (i+1)%size == 0:
             boxType = 'Right'
@@ -14,7 +16,14 @@ def initGame(size):
                 boxType = 'Bottom'
             else:
                 boxType = 'Both'
-        boxes.append(boxType)
+        box['boxType'] = boxType
+        box['top'] = i
+        box['left'] = i+size*(size+1)
+        box['bottom'] = i+size
+        box['right'] = i+1+size*(size+1)
+        if boxType == 'Right' or boxType == 'Both':
+            box['right'] = size*size+((i+1)//size + size*(size+1))-1
+        boxes.append(box)
 
     return boxes
 
