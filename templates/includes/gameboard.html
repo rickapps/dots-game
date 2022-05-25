@@ -1,5 +1,5 @@
 {% block body %}
-<div class="grid-container">
+<div id="gameboard" class="grid-container">
     {% for box in boxes %}
     {# Let's see what kind of square we have #}
     {% if box['boxType'] == 'Normal' %}

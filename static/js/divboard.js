@@ -24,8 +24,11 @@ colorDropDown.onchange = function() {
 }
 
 // Add an event listener to all our gameboard lines
-document.getElementById("1").addEventListener("click", selectLine, false); 
-document.getElementById("2").addEventListener("click", selectLine, false); 
+const gameboard = document.getElementById("gameboard");
+const lines = gameboard.getElementsByTagName("a");
+for (let line of lines) {
+    line.addEventListener("click", selectLine, false);
+}
 
 function selectLine(evt) {
     evt.target.classList.add("selected");

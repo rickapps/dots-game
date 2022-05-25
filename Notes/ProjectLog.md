@@ -15,4 +15,7 @@ You will need to refresh browser and possibly wait for new version to upload com
 Added logic to create ids for all boxes and lines. The ids will be used by javascript.
 
 **2022-05-24 20:31:45**   
-Created event listener function to change color and disable hover on selected lines.
+Created javascript event listener function to change color and disable hover on selected lines.
+
+**2022-05-25 17:29:30**   
+Added event listener to all lines on gameboard.
