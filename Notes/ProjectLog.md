@@ -11,3 +11,8 @@ Uploaded latest version to gcloud:
 5. gcloud app browse
 You will need to refresh browser and possibly wait for new version to upload completely.
 
+**2022-05-24 16:20:28**   
+Added logic to create ids for all boxes and lines. The ids will be used by javascript.
+
+**2022-05-24 20:31:45**   
+Created event listener function to change color and disable hover on selected lines.

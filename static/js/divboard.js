@@ -22,3 +22,12 @@ colorDropDown.onchange = function() {
     // Save the value of the theme so we can retrieve it after a POST
     localStorage.setItem('theme', this.value);
 }
+
+// Add an event listener to all our gameboard lines
+document.getElementById("1").addEventListener("click", selectLine, false); 
+document.getElementById("2").addEventListener("click", selectLine, false); 
+
+function selectLine(evt) {
+    evt.target.classList.add("selected");
+
+} 
