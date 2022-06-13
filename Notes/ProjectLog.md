@@ -19,3 +19,12 @@ Created javascript event listener function to change color and disable hover on 
 
 **2022-05-25 17:29:30**   
 Added event listener to all lines on gameboard.
+
+**2022-05-29 20:17:18**   
+Got lines to change width with game size. Use absolute positioning but still responsive layout
+
+**2022-06-09 15:26:23**   
+Task list -
+1. Create javascript to post new, verify, and find with appropriate parameters. For verify and find we
+do not need an actual form. We could make javascript calls to create post requests.
+2. Create python methods to return appropriate data structures in response to javascript post requests
