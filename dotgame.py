@@ -34,7 +34,10 @@ def game_board(size, lines=[], history=[]):
 # box lines are drawn, but no squares are completed.
 # The returned array should be passed to game_board.
 def init_game(size, prefill=False):
-    return 
+    # The number of lines is size*size*2+2*size. Initially,
+    # all lines in the array are zero.
+    lines = [0] * (size*size*2 + 2*size)
+    return lines
 
 # Search for the best move given the lines that are
 # currently drawn. If a square is completed, a list

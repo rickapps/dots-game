@@ -7,14 +7,16 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     size = 3
-    boxes = dotgame.game_board(size)
+    lines = dotgame.init_game(size)
+    boxes = dotgame.game_board(size, lines)
     return render_template('index.html', size=size, boxes = boxes)
 
 # Start a new game with user values
 @app.route("/new/", methods = ['POST'])
 def new_game():
-    size = request.form['glevel']
-    boxes = dotgame.game_board(int(size))
+    size = int(request.form['glevel'])
+    lines = dotgame.init_game(size);
+    boxes = dotgame.game_board(size, lines)
     return render_template('index.html',size=size, boxes = boxes)
 
 # Return a list of moves to make for specified board.

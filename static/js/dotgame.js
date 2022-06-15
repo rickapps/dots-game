@@ -3,19 +3,40 @@
 // the server. The functions return line and box numbers to our
 // custom.js to make changes to our gameboard controls.
 
-// Store line state, history, and score in local storage
-function pushStorage(moves)
+// Store line state, history, and score in local storage to make sure we do not lose the
+// values on page refresh.
+function pushMove(move)
 {
-    localStorage.setItem('history', moves);
-    localStorage.setItem('lines', moves[0]);
-    localStorage.setItem('score', 3);
-    return;
+    history = getHistory();
+    // Add the move to our history and to the lines array
+    history.push(move);
+    localStorage.setItem('History', history);
+    lines = getLines();
+    line = move[0];
+    lines[line] = 1;
+    localStorage.setItem('Lines', lines);
+    return history;
+}
+
+function updateScore(player, pointsToAdd)
+{
+    var key = 'Player1';
+    // Add the points to the player's existing score and store.
+    if (player = 2)
+        key = 'Player2';
+    score = getScore(player);
+    newScore = score + pointsToAdd;
+    localStorage.setItem(key, newScore);
+    return newScore;
 }
 
 // Pop the last move from storage. 
-function popStorage()
+function popLastMove()
 {
-    return moves;
+    var moves = getHistory();
+    popped = moves.pop();
+    localStorage.setItem('History');
+    return popped;
 }
 
 // Draw the indicated lines and box claims on the game board
@@ -37,21 +58,30 @@ function eraseMove(moves, bAnimate=true)
 }
 
 // Return a list of all moves
-function history()
+function getHistory()
 {
-    return;
+    history = localStorage.getItem('History');
+    if (history === null)
+        history = [];
+    return history;
 }
 
 // Return the state of all game board lines
 function getLines()
 {
-    return;
+    return localStorage.getItem["Lines"];
 }
 
 // Return the score for the indicated player 1 or 2
-function score(player)
+function getScore(player)
 {
-    return;
+    var key = 'Player1';
+    if (player == 2)
+        key = 'Player2';
+    score = localStorage.getItem(key);
+    if (score === null)
+        score = 0;
+    return score;
 }
 
 // Return the player that has control of the board 1 or 2

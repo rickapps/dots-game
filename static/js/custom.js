@@ -37,8 +37,8 @@ function selectLine(evt) {
     // Send a POST request to the server informing it of our move
     specs = {
         "size": columns,
-        "lines": [],
-        "move": "21"
+        "lines": getLines(),
+        "move": evt.target.id
     }
     // Options to be given as parameter
     // in fetch for making requests
