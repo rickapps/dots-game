@@ -1,21 +1,20 @@
-// Set up the proper number of columns for our boxes
-var columns = document.getElementById("gameSize").value;
+// Get the style sheet
 var bodyStyles = document.body.style;
-
 // Set variables in our style sheet.
-bodyStyles.setProperty('--gridSize', columns);
+bodyStyles.setProperty('--gridSize', GAME_SIZE);
 
 // Initialize the game size drop down on the panel
 var sizeDropDown = document.getElementById("glevel");
-sizeDropDown.value = columns;
+sizeDropDown.value = GAME_SIZE;
 
 // Define a function to change our css theme
 const setTheme = theme => document.documentElement.className = theme;
-// Set the theme to whatever it was before.
+// Set the theme to whatever it was before. We keep that value in localStorage
 var theme = localStorage.getItem('theme');
 if (theme === null) theme = 'theme1';
 setTheme(theme);
-// Set the theme when the dropdown changes
+
+// Listen for when someone changes the theme
 colorDropDown = document.getElementById("gcolors");
 colorDropDown.value = theme;
 colorDropDown.onchange = function () {
@@ -24,25 +23,24 @@ colorDropDown.onchange = function () {
     localStorage.setItem('theme', this.value);
 }
 
-// Add an event listener to all our gameboard lines
+// Add an event listener to all the lines on our gameboard.
 const gameboard = document.getElementById("gameboard");
 const lines = gameboard.getElementsByTagName("a");
-
 for (let line of lines) {
     line.addEventListener("click", selectLine, false);
 }
 
-// Update the gameboard with the new line and color change
+// Update the gameboard when someone clicks on a line
 function selectLine(evt) {
     // Send a POST request to the server informing it of our move
+    // The body of the request contains the current game state.
     specs = {
-        "size": columns,
+        "size": GAME_SIZE,
         "lines": getLines(),
         "move": evt.target.id
     }
-    // Options to be given as parameter
-    // in fetch for making requests
-    // other then GET
+    // Tell fetch we want a POST using JSON data
+    // and send the request.
     let options = {
         method: 'POST',
         headers: {
@@ -51,8 +49,10 @@ function selectLine(evt) {
         },
         body: JSON.stringify(specs)
     }
-    // Fake api for making post requests
     let fetchRes = fetch('/verify/', options);
+    // Use our results to update the gameboard. The only thing
+    // new we get from the server is whether we need to claim 
+    // a square and give our player a point.
     fetchRes.then(res =>
         res.json()).then(d => {
             console.log(d)

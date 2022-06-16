@@ -10,8 +10,6 @@
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <!-- Set some variables for javascript -->
-    <input type="hidden" id="gameSize" value="{{size}}"/>
     <div id="wrapper">
         {% include 'includes/header.html' %}
         <main id="content">
@@ -20,6 +18,13 @@
         {% include 'includes/panel.html' %}
         {% include 'includes/footer.html' %}
     </div>
+    <script>
+        // Set some constants for our javascript code. 
+        const GAME_SIZE = {{size}};
+        const INIT_LINES = {{lines}};
+        const INIT_MOVES = [0,0];
+        const INIT_SCORE = [0,0];
+    </script>
     <script src="/static/js/dotgame.js"></script>
     <script src="/static/js/custom.js"></script>
 </body>

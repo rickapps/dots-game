@@ -3,26 +3,44 @@ import json
 import dotgame
 app = Flask(__name__)
 
-# Start the game with default values
+# Some definitions:
+# move: a tuple. Val0 is the line# selected, Val1 is the box# claimed.
+# (2, 0) means line#2 was selected and it completes box#0. (2,-1) means line#2
+# was selected and no boxes were completed. (-1,-1) means game is over, there
+# are no lines left to select.
+# lines: a list of lines on the gameboard. A value of 1 means the line
+# has been selected. A value of 0 means the line is available to select.
+# moves: a list of move tuples. Whenever a player completes a box, he gets to
+# select a new line. The list of move tuples will always end with (line#, -1).
+# history: a list of all moves in the game. It is a list of lists of move tuples.
+# Odd indexes will be player0 moves and even indexes will be player1 moves.
+#   
+#  Start the game with default values. We won't clear local storage here
+# because the user could be continuing their last game.
 @app.route("/")
 def home():
-    size = 3
+    size = 3  # We have a total of 3*3 boxes on the gameboard. 4*4 dots.
     lines = dotgame.init_game(size)
     boxes = dotgame.game_board(size, lines)
-    return render_template('index.html', size=size, boxes = boxes)
+    return render_template('index.html', size=size, lines=lines, boxes=boxes)
 
-# Start a new game with user values
+# Start a new game with values specified by the user. For this case, 
+# localStorage has been cleared before the POST was issued.
 @app.route("/new/", methods = ['POST'])
 def new_game():
     size = int(request.form['glevel'])
     lines = dotgame.init_game(size);
     boxes = dotgame.game_board(size, lines)
-    return render_template('index.html',size=size, boxes = boxes)
+    return render_template('index.html',size=size, lines=lines, boxes=boxes)
 
-# Return a list of moves to make for specified board.
+# Return a list of moves to make for the specified lines list
 @app.route("/find/", methods = ['POST'])
 def find_best_move():
     # Get the game size and line array. Return a list of tuples.
+    mydata = request.json
+    size = mydata['size'] 
+    lines = mydata['lines']
+    move = dotgame.find_move(size, lines)
     return
 
 # Return the box state after the user's move. If box state is

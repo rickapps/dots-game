@@ -28,3 +28,12 @@ Task list -
 1. Create javascript to post new, verify, and find with appropriate parameters. For verify and find we
 do not need an actual form. We could make javascript calls to create post requests.
 2. Create python methods to return appropriate data structures in response to javascript post requests
+
+**2022-06-15 11:17:03**   
+1. Python does not need to store any information. It will be stateless. Only javascript needs to store
+history, lines, and score.  Python will generate initial values for all three, return them to javascript
+and javascript will store them. There is no need to store a copy of the gameboard, it can be generated
+by python using javascript's stored values.
+2. Easiest way for python to communicate values to javascript would
+be to have jinja code initialize javascript variable when page loads. Jinja code would also need to clear localStorage values when
+the gameboard is initialized.

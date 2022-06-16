@@ -2,7 +2,7 @@ import json
 # Returns the array of boxes that constitues the game board.
 # The number of boxes returned is size**2. The lines array
 # indicates which box sides have already been drawn (prefill).
-# The history array are moves made after game has started. 
+# The history array are moves made after the game has started. 
 # Box squares can only be claimed (colored) based on history.
 def game_board(size, lines=[], history=[]):
     boxes = []
