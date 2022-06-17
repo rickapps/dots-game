@@ -53,6 +53,7 @@ def find_move(size, lines):
 # (move, box). If box is -1, the turn is ended. If box
 # is positive, that box is claimed, and the player 
 # gets another turn. If move is -1, game is over.
-def verify_move(size, lines, move):
-    return json.dumps("size: " + size + " move: " + move)
+def verify_move(size, lines, newline):
+    move = [newline, -1]
+    return json.dumps(move)
 

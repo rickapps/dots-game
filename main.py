@@ -51,9 +51,9 @@ def verify_user_move():
     mydata = request.json
     size = mydata['size'] 
     lines = mydata['lines']
-    move = mydata['move']
+    line = mydata['newline']
     # Return a tuple (move, box)
-    return dotgame.verify_move(size, lines, move)
+    return dotgame.verify_move(size, lines, line)
 
 if __name__ == "__main__":
     app.run(debug=True)

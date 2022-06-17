@@ -23,6 +23,16 @@ colorDropDown.onchange = function () {
     localStorage.setItem('theme', this.value);
 }
 
+// Listen for when someone wants to start a new game
+newGame = document.getElementById("gamevals");
+newGame.onsubmit = function() {
+    // Verify it is what our user wants to do
+    alert("This will end your current game.")
+    // Clear our local storage values
+    clearGameValues();
+}
+
+
 // Add an event listener to all the lines on our gameboard.
 const gameboard = document.getElementById("gameboard");
 const lines = gameboard.getElementsByTagName("a");
@@ -37,7 +47,7 @@ function selectLine(evt) {
     specs = {
         "size": GAME_SIZE,
         "lines": getLines(),
-        "move": evt.target.id
+        "newline": evt.target.id,
     }
     // Tell fetch we want a POST using JSON data
     // and send the request.

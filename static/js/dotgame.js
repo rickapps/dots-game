@@ -39,6 +39,14 @@ function popLastMove()
     return popped;
 }
 
+function clearGameValues()
+{
+    localStorage.removeItem('History');
+    localStorage.removeItem('Lines');
+    localStorage.removeItem('Player1');
+    localStorage.removeItem('Player2');
+}
+
 // Draw the indicated lines and box claims on the game board
 // moves is a list of tuples (line_id, box_id), (line_id, box_id), ...
 function drawMove(moves, bAnimate=true)
@@ -62,14 +70,17 @@ function getHistory()
 {
     history = localStorage.getItem('History');
     if (history === null)
-        history = [];
+        history = INIT_MOVES;
     return history;
 }
 
 // Return the state of all game board lines
 function getLines()
 {
-    return localStorage.getItem["Lines"];
+    let lines = localStorage.getItem('Lines');
+    if (lines === null)
+        lines = INIT_LINES;
+    return lines;
 }
 
 // Return the score for the indicated player 1 or 2
@@ -85,7 +96,7 @@ function getScore(player)
 }
 
 // Return the player that has control of the board 1 or 2
-function player()
+function getPlayer()
 {
     return;
 }
