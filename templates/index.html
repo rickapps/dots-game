@@ -20,9 +20,9 @@
     </div>
     <script>
         // Set some constants for our javascript code. 
-        const GAME_SIZE = {{size}};
-        const INIT_LINES = {{lines}};
-        const INIT_MOVES = [0,0];
+        const GAME_SIZE = {{size|tojson}};
+        const INIT_LINES = {{lines|tojson}};
+        const INIT_MOVES = [];
         const INIT_SCORE = [0,0];
     </script>
     <script src="/static/js/dotgame.js"></script>

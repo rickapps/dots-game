@@ -54,6 +54,6 @@ def find_move(size, lines):
 # is positive, that box is claimed, and the player 
 # gets another turn. If move is -1, game is over.
 def verify_move(size, lines, newline):
-    move = [newline, -1]
-    return json.dumps(move)
+    move = (newline, -1)
+    return move
 

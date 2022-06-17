@@ -7,25 +7,25 @@
 // values on page refresh.
 function pushMove(move)
 {
-    history = getHistory();
+    let history = getHistory();
     // Add the move to our history and to the lines array
     history.push(move);
-    localStorage.setItem('History', history);
-    lines = getLines();
-    line = move[0];
+    localStorage.setItem('History', JSON.stringify(history));
+    let lines = getLines();
+    let line = move[0];
     lines[line] = 1;
-    localStorage.setItem('Lines', lines);
+    localStorage.setItem('Lines', JSON.stringify(lines));
     return history;
 }
 
 function updateScore(player, pointsToAdd)
 {
-    var key = 'Player1';
+    let key = 'Player1';
     // Add the points to the player's existing score and store.
     if (player = 2)
         key = 'Player2';
-    score = getScore(player);
-    newScore = score + pointsToAdd;
+    let score = getScore(player);
+    let newScore = score + pointsToAdd;
     localStorage.setItem(key, newScore);
     return newScore;
 }
@@ -33,8 +33,8 @@ function updateScore(player, pointsToAdd)
 // Pop the last move from storage. 
 function popLastMove()
 {
-    var moves = getHistory();
-    popped = moves.pop();
+    let moves = getHistory();
+    let popped = moves.pop();
     localStorage.setItem('History');
     return popped;
 }
@@ -68,8 +68,10 @@ function eraseMove(moves, bAnimate=true)
 // Return a list of all moves
 function getHistory()
 {
-    history = localStorage.getItem('History');
-    if (history === null)
+    let history = localStorage.getItem('History');
+    if (history)
+        history = JSON.parse(history);
+    else
         history = INIT_MOVES;
     return history;
 }
@@ -78,7 +80,9 @@ function getHistory()
 function getLines()
 {
     let lines = localStorage.getItem('Lines');
-    if (lines === null)
+    if (lines)
+        lines = JSON.parse(lines);
+    else
         lines = INIT_LINES;
     return lines;
 }
@@ -86,11 +90,11 @@ function getLines()
 // Return the score for the indicated player 1 or 2
 function getScore(player)
 {
-    var key = 'Player1';
+    let key = 'Player1';
     if (player == 2)
         key = 'Player2';
-    score = localStorage.getItem(key);
-    if (score === null)
+    let score = localStorage.getItem(key);
+    if (!score)
         score = 0;
     return score;
 }
