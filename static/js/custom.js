@@ -32,6 +32,21 @@ newGame.onsubmit = function() {
     clearGameValues();
 }
 
+// Once the page is fully loaded, modify the css to show drawn
+// lines and claimed boxes.
+window.addEventListener("load", () => {
+    // Obtain the current lines
+    let lines = getLines();
+    let len = lines.length;
+    let element;
+    for (let i=0; i<len; i++) {
+        if (lines[i] > 0)
+        {
+            element = document.getElementById(i.toString());
+            element.classList.add("selected");   
+        }
+    }
+});
 
 // Add an event listener to all the lines on our gameboard.
 let gameboard = document.getElementById("gameboard");
