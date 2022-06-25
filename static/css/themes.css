@@ -19,6 +19,8 @@ Email: rick@rickapps.com
   --line-available-color: transparent;
   --line-selected-color: green;
   --line-hover-color: orange;
+  --play1-background-color: pink;
+  --play2-background-color: yellow;
 }
 
 /* Create specific themes below.

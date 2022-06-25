@@ -3,8 +3,8 @@ class GameBoard:
         self.size = size
         self.lines = lines
         self.num_boxes = size*size
-        self.num_lines = 2 * self.num_boxes + 2 * self.size
-        self.num_horizontal = self.num_lines / 2   # We know num_lines is always even
+        self.num_lines = 2 * (self.num_boxes + self.size)
+        self.num_horizontal = int(self.num_lines / 2)   # We know num_lines is always even
         
 
     # Indicates if the line is horizontal or vertical
@@ -34,21 +34,21 @@ class GameBoard:
             if box2 % self.size == 0:
                 box1 = -1
     
-        return tuple(box1,box2)
+        return (box1,box2)
     
     # Get the top and bottom of the box
     def get_box_sides_h(self, box_num):
         box_top = box_num
         box_bottom = box_top + self.size
-        return tuple(box_top, box_bottom)
+        return (box_top, box_bottom)
 
     # Get the right and left sides of the box
     def get_box_sides_v(self, box_num):
         box_left = box_num + self.num_horizontal
         box_right = box_num + 1
         if box_right % self.size == 0:
-            ((box_right - 20) // self.size) + self.num_lines - self.size
-        return tuple(box_left, box_right)
+            int((box_right - 20) // self.size) + self.num_lines - self.size
+        return (box_left, box_right)
 
     # Indicates if all four sides of the box are drawn
     def is_box_complete(self, box_num):
@@ -59,7 +59,7 @@ class GameBoard:
         return is_complete
 
     # Update the lines array with the specified move and determine
-    # if the move completes a box.
+    # if the move completes any boxes. -1 means box not complete
     def make_move(self, new_line):
         self.lines[new_line ] = 1
         boxes = self.get_boxes(new_line)
@@ -69,6 +69,6 @@ class GameBoard:
             new_box1 = boxes[0]
         if boxes[1] >= 0 and self.is_box_complete(boxes[1]):
             new_box2 = boxes[1]
-        return tuple(new_box1, new_box2)
+        return (new_line, new_box1, new_box2)
     
 

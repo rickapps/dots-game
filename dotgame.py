@@ -42,20 +42,21 @@ def init_game(size, prefill=False):
 
 # Search for the best move given the lines that are
 # currently drawn. If a square is completed, a list
-# of moves is returned. If the final move is (-1,-1),
-# the game is over. A move is a tuple (move, box) where
-# move is the line# to draw and box is the square to claim.
+# of moves is returned. If the final move is (-1,-1,-1),
+# the game is over. A move is a tuple (line, box1, box2) where
+# line is the line# to draw and box is the square to claim. Up
+# to two boxes can be claimed by a single line.
 # find_move returns a list of moves.
 def find_move(size, lines):
     return   
 
 # Main purpose is to indicate if a box color should
 # change (claim a square). The return value is a tuple,
-# (move, box). If box is -1, the turn is ended. If box
-# is positive, that box is claimed, and the player 
-# gets another turn. If move is -1, game is over.
+# (line, box1, box2). If both boxes are -1, the turn is ended. 
+# If any box is positive, that box is claimed, and the player 
+# gets another turn. If line is -1, the game is over.
 def verify_move(size, lines, newline):
     game = gameboard.GameBoard(size, lines)
-    completed_boxes = game.make_move(newline)
-    return completed_boxes
+    move = game.make_move(newline)
+    return move
 

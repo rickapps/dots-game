@@ -55,14 +55,42 @@ for (let line of lines) {
     line.addEventListener("click", selectLine, false);
 }
 
+function updateSquare(boxNum, player)
+{
+    let square = document.getElementById("B-" + boxNum);
+    let claim = player == 1 ? "claim1" : "claim2";
+    square.classList.add(claim);
+}
+
+// Check if the move claims any squares. If so, update the
+// gameboard with the player's color, update the player's
+// score and return true. Otherwise, do nothing and return false.
+function claimSquares(move, player) {
+    let points = 0;
+    if (move[1] >= 0)
+    {
+        points += 1;
+        updateSquare(move[1], player);
+    }
+    if (move[2] >= 0)
+    {
+        points += 1;
+        updateSquare(move[2], player);
+    }
+    updateScore(player, points);
+    return points > 0;
+}
+
 // Update the gameboard when someone clicks on a line
+// In other words, the user has made a move. This is
+// the meat and potatoes of the game.
 function selectLine(evt) {
     // Send a POST request to the server informing it of our move
     // The body of the request contains the current game state.
     let specs = {
         "size": GAME_SIZE,
         "lines": getLines(),
-        "newline": evt.target.id,
+        "newline": parseInt(evt.target.id)
     }
     // Tell fetch we want a POST using JSON data
     // and send the request.
@@ -77,10 +105,12 @@ function selectLine(evt) {
     let fetchRes = fetch('/verify/', options);
     // Use our results to update the gameboard. The only thing
     // new we get from the server is whether we need to claim 
-    // a square and give our player a point.
+    // any squares and give our player one or two points.
     fetchRes.then(res =>
         res.json()).then(d => {
+            // Update our storage
             pushMove(d);
+            claimSquares(d);
         })
     evt.target.classList.add("selected");
     drawMove(evt.target.id)
