@@ -1,4 +1,5 @@
 import json
+import gameboard
 # Returns the array of boxes that constitues the game board.
 # The number of boxes returned is size**2. The lines array
 # indicates which box sides have already been drawn (prefill).
@@ -54,6 +55,7 @@ def find_move(size, lines):
 # is positive, that box is claimed, and the player 
 # gets another turn. If move is -1, game is over.
 def verify_move(size, lines, newline):
-    move = (newline, -1)
-    return move
+    game = gameboard.GameBoard(size, lines)
+    completed_boxes = game.make_move(newline)
+    return completed_boxes
 
