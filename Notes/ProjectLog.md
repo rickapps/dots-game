@@ -37,3 +37,10 @@ by python using javascript's stored values.
 2. Easiest way for python to communicate values to javascript would
 be to have jinja code initialize javascript variable when page loads. Jinja code would also need to clear localStorage values when
 the gameboard is initialized.
+
+**2022-06-26 11:10:38**   
+1. Javascript needs to be coded differently. Current design makes it difficult to keep business logic separate
+from UI logic. I will refactor the code to use events and event listeners. Javascript UI will respond to
+events triggered by business logic.
+2. Need to restructure storage to serialize claimed squares. This is
+needed only so we can continue a game from one session to another.
