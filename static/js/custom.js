@@ -45,6 +45,7 @@ window.addEventListener("load", () => {
             element = document.getElementById(i.toString());
             element.classList.add("selected");   
         }
+        // We need to claim the squares
     }
 });
 

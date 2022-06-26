@@ -26,7 +26,7 @@ class GameBoard:
                 box1 = -1
         else:
             box2 = line_num - self.num_horizontal
-            box1 = line_num - 1
+            box1 = box2 - 1
             # Special cases
             if box2 >= self.num_boxes:
                 box2 = -1
@@ -45,9 +45,9 @@ class GameBoard:
     # Get the right and left sides of the box
     def get_box_sides_v(self, box_num):
         box_left = box_num + self.num_horizontal
-        box_right = box_num + 1
+        box_right = box_left + 1
         if box_right % self.size == 0:
-            int((box_right - 20) // self.size) + self.num_lines - self.size
+            box_right = int((box_left - self.num_horizontal) // self.size) + self.num_lines - self.size
         return (box_left, box_right)
 
     # Indicates if all four sides of the box are drawn
