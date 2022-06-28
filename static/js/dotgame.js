@@ -1,6 +1,6 @@
 // These functions don't care about controls on our gameboard.
 // They only need line numbers and box numbers to communicate with
-// the server. The functions return line and box numbers to our
+// the server. The functions trigger events to our
 // custom.js to make changes to our gameboard controls.
 
 // Store line state, history, and score in local storage to make sure we do not lose the
@@ -47,15 +47,35 @@ function clearGameValues()
     localStorage.removeItem('Player2');
 }
 
-// Draw the indicated lines and box claims on the game board
-// moves is a list of tuples (line_id, box_id), (line_id, box_id), ...
-function drawMove(moves, bAnimate=true)
+// Send the desired move to the server to determine if it
+// completes any squares. Returns a tuple (lineNum, box1, box2)
+// Failure is indicated by (-1,-1,-1)
+function validateMove(lineNum, bAnimate=true)
 {
-    // Send the indicated move to the server and get return value
-    // Set the line on the gameboard and possibly claim the square
-    // Push our storage
-    // Do we need to toggle the move?
-    return;
+    let validated = [-1,-1,-1];
+    // Send a POST request to the server informing it of our move
+    // The body of the request contains the current game state.
+    let specs = {
+        "size": GAME_SIZE,
+        "lines": getLines(),
+        "newline": lineNum
+    }
+    // Tell fetch we want a POST using JSON data
+    // and send the request.
+    let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type':
+                'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(specs)
+    }
+    let fetchRes = fetch('/verify/', options);
+    fetchRes.then(res =>
+        res.json()).then(d => {
+            validated = d;
+        })
+    return validated;
 }
 
 // Remove the indicated lines and box claims from the game board
