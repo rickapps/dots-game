@@ -32,7 +32,7 @@ newGame.onsubmit = function() {
     clearGameValues();
 }
 
-// Once the page is fully loaded, modify the css to show drawn
+// Listen for page load, modify the css to show drawn
 // lines and claimed boxes.
 window.addEventListener("load", () => {
     // Obtain the current lines
@@ -55,13 +55,28 @@ let lines = gameboard.getElementsByTagName("a");
 for (let line of lines) {
     line.addEventListener("click", selectLine, false);
 }
+function selectLine(evt) {
+    let move = validateMove(parseInt(evt.target.id));
+} 
 
-function updateSquare(boxNum, player)
-{
-    let square = document.getElementById("B-" + boxNum);
-    let claim = player == 1 ? "claim1" : "claim2";
-    square.classList.add(claim);
-}
+// Add an event listener to update the gameboard when a
+// player makes a move.
+document.addEventListener("drawMove", (e) => {
+    let move = e.detail.move;
+    if (move[0] >= 0)
+    {
+        // Store the move
+        pushMove(move)
+        // draw our line
+        let line = document.getElementById(move[0].toString());
+        line.classList.add("selected");
+        // claim any squares
+        if (!claimSquares(move, 1))
+        {
+            // toggle turn
+        }
+    }
+});
 
 // Check if the move claims any squares. If so, update the
 // gameboard with the player's color, update the player's
@@ -82,25 +97,9 @@ function claimSquares(move, player) {
     return points > 0;
 }
 
-// Update the gameboard when someone clicks on a line
-// In other words, the user has made a move. This is
-// the meat and potatoes of the game.
-function selectLine(evt) {
-    // Does not repaint the screen unless first. Might want to
-    // trigger events to update screen instead.
-    evt.target.classList.add("selected");
-    let move = validateMove(parseInt(evt.target.id));
-    if (!claimSquares(move, 1))
-    {
-        // toggle turn
-    }
-    if (move[0] >= 0)
-    {
-        // Store the move
-        pushMove(move)
-        // draw our line
-        evt.target.classList.add("selected");
-        // claim any squares
-    }
-} 
-
+function updateSquare(boxNum, player)
+{
+    let square = document.getElementById("B-" + boxNum);
+    let claim = player == 1 ? "claim1" : "claim2";
+    square.classList.add(claim);
+}

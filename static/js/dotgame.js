@@ -49,16 +49,16 @@ function clearGameValues()
 
 // Send the desired move to the server to determine if it
 // completes any squares. Returns a tuple (lineNum, box1, box2)
-// Failure is indicated by (-1,-1,-1)
-function validateMove(lineNum, bAnimate=true)
+// Failure is indicated by (-1,-1,-1). Sends a drawMove event.
+function validateMove(line, bAnimate=true)
 {
-    let validated = [-1,-1,-1];
+    var validated = [-1,-1,-1];
     // Send a POST request to the server informing it of our move
     // The body of the request contains the current game state.
     let specs = {
         "size": GAME_SIZE,
         "lines": getLines(),
-        "newline": lineNum
+        "newline": line
     }
     // Tell fetch we want a POST using JSON data
     // and send the request.
@@ -73,8 +73,14 @@ function validateMove(lineNum, bAnimate=true)
     let fetchRes = fetch('/verify/', options);
     fetchRes.then(res =>
         res.json()).then(d => {
-            validated = d;
-        })
+            for (let i=0;i<3;i++) {
+                validated[i] = d[i];
+            }
+            // Do it here so it updates the page
+            let event = new CustomEvent("drawMove", {detail: {move: d}});
+            document.dispatchEvent(event);
+        }
+    );
     return validated;
 }
 
