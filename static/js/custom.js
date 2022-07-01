@@ -45,7 +45,16 @@ window.addEventListener("load", () => {
             element = document.getElementById(i.toString());
             element.classList.add("selected");   
         }
-        // We need to claim the squares
+    }
+    let claims = getClaims();
+    len = claims.length;
+    for (let i=0; i<len; i++) {
+        if (claims[i] >= 0)
+        {
+            element = document.getElementById("B-" + i.toString());
+            let claim = claims[i] == 1 ? "claim1" : "claim2";
+            element.classList.add(claim);
+        }
     }
 });
 

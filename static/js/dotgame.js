@@ -1,4 +1,3 @@
-// These functions don't care about controls on our gameboard.
 // They only need line numbers and box numbers to communicate with
 // the server. The functions trigger events to our
 // custom.js to make changes to our gameboard controls.
@@ -8,13 +7,28 @@
 function pushMove(move)
 {
     let history = getHistory();
-    // Add the move to our history and to the lines array
+    // Add the move to our history
     history.push(move);
     localStorage.setItem('History', JSON.stringify(history));
+    // Add the move to our lines array
     let lines = getLines();
     let line = move[0];
     lines[line] = 1;
     localStorage.setItem('Lines', JSON.stringify(lines));
+    // Add the move to our claims array 
+    if (move[1] + move[2] > -2)
+    {
+        let claims = getClaims();
+        if (move[1] >= 0)
+        {
+            claims[move[1]] = getPlayer();
+        }
+        if (move[2] >= 0)
+        {
+            claims[move[2]] = getPlayer();
+        }
+        localStorage.setItem('Claims', JSON.stringify(claims));
+    }
     return history;
 }
 
@@ -43,6 +57,7 @@ function clearGameValues()
 {
     localStorage.removeItem('History');
     localStorage.removeItem('Lines');
+    localStorage.removeItem('Claims');
     localStorage.removeItem('Player1');
     localStorage.removeItem('Player2');
 }
@@ -113,6 +128,17 @@ function getLines()
     return lines;
 }
 
+// Return the state of all game board lines
+function getClaims()
+{
+    let claims = localStorage.getItem('Claims');
+    if (claims)
+        claims = JSON.parse(claims);
+    else
+        claims = INIT_CLAIMS;
+    return claims;
+}
+
 // Return the score for the indicated player 1 or 2
 function getScore(player)
 {
@@ -128,5 +154,5 @@ function getScore(player)
 // Return the player that has control of the board 1 or 2
 function getPlayer()
 {
-    return;
+    return 1;
 }
