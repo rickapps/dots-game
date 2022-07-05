@@ -106,6 +106,17 @@ function eraseMove(moves, bAnimate=true)
     return;
 }
 
+function setTheme(theme)
+{
+    localStorage.setItem('Theme', theme);
+}
+
+function getTheme()
+{
+    let theme = localStorage.getItem('Theme');
+    return theme;
+}
+
 // Return a list of all moves
 function getHistory()
 {

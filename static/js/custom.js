@@ -8,19 +8,19 @@ let sizeDropDown = document.getElementById("glevel");
 sizeDropDown.value = GAME_SIZE;
 
 // Define a function to change our css theme
-const setTheme = theme => document.documentElement.className = theme;
+const changeTheme = theme => document.documentElement.className = theme;
 // Set the theme to whatever it was before. We keep that value in localStorage
-let theme = localStorage.getItem('theme');
+let theme = getTheme();
 if (theme === null) theme = INIT_THEME;
-setTheme(theme);
+changeTheme(theme);
 
 // Listen for when someone changes the theme
 let colorDropDown = document.getElementById("gcolors");
 colorDropDown.value = theme;
 colorDropDown.onchange = function () {
-    setTheme(this.value);
+    changeTheme(this.value);
     // Save the value of the theme so we can retrieve it after a POST
-    localStorage.setItem('theme', this.value);
+    setTheme(this.value)
 }
 
 // Listen for when someone wants to start a new game
@@ -38,6 +38,13 @@ window.addEventListener("load", () => {
     // Obtain the current lines
     let lines = getLines();
     let len = lines.length;
+    // Make sure our lines match with current game size
+    if (len != 2 * GAME_SIZE * (GAME_SIZE + 1))
+    {
+        // Clear our stored values and start from scratch
+        clearGameValues();
+        lines = getLines();
+    }
     let element;
     for (let i=0; i<len; i++) {
         if (lines[i] > 0)

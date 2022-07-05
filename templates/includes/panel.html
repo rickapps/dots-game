@@ -12,6 +12,7 @@
          <legend>Options:</legend>
          <label for="glevel">Level:</label>
          <select id="glevel" name="glevel">
+         <!-- The dropdown list values come from config.py GAME_LEVELS -->
          {% for level in glevels %}
             {% if size == level[1] %}
             <option value={{level[1]}} selected>{{level[0]}}</option>
@@ -22,6 +23,7 @@
          </select><br><br>
          <label for="gcolors">Colors:</label>
          <select type="text" id="gcolors" name="gcolors">
+         <!-- The dropdown list values come from config.py GAME_THEMES -->
          {% for theme in gthemes %}
             <option value="{{theme[1]}}">{{theme[0]}}</option>
          {% endfor %}            

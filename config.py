@@ -1,6 +1,7 @@
-DEFAULT_SIZE_INDEX=1 # This is the index in GAME_LEVELS
+# Set the default game size. The value is the list index in GAME_LEVELS
+DEFAULT_SIZE_INDEX=1 
 
-# Game Levels  size of 3 means there are 3x3 boxes and 4x4 dots on the gameboard.
+# Game Levels - A size of 3 means there are 3x3 boxes and 4x4 dots on the gameboard.
 GAME_LEVELS =	[
     ('Easy', 3),
     ('Medium', 5),
@@ -8,6 +9,8 @@ GAME_LEVELS =	[
     ('Expert', 10)
 ]
 
+# Game Themes - column1 is the name to display. Column2 is the name of the class in the css file.
+# Remember that the class name is case sensitive. It must match exactly what is in themes.css file.
 GAME_THEMES = [
     ('Spring', 'theme1'),
     ('Summer', 'theme2'),
