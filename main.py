@@ -21,12 +21,15 @@ app.config.from_pyfile('config.py')
 #### 
 #  Start the game with default values. We won't clear local storage here
 # because the user could be continuing their last game.
+glevels = app.config['GAME_LEVELS']
+gthemes = app.config['GAME_THEMES']
 @app.route("/")
 def home():
-    size = app.config['SIZE']
+    default = app.config['DEFAULT_SIZE_INDEX']
+    size = glevels[default][1]
     lines = dotgame.init_game(size)
     boxes = dotgame.game_board(size, lines)
-    return render_template('index.html', size=size, lines=lines, boxes=boxes)
+    return render_template('index.html', size=size, lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
 # Start a new game with values specified by the user. For this case, 
 # localStorage has been cleared before the POST was issued.
@@ -35,7 +38,7 @@ def new_game():
     size = int(request.form['glevel'])
     lines = dotgame.init_game(size);
     boxes = dotgame.game_board(size, lines)
-    return render_template('index.html',size=size, lines=lines, boxes=boxes)
+    return render_template('index.html',size=size, lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
 # Return a list of moves to make for the specified lines list
 @app.route("/find/", methods = ['POST'])

@@ -12,17 +12,19 @@
          <legend>Options:</legend>
          <label for="glevel">Level:</label>
          <select id="glevel" name="glevel">
-             <option value="3">Easy</option>
-             <option value="5">Medium</option>
-             <option value="7">Difficult</option>
-             <option value="10">Expert</option>
+         {% for level in glevels %}
+            {% if size == level[1] %}
+            <option value={{level[1]}} selected>{{level[0]}}</option>
+            {% else %}
+            <option value={{level[1]}}>{{level[0]}}</option>
+            {% endif %}
+         {% endfor %}            
          </select><br><br>
          <label for="gcolors">Colors:</label>
          <select type="text" id="gcolors" name="gcolors">
-             <option value="theme1">Spring</option>
-             <option value="theme2">Hot</option>
-             <option value="theme3">Fall</option>
-             <option value="theme4">Snow</option>
+         {% for theme in gthemes %}
+            <option value="{{theme[1]}}">{{theme[0]}}</option>
+         {% endfor %}            
          </select><br><br>
          <input type="submit" value="New Game">
         </fieldset>

@@ -11,7 +11,7 @@ sizeDropDown.value = GAME_SIZE;
 const setTheme = theme => document.documentElement.className = theme;
 // Set the theme to whatever it was before. We keep that value in localStorage
 let theme = localStorage.getItem('theme');
-if (theme === null) theme = 'theme1';
+if (theme === null) theme = INIT_THEME;
 setTheme(theme);
 
 // Listen for when someone changes the theme
