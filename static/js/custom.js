@@ -1,3 +1,7 @@
+// Respond to events mostly triggered by dotgame.js
+// Functions included in this file are specific to our UI. If we change
+// the UI, we will probably need to modify several of these functions.
+
 // Get the style sheet
 let bodyStyles = document.body.style;
 // Set variables in our style sheet.
@@ -14,16 +18,20 @@ let theme = getTheme();
 if (theme === null) theme = INIT_THEME;
 changeTheme(theme);
 
-// Listen for when someone changes the theme
+//////////////////////////////////
+// CHANGE CSS THEME 
+//////////////////////////////////
 let colorDropDown = document.getElementById("gcolors");
 colorDropDown.value = theme;
 colorDropDown.onchange = function () {
     changeTheme(this.value);
     // Save the value of the theme so we can retrieve it after a POST
-    setTheme(this.value)
+    storeTheme(this.value)
 }
 
-// Listen for when someone wants to start a new game
+//////////////////////////////////
+// START NEW GAME 
+//////////////////////////////////
 let newGame = document.getElementById("gamevals");
 newGame.onsubmit = function() {
     // Verify it is what our user wants to do
@@ -32,8 +40,9 @@ newGame.onsubmit = function() {
     clearGameValues();
 }
 
-// Listen for page load, modify the css to show drawn
-// lines and claimed boxes.
+//////////////////////////////////
+// PAGE LOAD COMPLETE 
+//////////////////////////////////
 window.addEventListener("load", () => {
     // Obtain the current lines
     let lines = getLines();
@@ -69,11 +78,18 @@ window.addEventListener("load", () => {
 let gameboard = document.getElementById("gameboard");
 let lines = gameboard.getElementsByTagName("a");
 for (let line of lines) {
-    line.addEventListener("click", selectLine, false);
+    line.addEventListener("click", player1Move, false);
 }
-function selectLine(evt) {
+
+// Human player has selected a line. Get the line
+// number and validate it with the server. validateMove
+// will draw the line and claim any approprate boxes.
+function player1Move(evt) {
     let move = validateMove(parseInt(evt.target.id));
 } 
+
+// Add event listener for player2 move
+document.addEventListener("makeMove", makeMove, false);
 
 // Add an event listener to update the gameboard when a
 // player makes a move.
@@ -97,23 +113,25 @@ document.addEventListener("drawMove", (e) => {
 // Check if the move claims any squares. If so, update the
 // gameboard with the player's color, update the player's
 // score and return true. Otherwise, do nothing and return false.
+// This function can update two squares - move[1] and move[2]
 function claimSquares(move, player) {
     let points = 0;
     if (move[1] >= 0)
     {
         points += 1;
-        updateSquare(move[1], player);
+        fillSquare(move[1], player);
     }
     if (move[2] >= 0)
     {
         points += 1;
-        updateSquare(move[2], player);
+        fillSquare(move[2], player);
     }
     updateScore(player, points);
     return points > 0;
 }
 
-function updateSquare(boxNum, player)
+// Color the square with the player's color
+function fillSquare(boxNum, player)
 {
     let square = document.getElementById("B-" + boxNum);
     let claim = player == 1 ? "claim1" : "claim2";
