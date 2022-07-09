@@ -48,7 +48,7 @@ def init_game(size, prefill=False):
 # to two boxes can be claimed by a single line.
 # find_move returns a list of moves.
 def find_move(size, lines):
-    return   
+    return [(7,3,-1)]  
 
 # Main purpose is to indicate if a box color should
 # change (claim a square). The return value is a tuple,
@@ -57,6 +57,6 @@ def find_move(size, lines):
 # gets another turn. If line is -1, the game is over.
 def verify_move(size, lines, newline):
     game = gameboard.GameBoard(size, lines)
-    move = game.make_move(newline)
+    move = game.update_game_board(newline)
     return move
 

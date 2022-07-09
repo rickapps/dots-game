@@ -2,6 +2,9 @@
 // Functions included in this file are specific to our UI. If we change
 // the UI, we will probably need to modify several of these functions.
 
+//////////////////////////////////
+// INITIALIZATION 
+//////////////////////////////////
 // Get the style sheet
 let bodyStyles = document.body.style;
 // Set variables in our style sheet.
@@ -17,6 +20,33 @@ const changeTheme = theme => document.documentElement.className = theme;
 let theme = getTheme();
 if (theme === null) theme = INIT_THEME;
 changeTheme(theme);
+
+//////////////////////////////////
+// ADD EVENT LISTENERS 
+//////////////////////////////////
+
+// Page loaded - including style sheets
+window.addEventListener("load", restoreGame);
+
+// Add an event listener to all the lines on our gameboard.
+// We need to take action when a user clicks a line.
+let gameboard = document.getElementById("gameboard");
+//let anchors = gameboard.getElementsByTagName("a");
+//for (let anchor of anchors) {
+//    anchor.addEventListener("click", playerMove, false);
+//}
+// Alternate way to listen - not sure if it is better
+gameboard.addEventListener("click", (event) => {
+    if (event.target.tagName.toLowerCase() === "a") {
+      playerMove(event);
+    }
+});
+
+// Add event listener to update the gameboard
+document.addEventListener("drawMove", drawMove, false);
+
+// Add event listener to switch to the other player
+document.addEventListener("switchPlayer", makeMove, false);
 
 //////////////////////////////////
 // CHANGE CSS THEME 
@@ -41,10 +71,14 @@ newGame.onsubmit = function() {
 }
 
 //////////////////////////////////
-// PAGE LOAD COMPLETE 
+// FUNCTIONS TO UPDATE PAGE 
 //////////////////////////////////
-window.addEventListener("load", () => {
-    // Obtain the current lines
+function restoreGame() {
+    // Restore the last game if game size has not changed.
+    // Since we do not save the size, this only works if
+    // the last game played used our default size. To make
+    // this more robust, we could use a cookie to store the
+    // size of the previous game.
     let lines = getLines();
     let len = lines.length;
     // Make sure our lines match with current game size
@@ -54,6 +88,7 @@ window.addEventListener("load", () => {
         clearGameValues();
         lines = getLines();
     }
+    // Draw the lines we obtained from storage
     let element;
     for (let i=0; i<len; i++) {
         if (lines[i] > 0)
@@ -62,6 +97,7 @@ window.addEventListener("load", () => {
             element.classList.add("selected");   
         }
     }
+    // Check if any squares should be filled.
     let claims = getClaims();
     len = claims.length;
     for (let i=0; i<len; i++) {
@@ -72,29 +108,19 @@ window.addEventListener("load", () => {
             element.classList.add(claim);
         }
     }
-});
+};
 
-// Add an event listener to all the lines on our gameboard.
-let gameboard = document.getElementById("gameboard");
-let lines = gameboard.getElementsByTagName("a");
-for (let line of lines) {
-    line.addEventListener("click", player1Move, false);
-}
 
 // Human player has selected a line. Get the line
 // number and validate it with the server. validateMove
 // will draw the line and claim any approprate boxes.
-function player1Move(evt) {
+function playerMove(evt) {
     let move = validateMove(parseInt(evt.target.id));
 } 
 
-// Add event listener for player2 move
-document.addEventListener("makeMove", makeMove, false);
-
-// Add an event listener to update the gameboard when a
-// player makes a move.
-document.addEventListener("drawMove", (e) => {
-    let move = e.detail.move;
+// Draw a single move on the gameboard
+function drawMove(evt) {
+    let move = evt.detail.move;
     if (move[0] >= 0)
     {
         // Store the move
@@ -108,7 +134,7 @@ document.addEventListener("drawMove", (e) => {
             // toggle turn
         }
     }
-});
+};
 
 // Check if the move claims any squares. If so, update the
 // gameboard with the player's color, update the player's

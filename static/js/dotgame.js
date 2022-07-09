@@ -133,15 +133,15 @@ function makeMove()
     let fetchRes = fetch('/find/', options);
     fetchRes.then(res =>
         res.json()).then(d => {
-                d.array.forEach(move => {
-                    moves.append(d);
-                    event = new CustomEvent("drawMove", {detail: {move: d}});   
+                d.forEach(move => {
+                    moves.push(move);
+                    event = new CustomEvent("drawMove", {detail: {move: move}});   
                     document.dispatchEvent(event);
                 });
             });
     // Move to the other player
-    event = new CustomEvent("switchPlayer");
-    document.dispatchEvent(event);
+    //event = new CustomEvent("switchPlayer");
+    //document.dispatchEvent(event);
     return moves;
 }
 

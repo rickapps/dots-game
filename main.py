@@ -48,7 +48,7 @@ def find_best_move():
     size = mydata['size'] 
     lines = mydata['lines']
     move = dotgame.find_move(size, lines)
-    return
+    return json.dumps(move)
 
 # Return the box state after the user's move. If box state is
 # -1, the player's turn is over. 

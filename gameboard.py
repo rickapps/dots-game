@@ -60,7 +60,7 @@ class GameBoard:
 
     # Update the lines array with the specified move and determine
     # if the move completes any boxes. -1 means box not complete
-    def make_move(self, new_line):
+    def update_game_board(self, new_line):
         self.lines[new_line ] = 1
         boxes = self.get_boxes(new_line)
         new_box1 = -1
