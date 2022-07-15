@@ -44,3 +44,4 @@ from UI logic. I will refactor the code to use events and event listeners. Javas
 events triggered by business logic.
 2. Need to restructure storage to serialize claimed squares. This is
 needed only so we can continue a game from one session to another.
+

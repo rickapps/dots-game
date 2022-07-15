@@ -42,12 +42,6 @@ gameboard.addEventListener("click", (event) => {
     }
 });
 
-// Add event listener to update the gameboard
-document.addEventListener("drawMove", drawMove, false);
-
-// Add event listener to switch to the other player
-document.addEventListener("switchPlayer", makeMove, false);
-
 //////////////////////////////////
 // CHANGE CSS THEME 
 //////////////////////////////////
@@ -70,15 +64,27 @@ newGame.onsubmit = function() {
     clearGameValues();
 }
 
+///////////////////////////////////
+// EVENTS TRIGGERED FROM DOTGAME.JS
 //////////////////////////////////
-// FUNCTIONS TO UPDATE PAGE 
+// Add event listener to update the gameboard
+// The arg for event is array of [line,box1,box2]
+// Drawing a single line could complete up to two boxes.
+document.addEventListener("drawMove", drawMove, false);
+
+// Add event listener to switch to the other player
+document.addEventListener("switchPlayer", makeMove, false);
+
 //////////////////////////////////
+// EVENT HANDLERS 
+//////////////////////////////////
+// Response to load event.
+// Restore the last game if game size has not changed.
+// Since we do not save the size, this only works if
+// the last game played used our default size. To make
+// this more robust, we could use a cookie to store the
+// size of the previous game.
 function restoreGame() {
-    // Restore the last game if game size has not changed.
-    // Since we do not save the size, this only works if
-    // the last game played used our default size. To make
-    // this more robust, we could use a cookie to store the
-    // size of the previous game.
     let lines = getLines();
     let len = lines.length;
     // Make sure our lines match with current game size
@@ -111,6 +117,7 @@ function restoreGame() {
 };
 
 
+// Response to click event.
 // Human player has selected a line. Get the line
 // number and validate it with the server. validateMove
 // will draw the line and claim any approprate boxes.
@@ -118,7 +125,8 @@ function playerMove(evt) {
     let move = validateMove(parseInt(evt.target.id));
 } 
 
-// Draw a single move on the gameboard
+// Response to drawMove event.
+// Draw a single move on the gameboard.
 function drawMove(evt) {
     let move = evt.detail.move;
     if (move[0] >= 0)
@@ -136,6 +144,10 @@ function drawMove(evt) {
     }
 };
 
+
+////////////////////////////////
+// HELPER FUNCTIONS
+///////////////////////////////
 // Check if the move claims any squares. If so, update the
 // gameboard with the player's color, update the player's
 // score and return true. Otherwise, do nothing and return false.
