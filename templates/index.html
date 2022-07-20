@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Dots Game</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="/static/css/themes.css">
+    <link rel="stylesheet" href="/static/css/layout.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <h1>PLAY DOTS & BOXES!</h1>
+    <h3>How to Play:</h3>
+    Players take turns drawing one horizontal or vertical line that connects two adjacent dots. Diagonal lines are not allowed. A player is awarded one
+    point each time they draw the fourth side of a 1x1 square that completes a box. That player also continues drawing lines and gaining points provided each
+    new line they draw completes another box. Remember, each time you complete a box, you must draw another line. If you draw a line that does not
+    complete a box, your turn ends, and your oponent's turn starts. The game is over when there are no more dots to connect. The player that completes
+    the most boxes wins. Play against the computer, or with another person. Your game will be saved to your computer. Return to this web page anytime to 
+    resume a game in progress. 
+    
+    <form action="/new/" method="POST" id="gamevals">
+        <fieldset>
+         <legend>Options:</legend>
+         <label for="glevel">Level:</label>
+         <select id="glevel" name="glevel">
+         <!-- The dropdown list values come from config.py GAME_LEVELS -->
+         {% for level in glevels %}
+            {% if size == level[1] %}
+            <option value={{level[1]}} selected>{{level[0]}}</option>
+            {% else %}
+            <option value={{level[1]}}>{{level[0]}}</option>
+            {% endif %}
+         {% endfor %}            
+         </select><br><br>
+         <label for="gcolors">Colors:</label>
+         <select type="text" id="gcolors" name="gcolors">
+         <!-- The dropdown list values come from config.py GAME_THEMES -->
+         {% for theme in gthemes %}
+            <option value="{{theme[1]}}">{{theme[0]}}</option>
+         {% endfor %}            
+         </select><br><br>
+         <input type="submit" value="New Game">
+        </fieldset>
+       </form>
+    <script>
+        const PAGE_NAME = 'intro';
+        // flask jinja fills values from main.py 
+        const GAME_SIZE = {{size|tojson}};
+        const INIT_THEME = {{theme|tojson}};
+    </script>
+    <script src="/static/js/dotgame.js"></script>
+    <script src="/static/js/custom.js"></script>
+</body>
+</html>

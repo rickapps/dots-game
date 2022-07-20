@@ -1,31 +1,33 @@
 // Javascript functions that communicate with the server.
 // Based on server responses, events are triggered. These
 // events are handled by functions in file custom.js.
+var pydots = pydots || {};
+pydots.dotgame= pydots.dotgame || {};
 //
 // Store line state, history, and score in local storage to make sure we do not lose the
 // values on page refresh.
-function pushMove(move)
+pydots.dotgame.pushMove = function (move)
 {
-    let history = getHistory();
+    let history = pydots.dotgame.getHistory();
     // Add the move to our history
     history.push(move);
     localStorage.setItem('History', JSON.stringify(history));
     // Add the move to our lines array
-    let lines = getLines();
+    let lines = pydots.dotgame.getLines();
     let line = move[0];
     lines[line] = 1;
     localStorage.setItem('Lines', JSON.stringify(lines));
     // Add the move to our claims array 
     if (move[1] + move[2] > -2)
     {
-        let claims = getClaims();
+        let claims = pydots.dotgame.getClaims();
         if (move[1] >= 0)
         {
-            claims[move[1]] = getPlayer();
+            claims[move[1]] = pydots.dotgame.getPlayer();
         }
         if (move[2] >= 0)
         {
-            claims[move[2]] = getPlayer();
+            claims[move[2]] = pydots.dotgame.getPlayer();
         }
         localStorage.setItem('Claims', JSON.stringify(claims));
     }
@@ -33,29 +35,29 @@ function pushMove(move)
 }
 
 // Update our scores. Trigger event to notify UI.
-function updateScore(player, pointsToAdd)
+pydots.dotgame.updateScore = function (player, pointsToAdd)
 {
     let key = 'Player1';
     // Add the points to the player's existing score and store.
     if (player = 2)
         key = 'Player2';
-    let score = getScore(player);
+    let score = pydots.dotgame.getScore(player);
     let newScore = score + pointsToAdd;
     localStorage.setItem(key, newScore);
     return newScore;
 }
 
 // Pop the last move from storage. 
-function popLastMove()
+pydots.dotgame.popLastMove = function ()
 {
-    let moves = getHistory();
+    let moves = pydots.dotgame.getHistory();
     let popped = moves.pop();
     localStorage.setItem('History');
     return popped;
 }
 
 // Clear all game specific values from storage
-function clearGameValues()
+pydots.dotgame.clearGameValues = function ()
 {
     localStorage.removeItem('History');
     localStorage.removeItem('Lines');
@@ -68,14 +70,14 @@ function clearGameValues()
 // completes any squares. Returns a tuple (lineNum, box1, box2)
 // Failure is indicated by (-1,-1,-1). Triggers other events to
 // notify UI.
-function validateMove(line, bAnimate=true)
+pydots.dotgame.validateMove = function (line, bAnimate=true)
 {
     var validated = [-1,-1,-1];
     // Send a POST request to the server informing it of our move
     // The body of the request contains the current game state.
     let specs = {
         "size": GAME_SIZE,
-        "lines": getLines(),
+        "lines": pydots.dotgame.getLines(),
         "newline": line
     }
     // Tell fetch we want a POST using JSON data
@@ -110,7 +112,7 @@ function validateMove(line, bAnimate=true)
 
 // Ask the computer for its move(s). For each move,
 // trigger drawMove event and others to notify UI.
-function makeMove()
+pydots.dotgame.makeMove = function ()
 {
     let moves = [];
     let event;
@@ -118,7 +120,7 @@ function makeMove()
     // The body of the request contains the current game state.
     let specs = {
         "size": GAME_SIZE,
-        "lines": getLines()
+        "lines": pydots.dotgame.getLines()
     }
     // Tell fetch we want a POST using JSON data
     // and send the request.
@@ -147,26 +149,27 @@ function makeMove()
 
 // Remove the indicated lines and box claims from the game board
 // moves is a list of tuples (line_id, box_id), (line_id, box_id), ...
-function eraseMove(moves, bAnimate=true)
+pydots.dotgame.eraseMove = function (moves, bAnimate=true)
 {
     return;
 }
 
 // Record the specified theme to storage
-function storeTheme(theme)
+pydots.dotgame.storeTheme = function (theme)
 {
     localStorage.setItem('Theme', theme);
 }
 
 // Retrieve the last theme from storage
-function getTheme()
+pydots.dotgame.getTheme = function ()
 {
     let theme = localStorage.getItem('Theme');
     return theme;
 }
 
+
 // Return a list of all moves
-function getHistory()
+pydots.dotgame.getHistory = function ()
 {
     let history = localStorage.getItem('History');
     if (history)
@@ -177,7 +180,7 @@ function getHistory()
 }
 
 // Return the state of all game board lines
-function getLines()
+pydots.dotgame.getLines = function ()
 {
     let lines = localStorage.getItem('Lines');
     if (lines)
@@ -188,7 +191,7 @@ function getLines()
 }
 
 // Return the state of all game board squares
-function getClaims()
+pydots.dotgame.getClaims = function ()
 {
     let claims = localStorage.getItem('Claims');
     if (claims)
@@ -199,7 +202,7 @@ function getClaims()
 }
 
 // Return the score for the indicated player 1 or 2
-function getScore(player)
+pydots.dotgame.getScore = function (player)
 {
     let key = 'Player1';
     if (player == 2)
@@ -211,7 +214,7 @@ function getScore(player)
 }
 
 // Return the player that has control of the board 1 or 2
-function getPlayer()
+pydots.dotgame.getPlayer = function ()
 {
     return 1;
 }

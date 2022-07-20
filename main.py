@@ -23,22 +23,24 @@ app.config.from_pyfile('config.py')
 # because the user could be continuing their last game.
 glevels = app.config['GAME_LEVELS']
 gthemes = app.config['GAME_THEMES']
+default_size = app.config['DEFAULT_SIZE_INDEX']
+default_theme = app.config['DEFAULT_THEME_INDEX']
+size = int(glevels[default_size][1])
+theme = gthemes[default_theme][1]
+
 @app.route("/")
 def home():
-    default = app.config['DEFAULT_SIZE_INDEX']
-    size = glevels[default][1]
-    lines = dotgame.init_game(size)
-    boxes = dotgame.game_board(size, lines)
-    return render_template('index.html', size=size, lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
+    return render_template('index.html', size=size, theme=theme, glevels=glevels, gthemes=gthemes)
 
 # Start a new game with values specified by the user. For this case, 
 # localStorage has been cleared before the POST was issued.
 @app.route("/new/", methods = ['POST'])
 def new_game():
     size = int(request.form['glevel'])
+    theme = request.form['gcolors']
     lines = dotgame.init_game(size);
     boxes = dotgame.game_board(size, lines)
-    return render_template('index.html',size=size, lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
+    return render_template('game.html',size=size, theme=theme, lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
 # Return a list of moves to make for the specified lines list
 @app.route("/find/", methods = ['POST'])
