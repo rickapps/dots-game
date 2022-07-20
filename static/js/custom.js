@@ -24,20 +24,31 @@ changeTheme(theme);
 //////////////////////////////////
 // ADD EVENT LISTENERS 
 //////////////////////////////////
+window.addEventListener("DOMContentLoaded", (event) => {
+    // Add an event listener to all the lines on our gameboard.
+    // We need to take action when a user clicks a line.
+    let gameboard = document.getElementById("gameboard");
+    if (gameboard) {
+        gameboard.addEventListener("click", (event) => {
+            if (event.target.tagName.toLowerCase() === "a") {
+            pydots.playerMove(event);
+            }
+        });
+    }
+    // Add event listener to update the gameboard
+    // The arg for event is array of [line,box1,box2]
+    // Drawing a single line could complete up to two boxes.
+    if (PAGE_NAME == 'game')
+    {
+        document.addEventListener("drawMove", pydots.drawMove, false);
+        // Add event listener to switch to the other player
+        document.addEventListener("switchPlayer", pydots.dotgame.makeMove, false);
+    }
+});
 
 // Page loaded - including style sheets
 if (PAGE_NAME == 'game') {
     window.addEventListener("load", pydots.restoreGame);
-}
-// Add an event listener to all the lines on our gameboard.
-// We need to take action when a user clicks a line.
-let gameboard = document.getElementById("gameboard");
-if (gameboard) {
-  gameboard.addEventListener("click", (event) => {
-    if (event.target.tagName.toLowerCase() === "a") {
-      pydots.playerMove(event);
-    }
-});
 }
 
 //////////////////////////////////
@@ -66,19 +77,6 @@ if (newGame)
         // Clear our local storage values
         pydots.dotgame.clearGameValues();
     }
-}
-
-///////////////////////////////////
-// EVENTS TRIGGERED FROM DOTGAME.JS
-//////////////////////////////////
-// Add event listener to update the gameboard
-// The arg for event is array of [line,box1,box2]
-// Drawing a single line could complete up to two boxes.
-if (PAGE_NAME == 'game')
-{
-    document.addEventListener("drawMove", pydots.drawMove, false);
-    // Add event listener to switch to the other player
-    document.addEventListener("switchPlayer", pydots.dotgame.makeMove, false);
 }
 
 //////////////////////////////////
