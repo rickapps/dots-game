@@ -1,5 +1,7 @@
 import json
 import gameboard
+import random
+
 # Returns the array of boxes that constitues the game board.
 # The number of boxes returned is size**2. The lines array
 # indicates which box sides have already been drawn (prefill).
@@ -48,7 +50,19 @@ def init_game(size, prefill=False):
 # to two boxes can be claimed by a single line.
 # find_move returns a list of moves.
 def find_move(size, lines):
-    return [(7,3,-1)]  
+    # Randomly pick indices until we find a line that is not taken
+    game = gameboard.GameBoard(size, lines)
+    upper = size*size*2 + 2*size
+    index_list = [random.randint(0, upper-1) for i in range(0,upper)]
+    move = []
+    for index in index_list:
+        if lines[index] == 0:
+            # We found a move
+            move.append(game.update_game_board(index))
+            if move[-1][1] == -1 and move[-1][2] == -1:
+                break
+        
+    return move  
 
 # Main purpose is to indicate if a box color should
 # change (claim a square). The return value is a tuple,

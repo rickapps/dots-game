@@ -1,5 +1,7 @@
 // Respond to events mostly triggered by dotgame.js
-// Functions included in this file are specific to our UI. If we change
+// This is what you would edit to revise the game UI. You could leave
+// dotgame.js alone as it just implements business logic.
+// Functions included in custom.js are specific to our UI. If we change
 // the UI, we will probably need to modify several of these functions.
 var pydots = pydots || {};
 //////////////////////////////////
@@ -25,31 +27,27 @@ changeTheme(theme);
 // ADD EVENT LISTENERS 
 //////////////////////////////////
 window.addEventListener("DOMContentLoaded", (event) => {
-    // Add an event listener to all the lines on our gameboard.
-    // We need to take action when a user clicks a line.
     let gameboard = document.getElementById("gameboard");
     if (gameboard) {
+        // Add an event listener to all the lines on our gameboard.
+        // When a player clicks on a line, we need to know about it.
         gameboard.addEventListener("click", (event) => {
             if (event.target.tagName.toLowerCase() === "a") {
             pydots.playerMove(event);
             }
         });
-    }
-    // Add event listener to update the gameboard
-    // The arg for event is array of [line,box1,box2]
-    // Drawing a single line could complete up to two boxes.
-    if (PAGE_NAME == 'game')
-    {
+        // Add event listener to draw a line on the gameboard.
+        // The arg for event is array of [line,box1,box2]
+        // Drawing a single line could complete up to two boxes.
         document.addEventListener("drawMove", pydots.drawMove, false);
-        // Add event listener to switch to the other player
-        document.addEventListener("switchPlayer", pydots.dotgame.makeMove, false);
+        // Add event listener to update the gameboard with current player.
+        document.addEventListener("updatePlayer", pydots.updatePlayer, false);
+        // Add event listener to update the score.
+        document.addEventListener("updateScore", pydots.updateScore);
+        // Add event listener to restore a previous game
+        window.addEventListener("load", pydots.restoreGame);
     }
 });
-
-// Page loaded - including style sheets
-if (PAGE_NAME == 'game') {
-    window.addEventListener("load", pydots.restoreGame);
-}
 
 //////////////////////////////////
 // CHANGE CSS THEME 
@@ -82,7 +80,6 @@ if (newGame)
 //////////////////////////////////
 // EVENT HANDLERS 
 //////////////////////////////////
-// Response to load event.
 // Restore the last game if game size has not changed.
 // Since we do not save the size, this only works if
 // the last game played used our default size. To make
@@ -120,13 +117,20 @@ pydots.restoreGame = function () {
     }
 };
 
+// Reset the board to indicate the current player's turn
+pydots.updatePlayer = function (evt) {
+    // If it is the machine's turn, let the server know.
+    if (pydots.dotgame.getPlayer() == MACHINE)
+        pydots.dotgame.makeMove();
+    return;
+}
 
 // Response to click event.
 // Human player has selected a line. Get the line
 // number and validate it with the server. validateMove
 // will draw the line and claim any approprate boxes.
 pydots.playerMove = function (evt) {
-    let move = pydots.dotgame.validateMove(parseInt(evt.target.id));
+    pydots.dotgame.validateMove(parseInt(evt.target.id));
 } 
 
 // Response to drawMove event.
@@ -137,17 +141,18 @@ pydots.drawMove = function (evt) {
     {
         // Store the move
         pydots.dotgame.pushMove(move)
-        // draw our line
+        // Next two statements draw our line
         let line = document.getElementById(move[0].toString());
         line.classList.add("selected");
         // claim any squares
-        if (!pydots.claimSquares(move, 1))
-        {
-            // toggle turn
-        }
+        pydots.claimSquares(move, 1);
     }
 };
 
+// Update our score board
+pydots.updateScore = function (player, score) {
+    return;
+}
 
 ////////////////////////////////
 // HELPER FUNCTIONS
