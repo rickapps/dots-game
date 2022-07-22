@@ -1,13 +1,17 @@
 // Javascript functions that communicate with the server.
 // Based on server responses, events are triggered. These
 // events are handled by functions in file custom.js.
+// If you want to modify the look of the game, you should
+// probably edit custom.js instead of here.
 var pydots = pydots || {};
 pydots.dotgame= pydots.dotgame || {};
 
+// If the machine is playing, it is always player number 0.
+// Human players can be 1, 2, 3, or 4
 const MACHINE = 0;
 
 //
-// Store line state, history, and score in local storage to make sure we do not lose the
+// Store line state, history, and claims in local storage to make sure we do not lose the
 // values on page refresh.
 pydots.dotgame.pushMove = function (move)
 {
@@ -38,7 +42,7 @@ pydots.dotgame.pushMove = function (move)
 }
 
 // Update our scores. Return the number of points added
-// to the current players score
+// to the current player's score
 pydots.dotgame.updateScore = function (move)
 {
     let add = 0;
@@ -62,7 +66,7 @@ pydots.dotgame.popLastMove = function ()
 {
     let moves = pydots.dotgame.getHistory();
     let popped = moves.pop();
-    localStorage.setItem('History');
+    localStorage.setItem('History', JSON.stringify(moves));
     return popped;
 }
 
@@ -75,8 +79,11 @@ pydots.dotgame.clearGameValues = function ()
     localStorage.removeItem('Scores');
 }
 
+// A human player has drawn one line on the gameboard.
 // Send the user's desired move to the server to determine if it
-// completes any squares. Returns a tuple (lineNum, box1, box2)
+// completes any squares. The server returns a tuple containing
+// (lineNum, box1, box2) where box1 and box2 indicate any completed
+// squares. A value of -1 means square not completed.
 // Failure is indicated by (-1,-1,-1). Triggers other events to
 // notify UI.
 pydots.dotgame.validateMove = function (line, bAnimate=true)
@@ -163,7 +170,7 @@ pydots.dotgame.makeMove = function ()
                         event = new CustomEvent("updateScore");
                     }
                 });
-                // Machine turn has ended
+                // Machine turn has ended. Switch to human player
                 pydots.dotgame.switchPlayers();
                 event = new CustomEvent("switchPlayer");
                 document.dispatchEvent(event);
@@ -171,14 +178,14 @@ pydots.dotgame.makeMove = function ()
     return moves;
 }
 
-// Remove the indicated lines and box claims from the game board
+// Remove the indicated lines and box claims from the game board.
 // moves is a list of tuples (line_id, box_id), (line_id, box_id), ...
 pydots.dotgame.eraseMove = function (moves, bAnimate=true)
 {
     return;
 }
 
-// Record the specified theme to storage
+// Write the specified theme to storage
 pydots.dotgame.storeTheme = function (theme)
 {
     localStorage.setItem('Theme', theme);
@@ -192,7 +199,7 @@ pydots.dotgame.getTheme = function ()
 }
 
 
-// Return a list of all moves
+// Return a list of all moves.
 pydots.dotgame.getHistory = function ()
 {
     let history = localStorage.getItem('History');
@@ -215,6 +222,7 @@ pydots.dotgame.getLines = function ()
 }
 
 // Return the state of all game board squares
+// We call them claims when the squares are complete.
 pydots.dotgame.getClaims = function ()
 {
     let claims = localStorage.getItem('Claims');
@@ -236,9 +244,10 @@ pydots.dotgame.getScore = function (player)
     return score;
 }
 
-// Set the number of players - 2,3,or 4. Indicate which player
-// is the computer - 0,1,2,3,or 4. 0 means all players are
-// human. 
+// Set the number of players: 2,3,or 4. Indicate which player
+// is the computer: 0,1,2,3,or 4. 0 means all players are
+// human. storePlayers(4,0) all are human. storePlayers(4,2)
+// means player 2 is the computer.
 pydots.dotgame.storePlayers = function(numPlayers, machine)
 {
     // Error if numbers are not within range

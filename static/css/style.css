@@ -64,12 +64,24 @@ Email: rick@rickapps.com
   aspect-ratio: 1;
 }
 
+.claim0 {
+  background-color: var(--machine-background-color);
+}
+
 .claim1 {
   background-color: var(--play1-background-color);
 }
 
 .claim2 {
   background-color: var(--play2-background-color);
+}
+
+.claim3 {
+  background-color: var(--play3-background-color);
+}
+
+.claim4 {
+  background-color: var(--play4-background-color);
 }
 
 /* The grid-item class always makes the top and left box borders visible. */

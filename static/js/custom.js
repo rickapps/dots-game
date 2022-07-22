@@ -74,6 +74,8 @@ if (newGame)
         alert("This will end your current game.")
         // Clear our local storage values
         pydots.dotgame.clearGameValues();
+        // Set number of players
+        pydots.dotgame.storePlayers(2,2);
     }
 }
 
@@ -145,7 +147,7 @@ pydots.drawMove = function (evt) {
         let line = document.getElementById(move[0].toString());
         line.classList.add("selected");
         // claim any squares
-        pydots.claimSquares(move, 1);
+        pydots.claimSquares(move, pydots.dotgame.getPlayer());
     }
 };
 
@@ -181,6 +183,6 @@ pydots.claimSquares = function (move, player) {
 pydots.fillSquare = function (boxNum, player)
 {
     let square = document.getElementById("B-" + boxNum);
-    let claim = player == 1 ? "claim1" : "claim2";
+    let claim = "claim" + player;
     square.classList.add(claim);
 }
