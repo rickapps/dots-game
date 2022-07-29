@@ -1,3 +1,4 @@
+# Class to represent a dot game board. 
 class GameBoard:
     def __init__(self, size, lines):
         self.size = size
@@ -52,11 +53,33 @@ class GameBoard:
 
     # Indicates if all four sides of the box are drawn
     def is_box_complete(self, box_num):
+        is_complete = self.count_completed_sides(box_num) == 4
+        return is_complete
+
+    # Return the line that would complete the given square if it
+    # exists. Otherwise, return -1.
+    def complete_the_square(self, box_num):
+        # If the box has three sides, return the missing line
+        lines = self.get_box_sides_h(box_num) + self.get_box_sides_v(box_num)
+        # Loop on values in the tuple
+        count = 0
+        free = -1
+        for line in lines:
+            if self.lines[line] == 0:
+                free = line
+            else:
+                count+=1
+        line = free if count == 3 else -1
+        return line
+
+    # Return a count of the number of completed sides of the 
+    # specified square.
+    def count_completed_sides(self, box_num):
         hlines = self.get_box_sides_h(box_num)
         vlines = self.get_box_sides_v(box_num)
-        is_complete = self.lines[hlines[0]] + self.lines[hlines[1]] + \
-           self.lines[vlines[0]] + self.lines[vlines[1]] == 4
-        return is_complete
+        count = self.lines[hlines[0]] + self.lines[hlines[1]] + \
+           self.lines[vlines[0]] + self.lines[vlines[1]] 
+        return count
 
     # Update the lines array with the specified move and determine
     # if the move completes any boxes. -1 means box not complete
@@ -70,5 +93,16 @@ class GameBoard:
         if boxes[1] >= 0 and self.is_box_complete(boxes[1]):
             new_box2 = boxes[1]
         return (new_line, new_box1, new_box2)
+
+    # Calculate the max number of points that could be
+    # obtained by the indicated move. We pass a copy
+    # of self.lines to the method.
+    def calculate_points(self, new_line, lines):
+        boxes = self.get_boxes(new_line)
+        lines[new_line] = 1
+        if self.is_box_complete(boxes[0]):
+            points+=1
+        else:
+            line = self.complete_the_square 
     
 
