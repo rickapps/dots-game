@@ -9,15 +9,15 @@ class GameBoard:
         
 
     # Indicates if the line is horizontal or vertical
-    def is_horizontal(self, line_num):
+    def is_line_horizontal(self, line_num):
         return line_num < self.num_horizontal
 
     # Returns the two boxes that include the line
     # The two boxes will be (box_left, box_right) OR (box_top, box_bottom)
-    def get_boxes(self, line_num):
+    def get_adjacent_boxes(self, line_num):
         box1 = -1 # left or top
         box2 = -1 # right or bottom
-        if self.is_horizontal(line_num):
+        if self.is_line_horizontal(line_num):
             box2 = line_num
             box1 = line_num - self.size
             # Special case
@@ -58,7 +58,7 @@ class GameBoard:
 
     # Return the line that would complete the given square if it
     # exists. Otherwise, return -1.
-    def complete_the_square(self, box_num):
+    def get_missing_side(self, box_num):
         # If the box has three sides, return the missing line
         lines = self.get_box_sides_h(box_num) + self.get_box_sides_v(box_num)
         # Loop on values in the tuple
@@ -85,7 +85,7 @@ class GameBoard:
     # if the move completes any boxes. -1 means box not complete
     def update_game_board(self, new_line):
         self.lines[new_line ] = 1
-        boxes = self.get_boxes(new_line)
+        boxes = self.get_adjacent_boxes(new_line)
         new_box1 = -1
         new_box2 = -1
         if boxes[0] >= 0 and self.is_box_complete(boxes[0]):
@@ -94,15 +94,29 @@ class GameBoard:
             new_box2 = boxes[1]
         return (new_line, new_box1, new_box2)
 
-    # Calculate the max number of points that could be
-    # obtained by the indicated move. We pass a copy
-    # of self.lines to the method.
-    def calculate_points(self, new_line, lines):
-        boxes = self.get_boxes(new_line)
-        lines[new_line] = 1
-        if self.is_box_complete(boxes[0]):
-            points+=1
-        else:
-            line = self.complete_the_square 
+    # Provide a starting box and an empty moves array.
+    # The function will complete all boxes in a chain.
+    # Each line drawn is added to the moves array.
+    # The total number of points earned by the moves is
+    # returned. The method returns -1 if the start box
+    # does not have three sides.
+    def complete_joined_boxes(self, start_box, moves):
+        boxes = []
+        points = -1
+        # Make sure our start box has three sides
+        line = self.get_missing_side(start_box)
+        if line >= 0:
+            points = 0
+            moves.append(self.update_game_board(line))
+            # A bit inefficient here
+            boxes = self.get_adjacent_boxes(line)
+        # Figure out the next box in the chain
+        for box in boxes:
+            if self.is_box_complete(box):
+                points += 1
+            else:
+                points += self.complete_joined_boxes(box, moves)
+        
+        return points
     
 

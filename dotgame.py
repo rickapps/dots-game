@@ -50,11 +50,23 @@ def init_game(size, prefill=False):
 # to two boxes can be claimed by a single line.
 # find_move returns a list of moves.
 def find_move(size, lines):
-    # Randomly pick indices until we find a line that is not taken
     game = gameboard.GameBoard(size, lines)
-    upper = size*size*2 + 2*size
-    index_list = [random.randint(0, upper-1) for i in range(0,upper)]
+    # Check for squares that can be made
+    points = 0
     move = []
+    more_three_sided = True
+    while more_three_sided:
+        more_three_sided = False
+        for i in range(game.num_boxes):
+            if game.count_completed_sides(i) == 3:
+                more_three_sided = True
+                points += game.complete_joined_boxes(i, move)
+                break
+
+    # All scoring moves have been made
+    # Randomly pick indices until we find a line that is not taken
+    upper = game.num_lines
+    index_list = [random.randint(0, upper-1) for i in range(0,upper)]
     for index in index_list:
         if lines[index] == 0:
             # We found a move
