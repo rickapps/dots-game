@@ -94,19 +94,47 @@ class GameBoard:
             new_box2 = boxes[1]
         return (new_line, new_box1, new_box2)
 
+    def is_scoring_line(self, line):
+        assert(self.lines[line] == 0), "Line is not empty - is_scoring_line"
+        scoring = False
+        boxes = self.get_adjacent_boxes(line)
+        if boxes[0] >= 0 and self.count_completed_sides(boxes[0]) == 3:
+            scoring = True
+        if boxes[1] >= 0 and self.count_completed_sides(boxes[1]) == 3:
+            scoring = True
+        return scoring
+
+    def get_line_cost(self, line):
+        assert(self.is_scoring_line(line) == False), "Bad line - get_line_cost"
+        moves = []
+        # Make the move
+        moves.append(self.update_game_board(line))
+        box = max(self.get_adjacent_boxes(line))
+        # See what opposing player can do
+        cost = self.complete_joined_boxes(box, moves)
+        # Return the game to its original state
+        self.undo_moves(moves)
+        return cost
+        
+    # Reset the specified lines to zero in the lines array
+    def undo_moves(self, moves):
+        for move in moves:
+            index = move[0]
+            self.lines[index] = 0
+        return
+
     # Provide a starting box and an empty moves array.
     # The function will complete all boxes in a chain.
     # Each line drawn is added to the moves array.
     # The total number of points earned by the moves is
-    # returned. The method returns -1 if the start box
+    # returned. The method returns 0 if the start box
     # does not have three sides.
     def complete_joined_boxes(self, start_box, moves):
         boxes = []
-        points = -1
+        points = 0
         # Make sure our start box has three sides
         line = self.get_missing_side(start_box)
         if line >= 0:
-            points = 0
             moves.append(self.update_game_board(line))
             # A bit inefficient here
             boxes = self.get_adjacent_boxes(line)
