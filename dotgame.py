@@ -49,7 +49,6 @@ def init_game(size, prefill=False):
 def find_best_nonscoring_move(size, lines):
     # Make a list of available lines and sort them randomly.
     available = []
-    consequences = 1000
     for i in range(len(lines)):
         if lines[i] == 0:
             available.append(i)
@@ -102,7 +101,7 @@ def find_move(size, lines):
                 break
 
     # We are out of the loop. Add a move to end our turn
-    move.append(find_best_nonscoring_move(size, lines))
+    move.extend(find_best_nonscoring_move(size, lines))
 
     return move  
 

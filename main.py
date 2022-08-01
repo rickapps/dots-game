@@ -50,6 +50,7 @@ def find_best_move():
     size = mydata['size'] 
     lines = mydata['lines']
     move = dotgame.find_move(size, lines)
+    # Return a list of tuples [(line,boxA,boxB), (...)]
     return json.dumps(move)
 
 # Return the box state after the user's move. If box state is
@@ -61,7 +62,7 @@ def verify_user_move():
     size = mydata['size'] 
     lines = mydata['lines']
     line = mydata['newline']
-    # Return a tuple (move, box) as json
+    # Return a tuple (line, boxA, boxB) as json
     return json.dumps(dotgame.verify_move(size, lines, line))
 
 if __name__ == "__main__":
