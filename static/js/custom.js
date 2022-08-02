@@ -2,11 +2,16 @@
 // rick@rickapps.com
 // August 1, 2022
 //
-// Respond to events mostly triggered by dotgame.js
-// This is what you would edit to revise the game UI. You could leave
-// dotgame.js alone as it just implements business logic.
-// Functions included in custom.js are specific to our UI. If we change
-// the UI, we will probably need to modify several of these functions.
+// Edit this file to change the look and feel of the dots game.
+// You need to listen for and respond to the following three custom events:
+// drawMove - Draw one line on the game board. Use dotgame.getPlayer()
+// to see who the current player is.
+// updatePlayer - The turn has changed. Update the board to indicate
+// whose turn it is.
+// updateScore - Update the scoreboard.
+//
+// Dotgame.js implements the business logic. You should not need to alter
+// this file if you just want to change the look of the game. 
 var pydots = pydots || {};
 //////////////////////////////////
 // INITIALIZATION 

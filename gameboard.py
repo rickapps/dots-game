@@ -2,7 +2,8 @@
 # rick@rickapps.com
 # August 1, 2022
 #
-# Class to represent a dot game board. 
+# Class to represent the dot game board. Specify the number of squares per side
+# and the current state of each line. 
 class GameBoard:
     def __init__(self, size, lines):
         self.size = size
@@ -12,12 +13,14 @@ class GameBoard:
         self.num_horizontal = int(self.num_lines / 2)   # We know num_lines is always even
         
 
-    # Indicates if the line is horizontal or vertical
+    # Indicates if the specified line is horizontal or vertical
     def is_line_horizontal(self, line_num):
         return line_num < self.num_horizontal
 
-    # Returns the two boxes that include the line
+    # Returns the two boxes that include the specified line
     # The two boxes will be (box_left, box_right) OR (box_top, box_bottom)
+    # If the line is on the edge of the board, one of the returned boxes will
+    # be -1.
     def get_adjacent_boxes(self, line_num):
         box1 = -1 # left or top
         box2 = -1 # right or bottom
@@ -41,7 +44,7 @@ class GameBoard:
     
         return (box1,box2)
     
-    # Get the top and bottom of the box
+    # Get the top and bottom lines of a specified box
     def get_box_sides_h(self, box_num):
         box_top = box_num
         box_bottom = box_top + self.size
@@ -55,7 +58,7 @@ class GameBoard:
             box_right = int((box_left - self.num_horizontal) // self.size) + self.num_lines - self.size
         return (box_left, box_right)
 
-    # Indicates if all four sides of the box are drawn
+    # Indicates if all four sides of the specified box are drawn
     def is_box_complete(self, box_num):
         is_complete = self.count_completed_sides(box_num) == 4
         return is_complete
@@ -98,6 +101,7 @@ class GameBoard:
             new_box2 = boxes[1]
         return (new_line, new_box1, new_box2)
 
+    # Return True if the specified line completes a box
     def is_scoring_line(self, line):
         assert(self.lines[line] == 0), "Line is not empty - is_scoring_line"
         scoring = False
@@ -108,14 +112,21 @@ class GameBoard:
             scoring = True
         return scoring
 
+    # Determine the number of points the next player might score if the current player
+    # draws the specified line. The method determines the cost of the line that
+    # ends the current player's turn.
     def get_line_cost(self, line):
         assert(self.is_scoring_line(line) == False), "Bad line - get_line_cost"
         moves = []
         # Make the move
         moves.append(self.update_game_board(line))
-        box = max(self.get_adjacent_boxes(line))
+        boxes = self.get_adjacent_boxes(line)
         # See what opposing player can do
-        cost = self.complete_joined_boxes(box, moves)
+        cost = 0
+        if boxes[0] >= 0:
+            cost += self.complete_joined_boxes(boxes[0], moves)
+        if boxes[1] >= 0:
+            cost += self.complete_joined_boxes(boxes[1], moves)
         # Return the game to its original state
         self.undo_moves(moves)
         return cost
@@ -127,12 +138,13 @@ class GameBoard:
             self.lines[index] = 0
         return
 
-    # Provide a starting box and an empty moves array.
+    # Input the starting box and an array to store moves.
     # The function will complete all boxes in a chain.
     # Each line drawn is added to the moves array.
     # The total number of points earned by the moves is
     # returned. The method returns 0 if the start box
-    # does not have three sides.
+    # does not have three sides. Moves are only added to the
+    # move array if the move completes a box.
     def complete_joined_boxes(self, start_box, moves):
         boxes = []
         points = 0
@@ -151,4 +163,3 @@ class GameBoard:
         
         return points
     
-
