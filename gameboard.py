@@ -1,3 +1,7 @@
+# Latest source available at: https://github.com/rickapps/dots-game
+# rick@rickapps.com
+# August 1, 2022
+#
 # Class to represent a dot game board. 
 class GameBoard:
     def __init__(self, size, lines):

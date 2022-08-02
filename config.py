@@ -1,3 +1,7 @@
+# Latest source available at: https://github.com/rickapps/dots-game
+# rick@rickapps.com
+# August 1, 2022
+#
 # Set the default game size. The value is the list index in GAME_LEVELS
 DEFAULT_SIZE_INDEX=1 
 # Set the default theme. The value is the list index in GAME_THEMES

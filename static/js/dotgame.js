@@ -1,3 +1,7 @@
+// Latest source available at: https://github.com/rickapps/dots-game
+// rick@rickapps.com
+// August 1, 2022
+//
 // Javascript functions that communicate with the server.
 // Based on server responses, events are triggered. These
 // events are handled by functions in file custom.js.

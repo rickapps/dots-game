@@ -1,3 +1,7 @@
+// Latest source available at: https://github.com/rickapps/dots-game
+// rick@rickapps.com
+// August 1, 2022
+//
 // Respond to events mostly triggered by dotgame.js
 // This is what you would edit to revise the game UI. You could leave
 // dotgame.js alone as it just implements business logic.

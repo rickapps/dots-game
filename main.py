@@ -1,3 +1,7 @@
+# Latest source available at: https://github.com/rickapps/dots-game
+# rick@rickapps.com
+# August 1, 2022
+#
 from flask import Flask, render_template, request
 import json
 import dotgame
