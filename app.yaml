@@ -1,1 +1,2 @@
+service: default
 runtime: python38
