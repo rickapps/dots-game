@@ -1,15 +1,11 @@
 # dots-game
 ## Dots game using CSS, Javascript, and Flask
 
-Modify the look and feel of this game by changing the three css files located in folder **static/css.** You may also want to revise **static/js/custom.js. Custom.js** contains code to respond to three custom events; *drawLine*, *updatePlayer*, and *updateScore*. These events draw a single line connecting two dots, update the board to indicate whose turn it is, and update the scoreboard respectively. 
+Links: [https://dotsgame.rickapps.com](https://dotsgame.rickapps.com) or [https://playdots.uc.r.appspot.com/](https://playdots.uc.r.appspot.com/)
 
-You can code a UI that does not use Flask. The UI only needs to post the player's move to the server  
-and request the machine move from the server. The server provides logic to detect when a square is 
-complete and when a player's turn has ended. It can also determine the best available move at any time.
-The jinja code in the current UI allows the Flask server to create an initial gameboard of any size. 
-But if you remove the jinja, you could host the UI of the dots game on any server and make POST requests to a Flask server hosted elsewhere.
+Modify the look and feel of the game by changing the three css files located in folder **static/css.** You may also want to revise **static/js/custom.js. Custom.js** contains code to respond to three custom events; *drawLine*, *updatePlayer*, and *updateScore*. These events draw a single line connecting two dots, update the board to indicate whose turn it is, and update the scoreboard respectively. 
 
-To modify the business logic of the game, the following information might be helpful:
+You can code a UI that does not use Flask. The UI only needs to post the player's move to the server and request the machine move from the server. The server provides logic to detect when a square is complete and when a player's turn has ended. It can also determine the best available move at any time. The jinja code in the current UI allows the Flask server to create an initial gameboard of any size. But if you remove the jinja, you could host the UI of the dots game on any server and make POST requests to a Flask server hosted elsewhere.
 
 ### Box and Line Numbering Scheme
  
@@ -22,11 +18,11 @@ For 4x4 game board, gameSize is 4. squareCount is 16. Squares are numbered 0-15.
 
 ### Definitions of terms used in the code
 
-**claims:** a list of all boxes on the gameboard. If a list value is -1, the box is not claimed. A value of 1 or 2 means a claim by player1 or player2.
+**claims:** a list of all boxes on the gameboard. Indices correspond to the description above. If a list value is -1, the box is not claimed. A value of 1 or 2 means a claim by player1 or player2.
 
 **history:** a list of all moves in the game. It is a list of lists of move tuples. Odd indexes will be player0 moves and even indexes will be player1 moves.
 
-**lines:** a list of lines on the gameboard. A value of 1 means the line has been selected. A value of 0 means the line is available to select.
+**lines:** a list of lines on the gameboard. Indices correspond to the description above. A value of 1 means the line has been selected. A value of 0 means the line is available to select.
 
 **move:** a three value tuple. Val0 is the line# selected, Val1 is the box# claimed. Val3 is the second box claimed. (2, 0, -1) means line#2 was selected and it completes box#0. (2,-1,-1) means line#2 was selected and no boxes were completed. (-1,-1,-1) means game is over, there are no lines left to select.
 
