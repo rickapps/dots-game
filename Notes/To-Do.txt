@@ -32,3 +32,8 @@ before starting the next move.
 6) Javascript function to process array of transistions
 7) How to serialize gameboard class. Can same class be used for Javascript? Gameboard class uses
 box numbers and sides instead of dots and lines.
+
+
+Index.html - Add num players, computer. Resume saved game.
+Game.html - update score. Remove new game, link to index, perhaps add Restart and Undo.
+Add indicator for current turn.

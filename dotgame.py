@@ -86,8 +86,8 @@ def find_best_nonscoring_move(size, lines):
 # the game is over. A move is a tuple (line, box1, box2) where
 # line is the line# to draw and box is the square to claim. Up
 # to two boxes can be claimed by a single line.  The code below
-# will not always find the 'best' move. This is intentional. The
-# game should be more fun if the computer sometimes messes up.
+# will not always find the 'best' move as it does not look ahead.
+# The game should be more fun if the computer sometimes messes up.
 # The function returns a list of moves.
 def find_move(size, lines):
     game = gameboard.GameBoard(size, lines)

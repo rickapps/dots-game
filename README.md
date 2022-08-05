@@ -24,7 +24,7 @@ For 4x4 game board, gameSize is 4. squareCount is 16. Squares are numbered 0-15.
 
 **lines:** a list of lines on the gameboard. Indices correspond to the description above. A value of 1 means the line has been selected. A value of 0 means the line is available to select.
 
-**move:** a three value tuple. Val0 is the line# selected, Val1 is the box# claimed. Val3 is the second box claimed. (2, 0, -1) means line#2 was selected and it completes box#0. (2,-1,-1) means line#2 was selected and no boxes were completed. (-1,-1,-1) means game is over, there are no lines left to select.
+**move:** a three value tuple. Val0 is the line# selected, Val1 is the box# claimed. Val3 is the second box claimed. (2, 2, -1) means line#2 was selected and it completes box#2. (2,-1,-1) means line#2 was selected and no boxes were completed. (-1,-1,-1) means game is over, there are no lines left to select.
 
 **moves:** a list of move tuples. Whenever a player completes a box, he gets to select a new line. The list of move tuples will always end with move (line#, -1,-1), except for the last move of the game.
 
