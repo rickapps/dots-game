@@ -261,6 +261,9 @@ pydots.dotgame.storePlayers = function(numPlayers, machine)
         throw new Error('Machine player cannot be greater than numPlayers');
     localStorage.setItem('NumPlayers', JSON.stringify(numPlayers));
     localStorage.setItem('Machine', JSON.stringify(machine));
+    // Start with 1. The number denotes which player has control of the board:
+    // (1,2,3, or 4). If player num == machine
+    
     localStorage.setItem('Player', JSON.stringify(Number(1)));
     // Set up the scores for the players
     let score = [];

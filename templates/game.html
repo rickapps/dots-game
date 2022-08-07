@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/static/css/layout.css">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body>
+<body id="gamePage">
     <div id="wrapper">
         {% include 'includes/header.html' %}
         <main id="content">
@@ -18,18 +18,6 @@
         {% include 'includes/panel.html' %}
         {% include 'includes/footer.html' %}
     </div>
-    <script>
-        // flask jinja fills values from main.py 
-        const PAGE_NAME = 'game';
-        const GAME_SIZE = {{size|tojson}};
-        const INIT_LINES = {{lines|tojson}};
-        const INIT_CLAIMS = new Array(GAME_SIZE**2).fill(-1);;
-        const INIT_MOVES = [];
-        const INIT_SCORE = [0,0];
-        const INIT_THEME = {{theme|tojson}};
-    </script>
-    <!-- type=module defers until the DOM has been loaded -->
-    <script src="/static/js/dotgame.js"></script>
-    <script src="/static/js/custom.js"></script>
+    {% include 'includes/scriptfiles.html' %}
 </body>
 </html>

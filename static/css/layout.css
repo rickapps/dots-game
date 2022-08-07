@@ -13,16 +13,24 @@ Email: rick@rickapps.com
 }
 
 /* Contains the gameboard */
-  #content {
+#content {
   background-color: yellow;
   width: 70%;
   float: right;
+}
+
+#indexPage #content {
+  width:60%;
 }
 
 #panel {
   float: left;
   width: 30%;
   background-color: var(--panel-color);
+}
+
+#indexPage #panel {
+  width:40%;
 }
 
 #footer {

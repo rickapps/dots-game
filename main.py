@@ -10,8 +10,8 @@ app.config.from_pyfile('config.py')
 
 # Some definitions:
 # move: a three value tuple. Val0 is the line# selected, Val1 is the box# claimed.
-# Val3 is the second box claimed. (2, 0, -1) means line#2 was selected and it 
-# completes box#0. (2,-1,-1) means line#2 was selected and no boxes were completed.
+# Val3 is the second box claimed. (2, 2, -1) means line#2 was selected and it 
+# completes box#2. (2,-1,-1) means line#2 was selected and no boxes were completed.
 # (-1,-1,-1) means game is over, there are no lines left to select.
 #
 # lines: a list of lines on the gameboard. A value of 1 means the line
@@ -27,22 +27,17 @@ app.config.from_pyfile('config.py')
 # claims: a list of all boxes on the gameboard. If the value is -1, the box
 # is not claimed. A value of 1 or 2 means a claim by player1 or player2.
 #### 
-#  Start the game with default values. We won't clear local storage here
-# because the user could be continuing their last game.
+#  Start the game with default values. 
 glevels = app.config['GAME_LEVELS']
 gthemes = app.config['GAME_THEMES']
 default_size = app.config['DEFAULT_SIZE_INDEX']
 default_theme = app.config['DEFAULT_THEME_INDEX']
 size = int(glevels[default_size][1])
 theme = gthemes[default_theme][1]
+lines = []
+boxes = []
 
-# Start a new game using default values or values saved in local storage
-@app.route("/")
-def home():
-    return render_template('index.html', size=size, theme=theme, glevels=glevels, gthemes=gthemes)
-
-# Start a new game with values specified by the user. For this case, 
-# localStorage has been cleared before the POST was issued.
+# Start a new game with values specified by the user. 
 @app.route("/new/", methods = ['POST'])
 def new_game():
     size = int(request.form['glevel'])
@@ -51,7 +46,16 @@ def new_game():
     boxes = dotgame.game_board(size, lines)
     return render_template('game.html',size=size, theme=theme, lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
-# Return a list of moves to make for the specified lines list
+# Resume a game using values from local storage
+@app.route("/resume/", methods = ['POST'])
+def resume_game():
+    size = int(request.form['glevel'])
+    theme = request.form['gcolors']
+    lines = dotgame.init_game(size);
+    boxes = dotgame.game_board(size, lines)
+    return render_template('game.html',size=size, theme=theme, lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
+
+# Return a list of moves to make for the specified lines array.
 # This is where the 'computer' calculates the best move
 @app.route("/find/", methods = ['POST'])
 def find_best_move():
@@ -63,8 +67,8 @@ def find_best_move():
     # Return a list of tuples [(line,boxA,boxB), (...)]
     return json.dumps(move)
 
-# We echo back the line sent in the post. We check if the line
-# completes any squares and generate a move to send to the client.
+# Get the user's last move. We check if their line
+# completes any squares and return the info to the client.
 @app.route("/verify/", methods = ['POST'])
 def verify_user_move():
     # Get game size, line array, and the move to be made.
@@ -74,6 +78,14 @@ def verify_user_move():
     line = mydata['newline']
     # Return a tuple (line, boxA, boxB) as json
     return json.dumps(dotgame.verify_move(size, lines, line))
+
+# A catch-all for unknown requests. Must be a POST request to get to
+# game page. path is here for future use.
+@app.route("/", defaults={'path': ''})
+@app.route('/<path:path>')
+def home(path):
+    return render_template('index.html', size=size, theme=theme, lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

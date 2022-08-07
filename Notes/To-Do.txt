@@ -37,3 +37,4 @@ box numbers and sides instead of dots and lines.
 Index.html - Add num players, computer. Resume saved game.
 Game.html - update score. Remove new game, link to index, perhaps add Restart and Undo.
 Add indicator for current turn.
+Themes - find css to make spheres and cylinders.

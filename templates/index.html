@@ -9,19 +9,23 @@
     <link rel="stylesheet" href="/static/css/layout.css">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body>
+<body id="indexPage">
     <div id="wrapper">
-        <div id="branding">
-            <h1>PLAY DOTS & BOXES!</h1>
-        </div>
+        {% include 'includes/header.html' %}
         <section id="panel">
-            <p id="resgame">
-                
-            </p>
+            <form action="/resume" method="POST" id="resumeGame">
+                <fieldset>
+                    <legend>Resume Game</legend>
+                    <p>You have an unfinished game. Do you want to finish it?</p>
+                    <p>Level: </p>
+                    <p>Score:</p>
+                    <input type="submit" value="Resume Game">
+                </fieldset>
+            </form>
             <form action="/new/" method="POST" id="gamevals">
                 <fieldset>
-                 <legend>Options:</legend>
-                 <label for="glevel">Level:</label>
+                 <legend>New Game:</legend>
+                 <label for="glevel">Skill:</label>
                  <select id="glevel" name="glevel">
                  <!-- The dropdown list values come from config.py GAME_LEVELS -->
                  {% for level in glevels %}
@@ -32,6 +36,18 @@
                     {% endif %}
                  {% endfor %}            
                  </select><br><br>
+                 <label for="players">Players:</label>
+                 <select type="text" id="players" name="players">
+                    <option value="2">2 players</option>
+                    <option value="3">3 players</option>
+                    <option value="4">4 players</option>
+                 </select><br><br>
+                 <label for="machine">Computer:</label>
+                 <select type="text" id="machine" name="machine">
+                    <option value="0">Not Playing</option>
+                    <option value="1">Player 1</option>
+                    <option value="2">Player 2</option>
+                 </select><br><br>
                  <label for="gcolors">Colors:</label>
                  <select type="text" id="gcolors" name="gcolors">
                  <!-- The dropdown list values come from config.py GAME_THEMES -->
@@ -39,8 +55,15 @@
                     <option value="{{theme[1]}}">{{theme[0]}}</option>
                  {% endfor %}            
                  </select><br><br>
-                 <input type="submit" value="New Game">
+                 <input type="submit" value="Start Game">
+                 <fieldset>
+                    <input type="text" id="player1" name="player1" value="Player 1">
+                    <input type="text" id="player2" name="player2" value="Computer">
+                    <input type="text" id="player3" name="player3" value="Player 3">
+                    <input type="text" id="player4" name="player4" value="Player 4">
+                 </fieldset>
                 </fieldset>
+
                </form>
             </section>
     <main id="content">
@@ -52,17 +75,8 @@
     the most boxes wins. Play against the computer, or with another person. Your game will be saved to your computer. Return to this web page anytime to 
     resume a game in progress. 
     </main>
-    <section id="footer">
-        <span>RickApps</span>
-    </section>
+    {% include 'includes/footer.html' %}
     </div>
-    <script>
-        const PAGE_NAME = 'intro';
-        // flask jinja fills values from main.py 
-        const GAME_SIZE = {{size|tojson}};
-        const INIT_THEME = {{theme|tojson}};
-    </script>
-    <script src="/static/js/dotgame.js"></script>
-    <script src="/static/js/custom.js"></script>
+    {% include 'includes/scriptfiles.html' %}
 </body>
 </html>
