@@ -1,5 +1,6 @@
 {% block body %}
 <!-- Javascript we want included on each page -->
+<!-- We have some globals we populate from the server -->
 <script>
     // flask jinja fills values from main.py 
     const GAME_SIZE = {{size|tojson}};

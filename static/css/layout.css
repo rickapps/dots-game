@@ -47,6 +47,7 @@ form {
 #footer {
   clear: both;
   background-color: var(--footer-color);
+  text-align: right;
 }
 
 /**************************/

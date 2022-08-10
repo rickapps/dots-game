@@ -202,6 +202,41 @@ pydots.dotgame.getTheme = function ()
     return theme;
 }
 
+// Store the skill level of the current game
+pydots.dotgame.storeLevel = function(level)
+{
+    localStorage.setItem('Level', JSON.stringify(level));
+}
+
+// Retrieve the skill level from storage
+pydots.dotgame.getLevel = function()
+{
+    let level = JSON.parse(localStorage.getItem('Level'));
+    return level;
+}
+
+// Retrieve the number of players from storage
+pydots.dotgame.getNumPlayers = function()
+{
+    let num = JSON.parse(localStorage.getItem('NumPlayers'));
+    return num;
+}
+
+// Store the name of the specified player in storage
+pydots.dotgame.storePlayerName = function(player, name)
+{
+    let names = JSON.parse(localStorage.getItem('Name'));
+    names[player] = name;
+    localStorage.setItem('Names', JSON.stringify(names));
+}
+
+// Retrieve the name of the specified player from storage
+pydots.dotgame.getPlayerName = function(player)
+{
+    let names = JSON.parse(localStorage.getItem('Name'));
+    let name = names[player];
+    return name;
+}
 
 // Return a list of all moves.
 pydots.dotgame.getHistory = function ()
@@ -263,16 +298,18 @@ pydots.dotgame.storePlayers = function(numPlayers, machine)
     localStorage.setItem('Machine', JSON.stringify(machine));
     // Start with 1. The number denotes which player has control of the board:
     // (1,2,3, or 4). If player num == machine
-    
     localStorage.setItem('Player', JSON.stringify(Number(1)));
     // Set up the scores for the players
     let score = [];
+    let name = [];
     for (let i = 0; i <= numPlayers; i++)
     {
         // Player zero is the machine
         score.push(0);
+        name.push('');
     }
     localStorage.setItem('Scores', JSON.stringify(score));
+    localStorage.setItem('Names', JSON.stringify(name));
 }
 
 // Return the player that has control of the board

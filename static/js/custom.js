@@ -53,6 +53,10 @@ window.addEventListener("DOMContentLoaded", (event) => {
         document.addEventListener("updatePlayer", pydots.updatePlayer, false);
         // Add event listener to update the score.
         document.addEventListener("updateScore", pydots.updateScore);
+    }
+    let resume = document.getElementById("resumeGame");
+    if (resume)
+    {
         // Add event listener to restore a previous game
         window.addEventListener("load", pydots.restoreGame);
     }
@@ -91,21 +95,45 @@ if (newGame)
 //////////////////////////////////
 // EVENT HANDLERS 
 //////////////////////////////////
-// Restore the last game if game size has not changed.
-// Since we do not save the size, this only works if
-// the last game played used our default size. To make
-// this more robust, we could use a cookie to store the
-// size of the previous game.
+// Check if we have a stored game
 pydots.restoreGame = function () {
-    let lines = pydots.dotgame.getLines();
-    let len = lines.length;
-    // Make sure our lines match with current game size
-    if (len != 2 * GAME_SIZE * (GAME_SIZE + 1))
+    let moves = pydots.dotgame.getHistory();
+    let len = moves.length;
+    // Was there any progress on the previous game?
+    if (len > 0)
+    {
+        // Get all spans within form resumeGame. There should be five.
+        let element = document.getElementById('resumeGame');
+        let spans = element.getElementsByTagName('span');
+        // Skill Level
+        let level = pydots.dotgame.getLevel();
+        spans[0].textContent = 'Skill Level: ${level}';
+        // Update the scores
+        let numPlayers = pydots.dotgame.getNumPlayers();
+        for (let i = 1; i < 5; i++)
+        {
+            if (i > numPlayers)
+            {
+                spans[i].style.display="none";
+            }
+            else
+            {
+                let name = pydots.dotgame.getPlayerName(i);
+                let score = pydots.dotgame.getScore(i);
+                spans[i].textContent = '${name}: ${score}';
+            }
+        } 
+    }
+    else
     {
         // Clear our stored values and start from scratch
         pydots.dotgame.clearGameValues();
-        lines = pydots.dotgame.getLines();
+        // Hide the resume section
+        document.getElementById("resumeGame").style.display="none";
     }
+};
+
+pydots.fillGame = function() {
     // Draw the lines we obtained from storage
     let element;
     for (let i=0; i<len; i++) {
@@ -126,7 +154,7 @@ pydots.restoreGame = function () {
             element.classList.add(claim);
         }
     }
-};
+}
 
 // Reset the board to indicate the current player's turn
 pydots.updatePlayer = function (evt) {
