@@ -13,7 +13,7 @@
     <div id="wrapper">
         {% include 'includes/header.html' %}
         <section id="panel">
-            <form action="/resume" method="POST" id="resumeGame">
+            <form action="/new/" method="POST" id="resumeGame">
                 <fieldset>
                 <legend>Resume Game</legend>
                 <section class="gameDetails">
@@ -23,16 +23,18 @@
                 <section class="gamePeople">
                     <fieldset>
                         <legend>Stats</legend>
-                        <span id="level">Skill: Medium</span>
-                        <span id="score1">Rick: 0</span>
-                        <span id="score2">Computer: 3</span>
-                        <span id="score3">Jayni: 0</span>
-                        <span id="score4">Junior: 2</span>
+                        <span id="level"></span>
+                        <span id="score1" class="claim1"></span>
+                        <span id="score2" class="claim2"></span>
+                        <span id="score3" class="claim3"></span>
+                        <span id="score4" class="claim4"></span>
                     </fieldset>
                     </section>
                 </fieldset>
             </form>
-            <form action="/new/" method="POST" id="gamevals">
+            <!-- Input fields without a name attribute do not get posted -->
+            <!-- These fields are used locally by javascript -->
+            <form action="/new/" method="POST" id="startNewGame">
                 <fieldset>
                 <legend>New Game:</legend>
                 <section class="gameDetails">
@@ -48,16 +50,16 @@
                     {% endfor %}            
                     </select><br><br>
                     <label for="players">Players:</label>
-                    <select type="text" id="players" name="players">
-                        <option value="2">2 players</option>
-                        <option value="3">3 players</option>
-                        <option value="4">4 players</option>
+                    <select type="text" id="players">
+                        <option value=2>2 players</option>
+                        <option value=3>3 players</option>
+                        <option value=4>4 players</option>
                     </select><br><br>
                     <label for="machine">Computer:</label>
-                    <select type="text" id="machine" name="machine">
-                        <option value="0">Not Playing</option>
-                        <option value="1">Player 1</option>
-                        <option value="2">Player 2</option>
+                    <select type="text" id="machine">
+                        <option value=0>Not Playing</option>
+                        <option value=1>Player 1</option>
+                        <option value=2>Player 2</option>
                     </select><br><br>
                     <label for="gcolors">Colors:</label>
                     <select type="text" id="gcolors" name="gcolors">
@@ -69,16 +71,16 @@
                     <input type="submit" value="Start Game">
                 </section>
                 <section class="gamePeople">
-                <fieldset>
+                <fieldset id="newGamePeople">
                     <legend>Names</legend>
                     <label for="player1">Player 1:</label>
-                    <input type="text" id="player1" name="player1" width="100%" value="Player 1"><br><br>
+                    <input type="text" id="player1" class="claim1" pattern="[a-zA-Z0-9]+" minlength="1" maxlength="10"><br><br>
                     <label for="player2">Player 2:</label>
-                    <input type="text" id="player2" name="player2" readonly value="Computer"><br><br>
+                    <input type="text" id="player2" class="claim2" pattern="[a-zA-Z0-9]+" minlength="1" maxlength="10"><br><br>
                     <label for="player3">Player 3:</label>
-                    <input type="text" id="player3" name="player3" value="Player 3"><br><br>
+                    <input type="text" id="player3" class="claim3" pattern="[a-zA-Z0-9]+" minlength="1" maxlength="10"><br><br>
                     <label for="player4">Player 4:</label>
-                    <input type="text" id="player4" name="player4" value="Player 4"><br><br>
+                    <input type="text" id="player4" class="claim4" pattern="[a-zA-Z0-9]+" minlength="1" maxlength="10"><br><br>
                 </fieldset>
                 </section>
                 </fieldset>

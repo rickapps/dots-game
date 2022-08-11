@@ -10,11 +10,10 @@
 var pydots = pydots || {};
 pydots.dotgame= pydots.dotgame || {};
 
-// If the machine is playing, it is always player number 0.
-// Human players can be 1, 2, 3, or 4
-const MACHINE = 0;
+// If the machine is not playing, it will be 0. Otherwise,
+// it is 1,2,3,or 4. We default to the second player.
+let machinePlayer = 2;
 
-//
 // Store line state, history, and claims in local storage to make sure we do not lose the
 // values on page refresh.
 pydots.dotgame.pushMove = function (move)
@@ -46,8 +45,8 @@ pydots.dotgame.pushMove = function (move)
 }
 
 // Update our scores. Return the number of points added
-// to the current player's score
-pydots.dotgame.updateScore = function (move)
+// to the current player's score by the specified move
+pydots.dotgame.calculateScore = function (move)
 {
     let add = 0;
     if (move[1] >= 0)
@@ -120,7 +119,7 @@ pydots.dotgame.validateMove = function (line, bAnimate=true)
             let event = new CustomEvent("drawMove", {detail: {move: d}});
             document.dispatchEvent(event);
             // Update our internal score
-            let points = pydots.dotgame.updateScore(d);
+            let points = pydots.dotgame.calculateScore(d);
             if (points > 0)
             {
                 // Send an event to update the scoreboard on the UI
@@ -168,7 +167,7 @@ pydots.dotgame.makeMove = function ()
                     event = new CustomEvent("drawMove", {detail: {move: move}});   
                     document.dispatchEvent(event);
                     // Update the score
-                    if (pydots.dotgame.updateScore(move) > 0)
+                    if (pydots.dotgame.calculateScore(move) > 0)
                     {
                         // Send event to update the score
                         event = new CustomEvent("updateScore");
@@ -199,6 +198,7 @@ pydots.dotgame.storeTheme = function (theme)
 pydots.dotgame.getTheme = function ()
 {
     let theme = localStorage.getItem('Theme');
+    if (theme === null) theme = INIT_THEME;
     return theme;
 }
 
@@ -211,7 +211,12 @@ pydots.dotgame.storeLevel = function(level)
 // Retrieve the skill level from storage
 pydots.dotgame.getLevel = function()
 {
-    let level = JSON.parse(localStorage.getItem('Level'));
+    let level = localStorage.getItem('Level');
+    if (level)
+        level = JSON.parse(level);
+    else
+        level = GAME_SIZE;
+
     return level;
 }
 
@@ -225,7 +230,11 @@ pydots.dotgame.getNumPlayers = function()
 // Store the name of the specified player in storage
 pydots.dotgame.storePlayerName = function(player, name)
 {
-    let names = JSON.parse(localStorage.getItem('Name'));
+    let names = localStorage.getItem('Name');
+    if (names)
+        names = JSON.parse(names);
+    else
+        names = INIT_NAMES;
     names[player] = name;
     localStorage.setItem('Names', JSON.stringify(names));
 }
@@ -233,9 +242,13 @@ pydots.dotgame.storePlayerName = function(player, name)
 // Retrieve the name of the specified player from storage
 pydots.dotgame.getPlayerName = function(player)
 {
-    let names = JSON.parse(localStorage.getItem('Name'));
-    let name = names[player];
-    return name;
+    let names = localStorage.getItem('Name');
+    if (names)
+        names = JSON.parse(names);
+    else
+        names = INIT_NAMES;
+
+    return names[player];
 }
 
 // Return a list of all moves.
@@ -296,15 +309,16 @@ pydots.dotgame.storePlayers = function(numPlayers, machine)
         throw new Error('Machine player cannot be greater than numPlayers');
     localStorage.setItem('NumPlayers', JSON.stringify(numPlayers));
     localStorage.setItem('Machine', JSON.stringify(machine));
+    machinePlayer = machine;
     // Start with 1. The number denotes which player has control of the board:
-    // (1,2,3, or 4). If player num == machine
+    // (1,2,3, or 4). 
     localStorage.setItem('Player', JSON.stringify(Number(1)));
     // Set up the scores for the players
     let score = [];
     let name = [];
     for (let i = 0; i <= numPlayers; i++)
     {
-        // Player zero is the machine
+        // Player zero is the machine. The array[0] is not used
         score.push(0);
         name.push('');
     }
@@ -316,23 +330,30 @@ pydots.dotgame.storePlayers = function(numPlayers, machine)
 pydots.dotgame.getPlayer = function ()
 {
     let player = JSON.parse(localStorage.getItem('Player'));
-    let machine = JSON.parse(localStorage.getItem('Machine'));
-    if (player == machine)
-        player = MACHINE;
     return player;
+}
+
+// Return true if it is the machine's turn.
+pydots.dotgame.isMachineTurn = function()
+{
+    let player = JSON.parse(localStorage.getItem('Player'));
+    return player == machinePlayer;
+}
+
+pydots.dotgame.getMachinePlayer = function()
+{
+    let machine = JSON.parse(localStorage.getItem('Machine'));
+    return machine;
 }
 
 // Set the current player to the next player
 pydots.dotgame.switchPlayers = function ()
 {
     let numPlayers = JSON.parse(localStorage.getItem('NumPlayers'));
-    let machine = JSON.parse(localStorage.getItem("Machine"));
     let player = JSON.parse(localStorage.getItem('Player'));
     // Move to the next player
     player = (player == numPlayers) ? 1 : player + 1;
     localStorage.setItem('Player', JSON.stringify(player));
-    if (player == machine)
-        player = MACHINE;
     return player;
 }
 

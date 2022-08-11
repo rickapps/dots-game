@@ -29,7 +29,6 @@ if (sizeDropDown) sizeDropDown.value = GAME_SIZE;
 const changeTheme = theme => document.documentElement.className = theme;
 // Set the theme to whatever it was before. We keep that value in localStorage
 let theme = pydots.dotgame.getTheme();
-if (theme === null) theme = INIT_THEME;
 changeTheme(theme);
 
 //////////////////////////////////
@@ -58,7 +57,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
     if (resume)
     {
         // Add event listener to restore a previous game
-        window.addEventListener("load", pydots.restoreGame);
+        window.addEventListener("load", pydots.initRestorePanel);
     }
 });
 
@@ -79,24 +78,37 @@ if (colorDropDown)
 //////////////////////////////////
 // START NEW GAME 
 //////////////////////////////////
-let newGame = document.getElementById("gamevals");
+let newGame = document.getElementById("startNewGame");
 if (newGame)
 {
     newGame.onsubmit = function() {
+        // Clear our local storage values
+        pydots.dotgame.clearGameValues();
+        // Store player info - number, names
+        pydots.storePlayerInfo();
+    }
+}
+
+//////////////////////////////////
+// RESTART GAME 
+//////////////////////////////////
+let restart = document.getElementById("restartGame");
+if (restart)
+{
+    restart.onsubmit = function() {
         // Verify it is what our user wants to do
         alert("This will end your current game.")
         // Clear our local storage values
         pydots.dotgame.clearGameValues();
-        // Set number of players
-        pydots.dotgame.storePlayers(2,2);
     }
 }
 
 //////////////////////////////////
 // EVENT HANDLERS 
 //////////////////////////////////
-// Check if we have a stored game
-pydots.restoreGame = function () {
+// Check if we have a stored game. If so, set up
+// the panel with display values.
+pydots.initRestorePanel = function () {
     let moves = pydots.dotgame.getHistory();
     let len = moves.length;
     // Was there any progress on the previous game?
@@ -159,7 +171,7 @@ pydots.fillGame = function() {
 // Reset the board to indicate the current player's turn
 pydots.updatePlayer = function (evt) {
     // If it is the machine's turn, let the server know.
-    if (pydots.dotgame.getPlayer() == MACHINE)
+    if (pydots.dotgame.isMachineTurn())
         pydots.dotgame.makeMove();
     return;
 }
@@ -212,7 +224,7 @@ pydots.claimSquares = function (move, player) {
         points += 1;
         pydots.fillSquare(move[2], player);
     }
-    pydots.dotgame.updateScore(player, points);
+    pydots.dotgame.calculateScore(player, points);
     return points > 0;
 }
 
@@ -222,4 +234,27 @@ pydots.fillSquare = function (boxNum, player)
     let square = document.getElementById("B-" + boxNum);
     let claim = "claim" + player;
     square.classList.add(claim);
+}
+
+// Save the info the user entered into the startNewGame form
+// This is information that is not sent to the server
+pydots.storePlayerInfo = function()
+{
+    // Store the skill level
+    let element = document.getElementById('glevel');
+    let skill = element.options[element.selectedIndex].value;
+    pydots.dotgame.storeLevel(skill);
+    // Store the player count
+    element = document.getElementById('players');
+    let numPlayers = element.options[element.selectedIndex].value;
+    element = document.getElementById('machine');
+    let computer = element.options[element.selectedIndex].value;
+    pydots.dotgame.storePlayers(numPlayers, computer);
+    // Store the names
+    element = document.getElementById('newGamePeople');
+    let names = element.getElementsByTagName('input');
+    for (let i = 1; i <= numPlayers; i++)
+    {
+        pydots.dotgame.storePlayerName(i, names[i-1].textContent);
+    }
 }
