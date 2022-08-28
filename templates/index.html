@@ -51,15 +51,16 @@
                     </select><br><br>
                     <label for="players">Players:</label>
                     <select type="text" id="players">
-                        <option value=2>2 players</option>
-                        <option value=3>3 players</option>
-                        <option value=4>4 players</option>
+                        {% for player in gplayers %}
+                        <option value={{player[1]}}>{{player[0]}}</option>
+                        {% endfor %}
                     </select><br><br>
-                    <label for="machine">Computer:</label>
+                    <label for="machine">{{machine}}:</label>
                     <select type="text" id="machine">
-                        <option value=0>Not Playing</option>
-                        <option value=1>Player 1</option>
-                        <option value=2>Player 2</option>
+                        <option value=0>{{nomachine}}</option>
+                        {% for name in pnames %}
+                        <option value={{name[1]}}>{{name[0]}}</option>
+                        {% endfor %}
                     </select><br><br>
                     <label for="gcolors">Colors:</label>
                     <select type="text" id="gcolors" name="gcolors">

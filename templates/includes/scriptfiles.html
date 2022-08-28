@@ -1,15 +1,25 @@
 {% block body %}
 <!-- Javascript we want included on each page -->
 <!-- We have some globals we populate from the server -->
+<!-- This is where we transfer values from python to javascript. -->
 <script>
     // flask jinja fills values from main.py 
+    // If GAME_SIZE is 3, there are 9 squares on the gameboard.
+    // There are (3+1)**2=16 dots on the gameboard.
     const GAME_SIZE = {{size|tojson}};
+    // The array of lines in the game. If a line is not
+    // taken, it has a value of 0. Otherwise, it is set to 1.
     const INIT_LINES = {{lines|tojson}};
+    // When a square is completed, the array will be updated
+    // with the player# that completed the square.
     const INIT_CLAIMS = new Array(GAME_SIZE**2).fill(-1);;
     const INIT_MOVES = [];
     const INIT_SCORE = [0,0];
-    const INIT_NAMES = ['Player1', 'Player2', 'Player3', 'Player4'];
-    const COMPUTER_PLAYER = 'Computer';
+    // The names we will use for human players. The user can 
+    // override these names with their own.
+    const INIT_NAMES = {{pnames|tojson}};
+    // The name we will use for the computer player
+    const COMPUTER_PLAYER = {{machine|tojson}};
     const INIT_THEME = {{theme|tojson}};
 </script>
 <script src="/static/js/dotgame.js"></script>

@@ -30,6 +30,10 @@ app.config.from_pyfile('config.py')
 #  Start the game with default values. 
 glevels = app.config['GAME_LEVELS']
 gthemes = app.config['GAME_THEMES']
+gplayers = app.config['PARTICIPANTS']
+machine = app.config['MACHINE_NAME']
+nomachine = app.config['NO_MACHINE']
+pnames = app.config['PLAYER_NAMES']
 default_size = app.config['DEFAULT_SIZE_INDEX']
 default_theme = app.config['DEFAULT_THEME_INDEX']
 size = int(glevels[default_size][1])
@@ -44,7 +48,8 @@ def new_game():
     theme = request.form['gcolors']
     lines = dotgame.init_game(size);
     boxes = dotgame.game_board(size, lines)
-    return render_template('game.html',size=size, theme=theme, lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
+    return render_template('game.html',size=size, theme=theme, \
+         lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
 # Resume a game using values from local storage
 @app.route("/resume/", methods = ['POST'])
@@ -53,7 +58,8 @@ def resume_game():
     theme = request.form['gcolors']
     lines = dotgame.init_game(size);
     boxes = dotgame.game_board(size, lines)
-    return render_template('game.html',size=size, theme=theme, lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
+    return render_template('game.html',size=size, theme=theme, \
+        lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
 # Return a list of moves to make for the specified lines array.
 # This is where the 'computer' calculates the best move
@@ -84,7 +90,10 @@ def verify_user_move():
 @app.route("/", defaults={'path': ''})
 @app.route('/<path:path>')
 def home(path):
-    return render_template('index.html', size=size, theme=theme, lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
+    return render_template('index.html', size=size, theme=theme, \
+        lines=lines, glevels=glevels, gthemes=gthemes, \
+        gplayers=gplayers, machine=machine, nomachine=nomachine, \
+        pnames=pnames)
 
 
 if __name__ == "__main__":

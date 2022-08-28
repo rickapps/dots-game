@@ -23,3 +23,23 @@ GAME_THEMES = [
     ('Fall', 'theme3'),
     ('Winter', 'theme4')
 ]
+
+# Default names for the game players
+PLAYER_NAMES = [
+    ('Player 1', 1),
+    ('Player 2', 2),
+    ('Player 3', 3),
+    ('Player 4', 4)
+]
+
+# Human players and machine player
+MACHINE_NAME='Computer'
+
+# Describe if only humans are playing
+NO_MACHINE='Not Playing'
+
+PARTICIPANTS = [
+    ('2 Players', 2),
+    ('3 Players', 3),
+    ('4 Players', 4)
+]

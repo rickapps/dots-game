@@ -6,7 +6,7 @@
 // Based on server responses, events are triggered. These
 // events are handled by functions in file custom.js.
 // If you want to modify the look of the game, you should
-// probably edit custom.js instead of here.
+// probably edit custom.js instead of this file.
 var pydots = pydots || {};
 pydots.dotgame= pydots.dotgame || {};
 

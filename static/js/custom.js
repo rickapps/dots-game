@@ -4,14 +4,14 @@
 //
 // Edit this file to change the look and feel of the dots game.
 // You need to listen for and respond to the following three custom events:
-// drawMove - Draw one line on the game board. Use dotgame.getPlayer()
+// 1) drawMove - Draw one line on the game board. Use dotgame.getPlayer()
 // to see who the current player is.
-// updatePlayer - The turn has changed. Update the board to indicate
+// 2) updatePlayer - The turn has changed. Update the board to indicate
 // whose turn it is.
-// updateScore - Update the scoreboard.
+// 3) updateScore - Update the scoreboard.
 //
-// Dotgame.js implements the business logic. You should not need to alter
-// this file if you just want to change the look of the game. 
+// The other file, Dotgame.js, implements the business logic. You won't need
+// to alter that file if you just want to change the appearance of the game. 
 var pydots = pydots || {};
 //////////////////////////////////
 // INITIALIZATION 
@@ -74,6 +74,23 @@ if (colorDropDown)
         pydots.dotgame.storeTheme(this.value)
     }
 }
+
+///////////////////////////////////
+// UPDATE INDEX PAGE
+///////////////////////////////////
+let playerDropDown = document.getElementById("players");
+if (playerDropDown)
+{
+    let machineDropDown = document.getElementById("machine");
+    playerDropDown.onchange = function() {
+        pydots.setPlayerList(this.value, machineDropDown.value);
+        
+    }
+    machineDropDown.onchange = function() {
+        pydots.setPlayerList(playerDropDown.value, this.value);
+    }
+}
+
 
 //////////////////////////////////
 // START NEW GAME 
@@ -257,4 +274,36 @@ pydots.storePlayerInfo = function()
     {
         pydots.dotgame.storePlayerName(i, names[i-1].textContent);
     }
+}
+
+// Show the specified number of names in the name list.
+// If machine is non-zero, populate that member of the
+// list with the machine name and make it read only.
+pydots.setPlayerList = function(numPlayers, machine=0)
+{
+    let fs = document.getElementById('newGamePeople');
+    let names = fs.getElementsByTagName('input');
+    let labels = fs.getElementsByTagName('label');
+    let state = 'visible';
+    for (let i = 0; i < names.length; i++)
+    {
+        if (i >= numPlayers)
+            state = 'hidden';
+        names[i].style.visibility = state;
+        names[i].readOnly = false;
+        names[i].value = INIT_NAMES[i][0];
+        labels[i].style.visibility = state;
+    }
+    if (machine > 0)
+    {
+        names[machine-1].value = COMPUTER_PLAYER;
+        names[machine-1].readOnly = true;
+    }
+}
+
+// Show the specified number of players in the
+// machine dropdown.
+pydots.setMachineList = function(numPlayers)
+{
+
 }
