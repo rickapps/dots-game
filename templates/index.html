@@ -18,7 +18,6 @@
                 <legend>Resume Game</legend>
                 <section class="gameDetails">
                     <p>You have an unfinished game. Do you want to finish it?</p>
-                    <input type="submit" value="Resume Game">
                 </section>
                 <section class="gamePeople">
                     <fieldset>
@@ -30,14 +29,17 @@
                         <span id="score4" class="claim4"></span>
                     </fieldset>
                     </section>
+                    <input type="submit" value="Resume Game">
                 </fieldset>
             </form>
             <!-- Input fields without a name attribute do not get posted -->
             <!-- These fields are used locally by javascript -->
             <form action="/new/" method="POST" id="startNewGame">
                 <fieldset>
-                <legend>New Game:</legend>
-                <section class="gameDetails">
+                    <legend>New Game</legend>
+            <section class="gameDetails">
+                <fieldset>
+                <legend>Setup</legend>
                     <label for="glevel">Skill:</label>
                     <select id="glevel" name="glevel">
                     <!-- The dropdown list values come from config.py GAME_LEVELS -->
@@ -68,26 +70,27 @@
                     {% for theme in gthemes %}
                         <option value="{{theme[1]}}">{{theme[0]}}</option>
                     {% endfor %}            
-                    </select><br><br>
-                    <input type="submit" value="Start Game">
-                </section>
-                <section class="gamePeople">
-                <fieldset id="newGamePeople">
-                    <legend>Names</legend>
-                    <label for="player1">Player 1:</label>
-                    <input type="text" id="player1" class="claim1" pattern="[a-zA-Z0-9]+" minlength="1" maxlength="10"><br><br>
-                    <label for="player2">Player 2:</label>
-                    <input type="text" id="player2" class="claim2" pattern="[a-zA-Z0-9]+" minlength="1" maxlength="10"><br><br>
-                    <label for="player3">Player 3:</label>
-                    <input type="text" id="player3" class="claim3" pattern="[a-zA-Z0-9]+" minlength="1" maxlength="10"><br><br>
-                    <label for="player4">Player 4:</label>
-                    <input type="text" id="player4" class="claim4" pattern="[a-zA-Z0-9]+" minlength="1" maxlength="10"><br><br>
+                    </select><br>
                 </fieldset>
-                </section>
-                </fieldset>
-               </form>
             </section>
-    <main id="content">
+            <section class="gamePeople">
+                    <fieldset id="newGamePeople">
+                        <legend>Names</legend>
+                        <label for="player1">Player 1:</label>
+                        <input type="text" id="player1" class="claim1" pattern="[a-zA-Z0-9 ]+" minlength="1" maxlength="10"><br><br>
+                        <label for="player2">Player 2:</label>
+                        <input type="text" id="player2" class="claim2" pattern="[a-zA-Z0-9 ]+" minlength="1" maxlength="10"><br><br>
+                        <label for="player3">Player 3:</label>
+                        <input type="text" id="player3" class="claim3" pattern="[a-zA-Z0-9 ]+" minlength="1" maxlength="10"><br><br>
+                        <label for="player4">Player 4:</label>
+                        <input type="text" id="player4" class="claim4" pattern="[a-zA-Z0-9 ]+" minlength="1" maxlength="10"><br>
+                    </fieldset>
+            </section>
+            <input type="submit" value="Start Game">
+        </fieldset>
+            </form>
+        </section>
+        <main id="content">
         <article>
     <h3>How to Play:</h3>
 
@@ -97,8 +100,8 @@
     complete a box, your turn ends, and your opponent's turn starts. The game is over when there are no more dots to connect. The player that completes
     the most boxes wins. Play against the computer, or with another person. Your game will be saved to your computer. Return to this web page anytime to 
     resume a game in progress. 
-</article>
-    </main>
+       </article>
+       </main>
     {% include 'includes/footer.html' %}
     </div>
     {% include 'includes/scriptfiles.html' %}

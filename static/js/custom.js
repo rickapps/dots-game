@@ -10,7 +10,7 @@
 // whose turn it is.
 // 3) updateScore - Update the scoreboard.
 //
-// The other file, Dotgame.js, implements the business logic. You won't need
+// The other file, Dotgame.js, implements the business logic. You shouldn't need
 // to alter that file if you just want to change the appearance of the game. 
 var pydots = pydots || {};
 //////////////////////////////////
@@ -162,7 +162,7 @@ pydots.initIndexPage = function () {
         // Hide the resume section
         document.getElementById("resumeGame").style.display="none";
     }
-    
+
     // Set the new game values.
     let numplayersdrop = document.getElementById('players');
     let machinedrop = document.getElementById('machine');
@@ -280,7 +280,7 @@ pydots.storePlayerInfo = function()
     let names = element.getElementsByTagName('input');
     for (let i = 1; i <= numPlayers; i++)
     {
-        pydots.dotgame.storePlayerName(i, names[i-1].textContent);
+        pydots.dotgame.storePlayerName(i, names[i-1].value);
     }
 }
 

@@ -6,10 +6,14 @@
     // flask jinja fills values from main.py 
     // If GAME_SIZE is 3, there are 9 squares on the gameboard.
     // There are (3+1)**2=16 dots on the gameboard.
+    {% if size is defined %}
     const GAME_SIZE = {{size|tojson}};
+    {% endif %}
     // The array of lines in the game. If a line is not
     // taken, it has a value of 0. Otherwise, it is set to 1.
+    {% if lines is defined %}
     const INIT_LINES = {{lines|tojson}};
+    {% endif %}
     // When a square is completed, the array will be updated
     // with the player# that completed the square.
     const INIT_CLAIMS = new Array(GAME_SIZE**2).fill(-1);;
@@ -17,10 +21,16 @@
     const INIT_SCORE = [0,0];
     // The names we will use for human players. The user can 
     // override these names with their own.
+    {% if pnames is defined %}
     const INIT_NAMES = {{pnames|tojson}};
+    {% endif %}
     // The name we will use for the computer player
+    {% if machine is defined %}
     const COMPUTER_PLAYER = {{machine|tojson}};
+    {% endif %}
+    {% if theme is defined %}
     const INIT_THEME = {{theme|tojson}};
+    {% endif %}
 </script>
 <script src="/static/js/dotgame.js"></script>
 <script src="/static/js/custom.js"></script>
