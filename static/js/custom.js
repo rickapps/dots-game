@@ -57,7 +57,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
     if (resume)
     {
         // Add event listener to restore a previous game
-        window.addEventListener("load", pydots.initRestorePanel);
+        window.addEventListener("load", pydots.initIndexPage);
     }
 });
 
@@ -125,8 +125,9 @@ if (restart)
 // EVENT HANDLERS 
 //////////////////////////////////
 // Check if we have a stored game. If so, set up
-// the panel with display values.
-pydots.initRestorePanel = function () {
+// the panel with display values. Set up the rest
+// of the page with default values.
+pydots.initIndexPage = function () {
     let moves = pydots.dotgame.getHistory();
     let len = moves.length;
     // Was there any progress on the previous game?
@@ -152,7 +153,7 @@ pydots.initRestorePanel = function () {
                 let score = pydots.dotgame.getScore(i);
                 spans[i].textContent = '${name}: ${score}';
             }
-        } 
+        }
     }
     else
     {
@@ -161,6 +162,12 @@ pydots.initRestorePanel = function () {
         // Hide the resume section
         document.getElementById("resumeGame").style.display="none";
     }
+    
+    // Set the new game values.
+    let numplayersdrop = document.getElementById('players');
+    let machinedrop = document.getElementById('machine');
+    pydots.setMachineList(machinedrop, numplayersdrop.value);
+    pydots.setPlayerList(numplayersdrop.value, machinedrop.value);
 };
 
 pydots.fillGame = function() {

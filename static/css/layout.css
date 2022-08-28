@@ -47,8 +47,17 @@ form {
 #footer {
   clear: both;
   background-color: var(--footer-color);
-  text-align: right;
 }
+
+.credit {
+  float: left;
+  text-align: left;
+}
+
+.source {
+  float: right;
+  text-align: right;
+} 
 
 /**************************/
 /* Special for index page */
