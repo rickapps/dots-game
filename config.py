@@ -9,10 +9,10 @@ DEFAULT_THEME_INDEX=0
 
 # Game Levels - A size of 3 means there are 3x3 boxes and 4x4 dots on the gameboard.
 GAME_LEVELS =	[
-    ('Easy', 3),
-    ('Medium', 5),
-    ('Difficult', 7),
-    ('Expert', 10)
+    ('Easy (3x3)', 3),
+    ('Medium (5x5)', 5),
+    ('Difficult (7x7)', 7),
+    ('Expert (10x10)', 10)
 ]
 
 # Game Themes - column1 is the name to display. Column2 is the name of the class in the css file.

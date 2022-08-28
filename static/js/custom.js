@@ -83,6 +83,7 @@ if (playerDropDown)
 {
     let machineDropDown = document.getElementById("machine");
     playerDropDown.onchange = function() {
+        pydots.setMachineList(machineDropDown, this.value);
         pydots.setPlayerList(this.value, machineDropDown.value);
         
     }
@@ -303,7 +304,22 @@ pydots.setPlayerList = function(numPlayers, machine=0)
 
 // Show the specified number of players in the
 // machine dropdown.
-pydots.setMachineList = function(numPlayers)
+pydots.setMachineList = function(dropdown, numPlayers)
 {
-
+    // We assume the first option is 'Not Playing'.
+    // We always leave that option intact.
+    let max = dropdown.options.length;
+    for (let i=1; i<max; i++)
+    {
+        dropdown.remove(1);
+    }
+    for (let i=0; i<numPlayers; i++)
+    {
+        var player = document.createElement('option');
+        player.text = INIT_NAMES[i][0];
+        player.value = INIT_NAMES[i][1];
+        dropdown.appendChild(player);
+    }
+    // Default to the last option
+    dropdown.selectedIndex = numPlayers;
 }
