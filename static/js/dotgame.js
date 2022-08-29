@@ -220,6 +220,22 @@ pydots.dotgame.getLevel = function()
     return level;
 }
 
+// Get the skill level name
+pydots.dotgame.getLevelName = function()
+{
+    let level = pydots.dotgame.getLevel();
+    let name = 'Not found';
+    for (let i=0; i<GAME_LEVELS.length; i++)
+    {
+        if (level == GAME_LEVELS[i][1])
+        {
+            name = GAME_LEVELS[i][0];
+            break;
+        }
+    }
+    return name;
+}
+
 // Retrieve the number of players from storage
 pydots.dotgame.getNumPlayers = function()
 {
@@ -248,7 +264,7 @@ pydots.dotgame.getPlayerName = function(player)
     else
         names = INIT_NAMES;
 
-    return names[player];
+    return names[player][0];
 }
 
 // Return a list of all moves.

@@ -104,6 +104,7 @@ if (newGame)
         pydots.dotgame.clearGameValues();
         // Store player info - number, names
         pydots.storePlayerInfo();
+        return true;
     }
 }
 
@@ -137,8 +138,8 @@ pydots.initIndexPage = function () {
         let element = document.getElementById('resumeGame');
         let spans = element.getElementsByTagName('span');
         // Skill Level
-        let level = pydots.dotgame.getLevel();
-        spans[0].textContent = 'Skill Level: ${level}';
+        let level = pydots.dotgame.getLevelName();
+        spans[0].textContent = `Skill Level: ${level}`;
         // Update the scores
         let numPlayers = pydots.dotgame.getNumPlayers();
         for (let i = 1; i < 5; i++)
@@ -151,7 +152,7 @@ pydots.initIndexPage = function () {
             {
                 let name = pydots.dotgame.getPlayerName(i);
                 let score = pydots.dotgame.getScore(i);
-                spans[i].textContent = '${name}: ${score}';
+                spans[i].textContent = `${name}: ${score}`;
             }
         }
     }

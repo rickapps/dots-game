@@ -31,6 +31,9 @@
     {% if theme is defined %}
     const INIT_THEME = {{theme|tojson}};
     {% endif %}
+    {% if glevels is defined %}
+    const GAME_LEVELS = {{glevels|tojson}};
+    {% endif %}
 </script>
 <script src="/static/js/dotgame.js"></script>
 <script src="/static/js/custom.js"></script>
