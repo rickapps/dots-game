@@ -258,13 +258,13 @@ pydots.dotgame.storePlayerName = function(player, name)
 // Retrieve the name of the specified player from storage
 pydots.dotgame.getPlayerName = function(player)
 {
-    let names = localStorage.getItem('Name');
+    let names = localStorage.getItem('Names');
     if (names)
         names = JSON.parse(names);
     else
         names = INIT_NAMES;
 
-    return names[player][0];
+    return names[player];
 }
 
 // Return a list of all moves.
