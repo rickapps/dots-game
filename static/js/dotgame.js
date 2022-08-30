@@ -79,6 +79,7 @@ pydots.dotgame.clearGameValues = function ()
     localStorage.removeItem('History');
     localStorage.removeItem('Lines');
     localStorage.removeItem('Claims');
+    localStorage.removeItem('Names');
     localStorage.removeItem('Scores');
 }
 
@@ -306,7 +307,7 @@ pydots.dotgame.getClaims = function ()
 pydots.dotgame.getScore = function (player)
 {
     let score = -1;
-    let scores = localStorage.getItem('Scores');
+    let scores = JSON.parse(localStorage.getItem('Scores'));
     if (scores)
         score = scores[player];
     return score;
