@@ -54,7 +54,7 @@ def new_game():
 # Resume a game using values from local storage
 @app.route("/resume/", methods = ['POST'])
 def resume_game():
-    size = int(request.form['glevel'])
+    size = int(request.form['glevels'])
     theme = request.form['gcolors']
     lines = dotgame.init_game(size);
     boxes = dotgame.game_board(size, lines)

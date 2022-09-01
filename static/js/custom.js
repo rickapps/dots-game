@@ -171,9 +171,13 @@ pydots.initIndexPage = function () {
     pydots.setPlayerList(numplayersdrop.value, machinedrop.value);
 };
 
+// To restore a game we need to draw the lines and
+// claim the squares using values from localstorage.
 pydots.fillGame = function() {
-    // Draw the lines we obtained from storage
     let element;
+    let lines = pydots.dotgame.getLines();
+    let len = lines.length;
+    // Draw the lines we obtained from storage
     for (let i=0; i<len; i++) {
         if (lines[i] > 0)
         {

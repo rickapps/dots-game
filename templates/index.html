@@ -38,8 +38,6 @@
                 <fieldset>
                     <legend>New Game</legend>
             <section class="gameDetails">
-                <fieldset>
-                <legend>Setup</legend>
                     <label for="glevel">Skill:</label>
                     <select id="glevel" name="glevel">
                     <!-- The dropdown list values come from config.py GAME_LEVELS -->
@@ -70,9 +68,8 @@
                     {% for theme in gthemes %}
                         <option value="{{theme[1]}}">{{theme[0]}}</option>
                     {% endfor %}            
-                    </select><br>
-                </fieldset>
-            </section>
+                    </select><br><br>
+             </section>
             <section class="gamePeople">
                     <fieldset id="newGamePeople">
                         <legend>Names</legend>
