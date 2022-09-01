@@ -2,26 +2,16 @@
 <!-- Our scoreboard on the game page -->
 <div id="panel">
     <fieldset>
-        <legend>Score:</legend>
-        <label for="play1">You:</label>
-        <input type="text" id="play1" name="play1"><br><br>
-        <label for="play2">Computer:</label>
-        <input type="text" id="play2" name="play2"><br><br>
+        <legend>Scores:</legend>
+        <span id="level"></span>
+        <span id="score1" class="claim1"></span>
+        <span id="score2" class="claim2"></span>
+        <span id="score3" class="claim3"></span>
+        <span id="score4" class="claim4"></span>
     </fieldset>
     <form action="/new/" method="POST" id="restartGame">
         <fieldset>
          <legend>Options:</legend>
-         <label for="glevel">Level:</label>
-         <select id="glevel" name="glevel">
-         <!-- The dropdown list values come from config.py GAME_LEVELS -->
-         {% for level in glevels %}
-            {% if size == level[1] %}
-            <option value={{level[1]}} selected>{{level[0]}}</option>
-            {% else %}
-            <option value={{level[1]}}>{{level[0]}}</option>
-            {% endif %}
-         {% endfor %}            
-         </select><br><br>
          <label for="gcolors">Colors:</label>
          <select type="text" id="gcolors" name="gcolors">
          <!-- The dropdown list values come from config.py GAME_THEMES -->
@@ -29,8 +19,9 @@
             <option value="{{theme[1]}}">{{theme[0]}}</option>
          {% endfor %}            
          </select><br><br>
-         <input type="submit" value="New Game">
+         <input type="submit" value="Restart Game">
+         <button onclick="window.location.href='/';">Change Game</button>
         </fieldset>
-       </form>
-       </div>
+    </form>
+</div>
 {% endblock %}
