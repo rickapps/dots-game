@@ -1,38 +1,43 @@
 {% block body %}
 <div id="gameboard" class="grid-container">
     {% for box in boxes %}
+    {% set claim = 'claim3' %}
+    {% set claim = 'claim1' if '1' in box['options'] %}
+    {% set claim = 'claim2' if '2' in box['options'] %}
+    {% set claim = 'claim3' if '3' in box['options'] %}
+    {% set claim = 'claim4' if '4' in box['options'] %}
     {# Let's see what kind of square we have #}
     {% if box['boxType'] == 'Normal' %}
-    <div id="{{box['boxID']}}" class="grid-item">
+    <div id="{{box['boxID']}}" class="grid-item {{claim}}">
         <div class="dot top-left"></div>
-        <a id="{{box['top']}}" href="" class="line-top" onclick="return false;"></a>
-        <a id="{{box['left']}}" href="" class="line-left" onclick="return false;"></a>
+        <a id="{{box['top']}}" href="" class="line-top {{ 'selected' if 'top' in box['options'] }}" onclick="return false;"></a>
+        <a id="{{box['left']}}" href="" class="line-left {{ 'selected' if 'left' in box['options'] }}" onclick="return false;"></a>
     </div>
     {% elif box['boxType'] == 'Right' %}
-    <div id="{{box['boxID']}}" class="grid-item right-edge">
+    <div id="{{box['boxID']}}" class="grid-item right-edge {{claim}}">
         <div class="dot top-left"></div>
-        <a id="{{box['top']}}" href="" class="line-top" onclick="return false;"></a>
-        <a id="{{box['left']}}" href="" class="line-left" onclick="return false;"></a>
+        <a id="{{box['top']}}" href="" class="line-top {{ 'selected' if 'top' in box['options'] }}" onclick="return false;"></a>
+        <a id="{{box['left']}}" href="" class="line-left {{ 'selected' if 'left' in box['options'] }}" onclick="return false;"></a>
         <div class="dot top-right"></div>
-        <a id="{{box['right']}}" href="" class="line-right" onclick="return false;"></a>
+        <a id="{{box['right']}}" href="" class="line-right {{ 'selected' if 'right' in box['options'] }}" onclick="return false;"></a>
     </div> 
     {% elif box['boxType'] == 'Bottom' %}
-    <div id="{{box['boxID']}}" class="grid-item bottom-edge">
+    <div id="{{box['boxID']}}" class="grid-item bottom-edge {{claim}}">
         <div class="dot top-left"></div>
-        <a id="{{box['top']}}" href="" class="line-top" onclick="return false;"></a>
-        <a id="{{box['left']}}" href="" class="line-left" onclick="return false;"></a>
+        <a id="{{box['top']}}" href="" class="line-top {{ 'selected' if 'top' in box['options'] }}" onclick="return false;"></a>
+        <a id="{{box['left']}}" href="" class="line-left {{ 'selected' if 'left' in box['options'] }}" onclick="return false;"></a>
         <div class="dot bottom-left"></div>
-        <a id="{{box['bottom']}}" href="" class="line-bottom" onclick="return false;"></a>
+        <a id="{{box['bottom']}}" href="" class="line-bottom {{ 'selected' if 'bottom' in box['options'] }}" onclick="return false;"></a>
     </div> 
     {% elif box['boxType'] == 'Both' %}
-    <div id="{{box['boxID']}}" class="grid-item right-edge bottom-edge">
+    <div id="{{box['boxID']}}" class="grid-item right-edge bottom-edge {{claim}}">
         <div class="dot top-left"></div>
-        <a id="{{box['top']}}" href="" class="line-top" onclick="return false;"></a>
-        <a id="{{box['left']}}" href="" class="line-left" onclick="return false;"></a>
+        <a id="{{box['top']}}" href="" class="line-top {{ 'selected' if 'top' in box['options'] }}" onclick="return false;"></a>
+        <a id="{{box['left']}}" href="" class="line-left {{ 'selected' if 'left' in box['options'] }}" onclick="return false;"></a>
         <div class="dot top-right"></div>
-        <a id="{{box['right']}}" href="" class="line-right" onclick="return false;"></a>
+        <a id="{{box['right']}}" href="" class="line-right {{ 'selected' if 'right' in box['options'] }}" onclick="return false;"></a>
         <div class="dot bottom-left"></div>
-        <a id="{{box['bottom']}}" href="" class="line-bottom" onclick="return false;"></a>
+        <a id="{{box['bottom']}}" href="" class="line-bottom {{ 'selected' if 'bottom' in box['options'] }}" onclick="return false;"></a>
         <div class="dot bottom-right"></div>
     </div> 
     {% endif %}

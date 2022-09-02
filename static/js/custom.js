@@ -134,27 +134,7 @@ pydots.initIndexPage = function () {
     // Was there any progress on the previous game?
     if (len > 0)
     {
-        // Get all spans within form resumeGame. There should be five.
-        let element = document.getElementById('resumeGame');
-        let spans = element.getElementsByTagName('span');
-        // Skill Level
-        let level = pydots.dotgame.getLevelName();
-        spans[0].textContent = `Skill Level: ${level}`;
-        // Update the scores
-        let numPlayers = pydots.dotgame.getNumPlayers();
-        for (let i = 1; i < 5; i++)
-        {
-            if (i > numPlayers)
-            {
-                spans[i].style.display="none";
-            }
-            else
-            {
-                let name = pydots.dotgame.getPlayerName(i);
-                let score = pydots.dotgame.getScore(i);
-                spans[i].textContent = `${name}: ${score}`;
-            }
-        }
+        pydots.displayScores("resumeGame");
     }
     else
     {
@@ -203,6 +183,7 @@ pydots.updatePlayer = function (evt) {
     // If it is the machine's turn, let the server know.
     if (pydots.dotgame.isMachineTurn())
         pydots.dotgame.makeMove();
+    pydots.updateScore(1,0);
     return;
 }
 
@@ -232,6 +213,7 @@ pydots.drawMove = function (evt) {
 
 // Update our score board
 pydots.updateScore = function (player, score) {
+    pydots.displayScores('panel');
     return;
 }
 
@@ -334,4 +316,29 @@ pydots.setMachineList = function(dropdown, numPlayers)
     }
     // Default to the last option
     dropdown.selectedIndex = numPlayers;
+}
+
+pydots.displayScores = function(location)
+{
+        // Get all spans within the specified location. There should be five.
+        let element = document.getElementById(location);
+        let spans = element.getElementsByTagName('span');
+        // Skill Level
+        let level = pydots.dotgame.getLevelName();
+        spans[0].textContent = `Skill Level: ${level}`;
+        // Update the scores
+        let numPlayers = pydots.dotgame.getNumPlayers();
+        for (let i = 1; i < 5; i++)
+        {
+            if (i > numPlayers)
+            {
+                spans[i].style.display="none";
+            }
+            else
+            {
+                let name = pydots.dotgame.getPlayerName(i);
+                let score = pydots.dotgame.getScore(i);
+                spans[i].textContent = `${name}: ${score}`;
+            }
+        }
 }

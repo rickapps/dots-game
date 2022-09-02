@@ -79,8 +79,11 @@ pydots.dotgame.clearGameValues = function ()
     localStorage.removeItem('History');
     localStorage.removeItem('Lines');
     localStorage.removeItem('Claims');
-    localStorage.removeItem('Names');
-    localStorage.removeItem('Scores');
+    // Set the current player back to player 1
+    localStorage.setItem('Player', JSON.stringify(1));
+    // Reset game scores to zeros
+    let scores = [0,0,0,0];
+    localStorage.setItem('Scores', JSON.stringify(scores));
 }
 
 // A human player has drawn one line on the gameboard.

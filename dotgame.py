@@ -11,7 +11,7 @@ import random
 # indicates which box sides have already been drawn (prefill).
 # The history array are moves made after the game has started. 
 # Box squares can only be claimed (colored) based on history.
-def game_board(size, lines=[], history=[]):
+def game_board(size, lines=[], claims=[]):
     boxes = []
     
     for i in range(size * size):
@@ -32,6 +32,19 @@ def game_board(size, lines=[], history=[]):
         box['right'] = i+1+size*(size+1)
         if boxType == 'Right' or boxType == 'Both':
             box['right'] = size*size+((i+1)//size + size*(size+1))-1
+        box['options'] = []
+        if len(lines) > 0 and len(claims) > 0:
+            # Check for completed lines and claims
+            if lines[box['top']] > 0:
+                box['options'].append('top')
+            if lines[box['left']] > 0:
+                box['options'].append('left')
+            if lines[box['bottom']] > 0:
+                box['options'].append('bottom')
+            if lines[box['right']] > 0:
+                box['options'].append('right')
+            # Record the claim
+            box['options'].append(claims[i])
         boxes.append(box)
 
     return boxes
