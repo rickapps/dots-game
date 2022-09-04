@@ -1,6 +1,7 @@
-# Latest source available at: https://github.com/rickapps/dots-game
+# Copyright (c) 2022 Rick Eichhorn
+# Latest source available at: https://github.com/rickapps/
 # rick@rickapps.com
-# August 1, 2022
+# September 4, 2022
 #
 import json
 import gameboard
