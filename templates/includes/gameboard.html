@@ -1,13 +1,13 @@
 {% block body %}
 <div id="gameboard" class="grid-container">
     {% for box in boxes %}
-    {% if '1' in box.options %}
+    {% if 1 in box.options %}
     {% set claim = 'claim1' %}
-    {% elif '2' in box.options %}
+    {% elif 2 in box.options %}
     {% set claim = 'claim2' %}
-    {% elif '3' in box.options %}
+    {% elif 3 in box.options %}
     {% set claim = 'claim3' %}
-    {% elif '4' in box.options %}
+    {% elif 4 in box.options %}
     {% set claim = 'claim4' %}
     {% endif %}
     {# Let's see what kind of square we have #}
