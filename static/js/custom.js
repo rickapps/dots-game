@@ -128,6 +128,9 @@ if (restart)
 let resume = document.getElementById("resumeGame");
 if (resume)
 {
+    // For now, we will pull the info from storage and load it into html
+    // input fields. Later we will see if we can modify the request header
+    // before the form is posted and do away with the input fields.
     resume.onsubmit = function() {
         document.getElementById('size').value = pydots.dotgame.getLevel();
         document.getElementById('theme').value = pydots.dotgame.getTheme();

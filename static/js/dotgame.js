@@ -87,6 +87,9 @@ pydots.dotgame.clearGameValues = function ()
 }
 
 // Retrieve saved game from localstorage and POST it to server
+// Need to try different way. Cannot get fetch to change url.
+// Will try to use js to modify the request header, but still
+// post using an html form.
 pydots.dotgame.resumeGame = function()
 {
     let game = {

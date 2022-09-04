@@ -11,6 +11,7 @@
     </fieldset>
     <form action="/new/" method="POST" id="restartGame">
         <fieldset>
+         <input type="hidden" name="glevel" value="{{size|tojson}}">
          <legend>Options:</legend>
          <label for="gcolors">Colors:</label>
          <select type="text" id="gcolors" name="gcolors">
