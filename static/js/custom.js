@@ -123,6 +123,21 @@ if (restart)
 }
 
 //////////////////////////////////
+// RESUME GAME 
+//////////////////////////////////
+let resume = document.getElementById("resumeGame");
+if (resume)
+{
+    resume.onsubmit = function() {
+        document.getElementById('size').value = pydots.dotgame.getLevel();
+        document.getElementById('theme').value = pydots.dotgame.getTheme();
+        document.getElementById('lines').value = JSON.stringify(pydots.dotgame.getLines());
+        document.getElementById('claims').value = JSON.stringify(pydots.dotgame.getClaims());
+        return true;
+    }
+}
+
+//////////////////////////////////
 // EVENT HANDLERS 
 //////////////////////////////////
 // Check if we have a stored game. If so, set up

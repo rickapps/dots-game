@@ -86,6 +86,32 @@ pydots.dotgame.clearGameValues = function ()
     localStorage.setItem('Scores', JSON.stringify(scores));
 }
 
+// Retrieve saved game from localstorage and POST it to server
+pydots.dotgame.resumeGame = function()
+{
+    let game = {
+        "size": pydots.dotgame.getLevel(),
+        "theme": pydots.dotgame.getTheme(),
+        "lines": pydots.dotgame.getLines(),
+        "claims": pydots.dotgame.getClaims()
+    }
+    // Tell fetch we want a POST using JSON data
+    // and send the request.
+    let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type':
+                'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(game)
+    }
+    let fetchRes = fetch('/resume/', options);
+    fetchRes.then(res => res.text()).then((data) =>
+    {
+        return data;
+    });
+}
+
 // A human player has drawn one line on the gameboard.
 // Send the user's desired move to the server to determine if it
 // completes any squares. The server returns a tuple containing

@@ -52,12 +52,16 @@ def new_game():
          lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
 # Resume a game using values from local storage
+# The post is done from javascript.
 @app.route("/resume/", methods = ['POST'])
 def resume_game():
-    size = int(request.form['glevels'])
-    theme = request.form['gcolors']
-    lines = dotgame.init_game(size);
-    boxes = dotgame.game_board(size, lines)
+    size = int(request.form['size'])
+    theme = request.form['theme']
+    # There has got to be a better way to do this! How can I
+    # send array data on a form?
+    lines = list(map(int, request.form['lines'][1:-1].split(',')))
+    claims = list(map(int, request.form['claims'][1:-1].split(',')))
+    boxes = dotgame.game_board(size, lines, claims)
     return render_template('game.html',size=size, theme=theme, \
         lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
@@ -86,12 +90,12 @@ def verify_user_move():
     return json.dumps(dotgame.verify_move(size, lines, line))
 
 # A catch-all for unknown requests. Must be a POST request to get to
-# game page. path is here for future use.
+# game page. path is here for future use. We route them to index page
 @app.route("/", defaults={'path': ''})
 @app.route('/<path:path>')
 def home(path):
     return render_template('index.html', size=size, theme=theme, \
-        lines=lines, glevels=glevels, gthemes=gthemes, \
+        lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes, \
         gplayers=gplayers, machine=machine, nomachine=nomachine, \
         pnames=pnames)
 
