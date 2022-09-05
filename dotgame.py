@@ -10,8 +10,7 @@ import random
 # Returns the array of boxes that constitutes the game board.
 # The number of boxes returned is size**2. The lines array
 # indicates which box sides have already been drawn (prefill).
-# The history array are moves made after the game has started. 
-# Box squares can only be claimed (colored) based on history.
+# The claims list contains completed boxes and their owner. 
 def game_board(size, lines=[], claims=[]):
     boxes = []
     

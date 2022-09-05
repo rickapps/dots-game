@@ -11,10 +11,6 @@
 var pydots = pydots || {};
 pydots.dotgame= pydots.dotgame || {};
 
-// If the machine is not playing, it will be 0. Otherwise,
-// it is 1,2,3,or 4. We default to the second player.
-let machinePlayer = 2;
-
 // Store line state, history, and claims in local storage to make sure we do not lose the
 // values on page refresh.
 pydots.dotgame.pushMove = function (move)
@@ -205,11 +201,12 @@ pydots.dotgame.makeMove = function ()
                     {
                         // Send event to update the score
                         event = new CustomEvent("updateScore");
+                        document.dispatchEvent(event);
                     }
                 });
                 // Machine turn has ended. Switch to human player
                 pydots.dotgame.switchPlayers();
-                event = new CustomEvent("switchPlayer");
+                event = new CustomEvent("updatePlayer");
                 document.dispatchEvent(event);
             });
     return moves;
@@ -359,7 +356,6 @@ pydots.dotgame.storePlayers = function(numPlayers, machine)
         throw new Error('Machine player cannot be greater than numPlayers');
     localStorage.setItem('NumPlayers', JSON.stringify(numPlayers));
     localStorage.setItem('Machine', JSON.stringify(machine));
-    machinePlayer = machine;
     // Start with 1. The number denotes which player has control of the board:
     // (1,2,3, or 4). 
     localStorage.setItem('Player', JSON.stringify(Number(1)));
@@ -386,8 +382,8 @@ pydots.dotgame.getPlayer = function ()
 // Return true if it is the machine's turn.
 pydots.dotgame.isMachineTurn = function()
 {
-    let player = JSON.parse(localStorage.getItem('Player'));
-    return player == machinePlayer;
+    let player = this.getPlayer();
+    return player == this.getMachinePlayer();
 }
 
 pydots.dotgame.getMachinePlayer = function()
@@ -399,8 +395,8 @@ pydots.dotgame.getMachinePlayer = function()
 // Set the current player to the next player
 pydots.dotgame.switchPlayers = function ()
 {
-    let numPlayers = JSON.parse(localStorage.getItem('NumPlayers'));
-    let player = JSON.parse(localStorage.getItem('Player'));
+    let numPlayers = this.getNumPlayers();
+    let player = this.getPlayer();
     // Move to the next player
     player = (player == numPlayers) ? 1 : player + 1;
     localStorage.setItem('Player', JSON.stringify(player));

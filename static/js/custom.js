@@ -53,7 +53,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
         document.addEventListener("updatePlayer", pydots.updatePlayer, false);
         // Add event listener to update the score.
         document.addEventListener("updateScore", pydots.updateScore);
-    }
+        pydots.updatePlayer();
+        pydots.updateScore();
+}
     let resume = document.getElementById("resumeGame");
     if (resume)
     {
@@ -199,10 +201,11 @@ pydots.fillGame = function() {
 
 // Reset the board to indicate the current player's turn
 pydots.updatePlayer = function (evt) {
+    // Update the scoreboard to show the current player
+    let player = pydots.dotgame.getPlayer();
     // If it is the machine's turn, let the server know.
     if (pydots.dotgame.isMachineTurn())
         pydots.dotgame.makeMove();
-    pydots.updateScore(1,0);
     return;
 }
 
