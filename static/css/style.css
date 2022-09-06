@@ -9,6 +9,19 @@ Email: rick@rickapps.com
   text-align: center;
 }
 
+span.bold {
+  font-size: 40px;
+  font-weight: 700;
+}
+
+img.invisible {
+  visibility: hidden;
+}
+
+img.indicator {
+  width: 30px;
+}
+
 /* Styles for the dots on the game board
 ----------------------------------------------------------------------------*/
 .dot {

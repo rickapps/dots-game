@@ -202,7 +202,15 @@ pydots.fillGame = function() {
 // Reset the board to indicate the current player's turn
 pydots.updatePlayer = function (evt) {
     // Update the scoreboard to show the current player
+    let numPlayers = pydots.dotgame.getNumPlayers();
     let player = pydots.dotgame.getPlayer();
+    let element = document.getElementById('scoreBoard');
+    let markers = element.getElementsByTagName('img');
+    for (let i = 0; i < numPlayers; i++)
+    {
+        markers[i].classList.add('invisible');
+    }
+    markers[player-1].classList.toggle('invisible');
     // If it is the machine's turn, let the server know.
     if (pydots.dotgame.isMachineTurn())
         pydots.dotgame.makeMove();
