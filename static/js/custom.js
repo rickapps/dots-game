@@ -172,33 +172,6 @@ pydots.initIndexPage = function () {
     pydots.setPlayerList(numplayersdrop.value, machinedrop.value);
 };
 
-// To restore a game we need to draw the lines and
-// claim the squares using values from localstorage.
-pydots.fillGame = function() {
-    let element;
-    let lines = pydots.dotgame.getLines();
-    let len = lines.length;
-    // Draw the lines we obtained from storage
-    for (let i=0; i<len; i++) {
-        if (lines[i] > 0)
-        {
-            element = document.getElementById(i.toString());
-            element.classList.add("selected");   
-        }
-    }
-    // Check if any squares should be filled.
-    let claims = pydots.dotgame.getClaims();
-    len = claims.length;
-    for (let i=0; i<len; i++) {
-        if (claims[i] >= 0)
-        {
-            element = document.getElementById("B-" + i.toString());
-            let claim = claims[i] == 1 ? "claim1" : "claim2";
-            element.classList.add(claim);
-        }
-    }
-}
-
 // Reset the board to indicate the current player's turn
 pydots.updatePlayer = function (evt) {
     // Update the scoreboard to show the current player

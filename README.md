@@ -1,5 +1,5 @@
 # dots-game
-## Dots game using CSS, Javascript, and Flask
+## Dots game using CSS, Javascript, and Python Flask
 
 Links: [https://dotsgame.rickapps.com](https://dotsgame.rickapps.com) or [https://playdots.uc.r.appspot.com/](https://playdots.uc.r.appspot.com/)
 
@@ -9,8 +9,7 @@ You can code a UI that does not use Flask. The UI only needs to post the player'
 
 ### Box and Line Numbering Scheme
  
-The top left square has id=0. The bottom right square has id=squareCount-1. Each square has four sides; Top, Right, Bottom, and Left. If the square is complete it has an owner of Player1 or Player2. All horizontal lines are numbered sequentially from the top left to the bottom right. The top segment 
-of square zero is numbered zero, the top segment of square one is one, the bottom segment of square squareCount-1 is numbered (squareCount-1)+gameSize; Vertical lines are then numbered sequentially starting with the left side of square zero (The line id is squareCount+gameSize). However, vertical lines are not numbered sequentially all the way to the last column. Instead, the numbering ends at the right side of the square just before the last column. The vertical lines composing the outer right edge of the dot game board are not assigned numbers until all the other vertical lines are assigned. Then the right edge is numbered from top to bottom. 
+The top left square has id=0. The bottom right square has id=squareCount-1. Each square has four sides; Top, Right, Bottom, and Left. If the square is complete it has a claim by the player that completed the box. All horizontal lines are numbered sequentially from the top left to the bottom right. The top segment of square zero is numbered zero, the top segment of square one is one, the bottom segment of square squareCount-1 is numbered (squareCount-1)+gameSize; Vertical lines are then numbered sequentially starting with the left side of square zero (The line id is squareCount+gameSize). However, vertical lines are not numbered sequentially all the way to the last column. Instead, the numbering ends at the right side of the square just before the last column. The vertical lines composing the outer right edge of the dot game board are not assigned numbers until all the other vertical lines are assigned. Then the right edge is numbered from top to bottom. 
 
 ![Example 4x4 game](static/img/DotNumbering2.png)
 
@@ -18,9 +17,9 @@ For 4x4 game board, gameSize is 4. squareCount is 16. Squares are numbered 0-15.
 
 ### Definitions of terms used in the code
 
-**claims:** a list of all boxes on the gameboard. Indices correspond to the description above. If a list value is -1, the box is not claimed. A value of 1 or 2 means a claim by player1 or player2.
+**claims:** a list of all boxes on the gameboard. Indices correspond to the description above. If a list value is 0, the box is not claimed. Otherwise, the value is the player number that owns the claim.
 
-**history:** a list of all moves in the game. It is a list of lists of move tuples. Odd indexes will be player0 moves and even indexes will be player1 moves.
+**history:** a list of all moves in the game. It is a list of lists of move tuples. 
 
 **lines:** a list of lines on the gameboard. Indices correspond to the description above. A value of 1 means the line has been selected. A value of 0 means the line is available to select.
 
