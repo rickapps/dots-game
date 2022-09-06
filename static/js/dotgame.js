@@ -154,6 +154,7 @@ pydots.dotgame.validateMove = function (line, bAnimate=true)
             {
                 // Send an event to update the scoreboard on the UI
                 let event = new CustomEvent("updateScore");
+                document.dispatchEvent(event);
             }
             else
             {

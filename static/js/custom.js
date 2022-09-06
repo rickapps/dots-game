@@ -266,7 +266,6 @@ pydots.claimSquares = function (move, player) {
         points += 1;
         pydots.fillSquare(move[2], player);
     }
-    pydots.dotgame.calculateScore(player, points);
     return points > 0;
 }
 
