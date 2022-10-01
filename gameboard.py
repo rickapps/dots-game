@@ -93,6 +93,7 @@ class GameBoard:
     # Update the lines array with the specified move and determine
     # if the move completes any boxes. -1 means box not complete
     def update_game_board(self, new_line):
+        assert(self.lines[new_line] == 0), "Line is not empty - update_game_board"
         self.lines[new_line ] = 1
         boxes = self.get_adjacent_boxes(new_line)
         new_box1 = -1
@@ -164,4 +165,8 @@ class GameBoard:
                 points += self.complete_joined_boxes(box, moves)
         
         return points
+
+    # Indicate if more moves are available
+    def is_game_complete(self):
+        return sum(self.lines) == self.num_lines
     

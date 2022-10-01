@@ -38,3 +38,9 @@ Index.html - Add num players, computer. Resume saved game.
 Game.html - update score. Remove new game, link to index, perhaps add Restart and Undo.
 Add indicator for current turn.
 Themes - find css to make spheres and cylinders.
+
+Tasks as of 09/14/2022
+1) Event to end game. Ended games cannot be continued. Add handler for message.
+2) Update css for actual page designs. Perhaps implement at least one theme with a 3-D effect.
+3) Implement Undo
+4) Slow down machine moves so they can be seen.

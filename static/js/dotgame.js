@@ -117,11 +117,12 @@ pydots.dotgame.resumeGame = function()
 // completes any squares. The server returns a tuple containing
 // (lineNum, box1, box2) where box1 and box2 indicate any completed
 // squares. A value of -1 means square not completed.
-// Failure is indicated by (-1,-1,-1). Triggers other events to
+// End game if move is (-1,-1,-1). Triggers other events to
 // notify UI.
 pydots.dotgame.validateMove = function (line, bAnimate=true)
 {
-    var validated = [-1,-1,-1];
+    let moves = [];
+    let event;
     // Send a POST request to the server informing it of our move
     // The body of the request contains the current game state.
     let specs = {
@@ -142,30 +143,36 @@ pydots.dotgame.validateMove = function (line, bAnimate=true)
     let fetchRes = fetch('/verify/', options);
     fetchRes.then(res =>
         res.json()).then(d => {
-            for (let i=0;i<3;i++) {
-                validated[i] = d[i];
-            }
-            // Send an event to update the UI
-            let event = new CustomEvent("drawMove", {detail: {move: d}});
-            document.dispatchEvent(event);
-            // Update our internal score
-            let points = pydots.dotgame.calculateScore(d);
-            if (points > 0)
-            {
-                // Send an event to update the scoreboard on the UI
-                let event = new CustomEvent("updateScore");
-                document.dispatchEvent(event);
-            }
-            else
-            {
-                // Move to the other player
-                pydots.dotgame.switchPlayers();
-                event = new CustomEvent("updatePlayer");
-                document.dispatchEvent(event);
-            }
-        }
-    );
-    return validated;
+            d.forEach(move => {
+                moves.push(move);
+                if (pydots.dotgame.gameOver(move))
+                {
+                    event = new CustomEvent("gameOver");
+                    document.dispatchEvent(event);
+                }
+                else
+                {
+                    // Send an event to update the UI
+                    event = new CustomEvent("drawMove", {detail: {move: move}});
+                    document.dispatchEvent(event);
+                    // Update our internal score
+                    if (pydots.dotgame.calculateScore(move) > 0)
+                    {
+                        // Send an event to update the scoreboard on the UI
+                        let event = new CustomEvent("updateScore");
+                        document.dispatchEvent(event);
+                    }
+                    else
+                    {
+                        // Move to the other player
+                        pydots.dotgame.switchPlayers();
+                        event = new CustomEvent("updatePlayer");
+                        document.dispatchEvent(event);
+                    }
+                }
+            })
+        });
+    return moves;
 }
 
 // Ask the computer for its move(s). For each move,
@@ -195,14 +202,22 @@ pydots.dotgame.makeMove = function ()
         res.json()).then(d => {
                 d.forEach(move => {
                     moves.push(move);
-                    event = new CustomEvent("drawMove", {detail: {move: move}});   
-                    document.dispatchEvent(event);
-                    // Update the score
-                    if (pydots.dotgame.calculateScore(move) > 0)
+                    if (pydots.dotgame.gameOver(move))
                     {
-                        // Send event to update the score
-                        event = new CustomEvent("updateScore");
+                        event = new CustomEvent("gameOver");   
                         document.dispatchEvent(event);
+                    }
+                    else
+                    {
+                        event = new CustomEvent("drawMove", {detail: {move: move}});   
+                        document.dispatchEvent(event);
+                        // Update the score
+                        if (pydots.dotgame.calculateScore(move) > 0)
+                        {
+                            // Send event to update the score
+                            event = new CustomEvent("updateScore");
+                            document.dispatchEvent(event);
+                        }
                     }
                 });
                 // Machine turn has ended. Switch to human player
@@ -211,6 +226,11 @@ pydots.dotgame.makeMove = function ()
                 document.dispatchEvent(event);
             });
     return moves;
+}
+
+pydots.dotgame.gameOver = function (move)
+{
+    return move[0] < 0;
 }
 
 // Remove the indicated lines and box claims from the game board.

@@ -4,12 +4,13 @@
 // August 1, 2022
 //
 // Edit this file to change the look and feel of the dots game.
-// You need to listen for and respond to the following three custom events:
+// You need to listen for and respond to the following four custom events:
 // 1) drawMove - Draw one line on the game board. Use dotgame.getPlayer()
 // to see who the current player is.
 // 2) updatePlayer - The turn has changed. Update the board to indicate
 // whose turn it is.
 // 3) updateScore - Update the scoreboard.
+// 4) gameOver - The game has ended. Display notice to user. 
 //
 // The other file, Dotgame.js, implements the business logic. You shouldn't need
 // to alter that file if you just want to change the appearance of the game. 
@@ -53,6 +54,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
         document.addEventListener("updatePlayer", pydots.updatePlayer, false);
         // Add event listener to update the score.
         document.addEventListener("updateScore", pydots.updateScore);
+        document.addEventListener("gameOver", pydots.endGame);
         pydots.updatePlayer();
         pydots.updateScore();
 }
@@ -197,6 +199,10 @@ pydots.updatePlayer = function (evt) {
 pydots.playerMove = function (evt) {
     pydots.dotgame.validateMove(parseInt(evt.target.id));
 } 
+
+pydots.endGame = function() {
+    alert("Game Over");
+}
 
 // Response to drawMove event.
 // Draw a single move on the gameboard.

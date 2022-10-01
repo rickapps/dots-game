@@ -120,7 +120,7 @@ def find_move(size, lines):
     # We are out of the loop. Add a move to end our turn
     move.extend(find_best_nonscoring_move(size, lines))
 
-    return move  
+    return move   
 
 # Main purpose is to indicate if a box color should
 # change (claim a square). The return value is a tuple,
@@ -128,9 +128,11 @@ def find_move(size, lines):
 # If any box is positive, that box is claimed, and the player 
 # gets another turn. If line is -1, the game is over.
 def verify_move(size, lines, newline):
+    move = []
     game = gameboard.GameBoard(size, lines)
-    move = game.update_game_board(newline)
+    move.append(game.update_game_board(newline))
+    if game.is_game_complete():
+        move.append((-1,-1,-1))
     return move
-
 
     
