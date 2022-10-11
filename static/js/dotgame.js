@@ -144,14 +144,16 @@ pydots.dotgame.validateMove = function (line, bAnimate=true)
     fetchRes.then(res =>
         res.json()).then(d => {
             d.forEach(move => {
-                moves.push(move);
-                if (pydots.dotgame.gameOver(move))
+                // The final move in the list may signal the game is over
+                let gameIsOver = pydots.dotgame.gameOver(move);
+                if (gameIsOver)
                 {
                     event = new CustomEvent("gameOver");
                     document.dispatchEvent(event);
                 }
                 else
                 {
+                    moves.push(move);
                     // Send an event to update the UI
                     event = new CustomEvent("drawMove", {detail: {move: move}});
                     document.dispatchEvent(event);
@@ -172,7 +174,7 @@ pydots.dotgame.validateMove = function (line, bAnimate=true)
                 }
             })
         });
-    return moves;
+    return;
 }
 
 // Ask the computer for its move(s). For each move,
@@ -201,31 +203,39 @@ pydots.dotgame.makeMove = function ()
     fetchRes.then(res =>
         res.json()).then(d => {
                 d.forEach(move => {
-                    moves.push(move);
-                    if (pydots.dotgame.gameOver(move))
+                    // A list of moves is returned. The final entry in the
+                    // list may indicate the game has ended.
+                    let gameIsOver = pydots.dotgame.gameOver(move);
+                    if (gameIsOver)
                     {
+                        // Tell the UI the game is ended
                         event = new CustomEvent("gameOver");   
                         document.dispatchEvent(event);
                     }
                     else
                     {
+                        moves.push(move);
+                        // We have a valid move - update the gameboard
                         event = new CustomEvent("drawMove", {detail: {move: move}});   
                         document.dispatchEvent(event);
-                        // Update the score
+                        // Do we need to update the score?
                         if (pydots.dotgame.calculateScore(move) > 0)
                         {
                             // Send event to update the score
                             event = new CustomEvent("updateScore");
                             document.dispatchEvent(event);
                         }
+                        else
+                        {
+                            // Machine turn has ended. Switch to human player
+                            pydots.dotgame.switchPlayers();
+                            event = new CustomEvent("updatePlayer");
+                            document.dispatchEvent(event);
+                        }
                     }
-                });
-                // Machine turn has ended. Switch to human player
-                pydots.dotgame.switchPlayers();
-                event = new CustomEvent("updatePlayer");
-                document.dispatchEvent(event);
+                })
             });
-    return moves;
+    return;
 }
 
 pydots.dotgame.gameOver = function (move)

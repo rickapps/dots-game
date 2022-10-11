@@ -8,7 +8,7 @@
 // 1) drawMove - Draw one line on the game board. Use dotgame.getPlayer()
 // to see who the current player is.
 // 2) updatePlayer - The turn has changed. Update the board to indicate
-// whose turn it is.
+// whose turn it is. If it is the computer's turn, call makeMove.
 // 3) updateScore - Update the scoreboard.
 // 4) gameOver - The game has ended. Display notice to user. 
 //
@@ -179,6 +179,7 @@ pydots.updatePlayer = function (evt) {
     // Update the scoreboard to show the current player
     let numPlayers = pydots.dotgame.getNumPlayers();
     let player = pydots.dotgame.getPlayer();
+    console.log(`updatePlayer - it is ${player}`);
     let element = document.getElementById('scoreBoard');
     let markers = element.getElementsByTagName('img');
     for (let i = 0; i < numPlayers; i++)
@@ -201,6 +202,7 @@ pydots.playerMove = function (evt) {
 } 
 
 pydots.endGame = function() {
+    console.log('Game Over.');
     alert("Game Over");
 }
 
@@ -208,6 +210,7 @@ pydots.endGame = function() {
 // Draw a single move on the gameboard.
 pydots.drawMove = function (evt) {
     let move = evt.detail.move;
+    console.log(`Draw move: ${move[0]}`);
     if (move[0] >= 0)
     {
         // Store the move
@@ -222,6 +225,7 @@ pydots.drawMove = function (evt) {
 
 // Update our score board
 pydots.updateScore = function (player, score) {
+    console.log('Update Score');
     pydots.displayScores('panel');
     return;
 }
