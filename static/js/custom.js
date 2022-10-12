@@ -202,8 +202,8 @@ pydots.playerMove = function (evt) {
 } 
 
 pydots.endGame = function() {
-    console.log('Game Over.');
-    alert("Game Over");
+    let dlg = document.getElementById('endGameDlg');
+    dlg.classList.toggle('show-dlg');
 }
 
 // Response to drawMove event.

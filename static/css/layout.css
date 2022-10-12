@@ -29,6 +29,7 @@ form {
 }
 
 #content {
+  position: relative;
   background-color: yellow;
   width: 70%;
   float: right;
@@ -58,6 +59,28 @@ form {
   float: right;
   text-align: right;
 } 
+
+.modal {
+  position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   background-color: blue;
+ }
+ 
+.modal-dialog {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0,0,0,0.7);
+  display: none;
+}
+
+.show-dlg {
+  display: block;
+}
 
 /**************************/
 /* Special for index page */
