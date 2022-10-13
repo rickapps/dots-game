@@ -156,5 +156,12 @@ We only want to affect the anchor tags that are within class .grid-item
   width: 5%;
 }
 
-
+.anchor-btn {
+  background-color: blue;
+  color: white;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  padding: 2px;
+}
 
