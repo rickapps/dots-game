@@ -121,9 +121,16 @@ if (restart)
 {
     restart.onsubmit = function() {
         // Verify it is what our user wants to do
-        alert("This will end your current game.")
-        // Clear our local storage values
-        pydots.dotgame.clearGameValues();
+        let moves = pydots.dotgame.getHistory();
+        if (moves.length > 0)
+        {
+            let isConfirmed = confirm("Do you want to end your current game?");
+            // Clear our local storage values
+            if (isConfirmed)
+                pydots.dotgame.clearGameValues();
+            else
+                return false;
+        }
     }
 }
 
@@ -179,7 +186,6 @@ pydots.updatePlayer = function (evt) {
     // Update the scoreboard to show the current player
     let numPlayers = pydots.dotgame.getNumPlayers();
     let player = pydots.dotgame.getPlayer();
-    console.log(`updatePlayer - it is ${player}`);
     let element = document.getElementById('scoreBoard');
     let markers = element.getElementsByTagName('img');
     for (let i = 0; i < numPlayers; i++)
@@ -211,10 +217,9 @@ pydots.endGame = function() {
 // Draw a single move on the gameboard.
 pydots.drawMove = function (evt) {
     let move = evt.detail.move;
-    console.log(`Draw move: ${move[0]}`);
     if (move[0] >= 0)
     {
-        // Store the move
+         // Store the move
         pydots.dotgame.pushMove(move)
         // Next two statements draw our line
         let line = document.getElementById(move[0].toString());
@@ -226,7 +231,6 @@ pydots.drawMove = function (evt) {
 
 // Update our score board
 pydots.updateScore = function (player, score) {
-    console.log('Update Score');
     pydots.displayScores('panel');
     return;
 }
