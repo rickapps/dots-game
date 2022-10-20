@@ -73,14 +73,13 @@ pydots.dotgame.popLastMove = function ()
 // Clear all game specific values from storage
 pydots.dotgame.clearGameValues = function ()
 {
-    localStorage.removeItem('History');
+    localStorage.setItem('History', JSON.stringify(INIT_MOVES));
     localStorage.removeItem('Lines');
-    localStorage.removeItem('Claims');
+    localStorage.setItem('Claims', JSON.stringify(INIT_CLAIMS));
     // Set the current player back to player 1
     localStorage.setItem('Player', JSON.stringify(1));
     // Reset game scores to zeros
-    let scores = [0,0,0,0];
-    localStorage.setItem('Scores', JSON.stringify(scores));
+    localStorage.setItem('Scores', JSON.stringify(INIT_SCORE));
 }
 
 // Retrieve saved game from localstorage and POST it to server
