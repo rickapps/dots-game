@@ -73,9 +73,9 @@ pydots.dotgame.popLastMove = function ()
 // Clear all game specific values from storage
 pydots.dotgame.clearGameValues = function ()
 {
-    localStorage.setItem('History', JSON.stringify(INIT_MOVES));
+    localStorage.setItem('History', JSON.stringify(INIT_MOVES)); // Remove does not remove the key
     localStorage.removeItem('Lines');
-    localStorage.setItem('Claims', JSON.stringify(INIT_CLAIMS));
+    localStorage.setItem('Claims', JSON.stringify([])); // Remove does not remove the key
     // Set the current player back to player 1
     localStorage.setItem('Player', JSON.stringify(1));
     // Reset game scores to zeros
@@ -358,7 +358,10 @@ pydots.dotgame.getClaims = function ()
     if (claims)
         claims = JSON.parse(claims);
     else
-        claims = INIT_CLAIMS;
+        claims = [];  
+        
+    if (claims.length == 0)
+        claims = new Array(pydots.dotgame.getLevel()**2).fill(0);;
     return claims;
 }
 
