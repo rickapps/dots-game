@@ -11,6 +11,7 @@ Email: rick@rickapps.com
 :root.all-vars {
   --gridSize: 3;                  
   --wrapper-color: aqua;
+  --main-color: yellow;
   --panel-color: blueviolet;
   --footer-color: red;
   --dot-color: red;

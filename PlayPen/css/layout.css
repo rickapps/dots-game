@@ -1,0 +1,34 @@
+/* Container for header, content, panel, and footer */
+body {
+    margin: 10px;
+}
+
+#wrapper {
+    width: 90%;
+    margin: 0 auto;
+    background-color: var(--wrapper-color);
+}
+
+main {
+    position: relative;
+    background-color: var(--main-color);
+    width: 70%;
+    float: right;
+}
+
+#panel {
+    float: left;
+    width: 30%;
+    background-color: var(--panel-color);
+}
+  
+#branding {
+    text-align: center;
+}
+  
+footer {
+    clear: both;
+    background-color: var(--footer-color);
+}
+  
+  

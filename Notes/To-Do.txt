@@ -44,3 +44,45 @@ Tasks as of 09/14/2022
 2) Update css for actual page designs. Perhaps implement at least one theme with a 3-D effect.
 3) Implement Undo
 4) Slow down machine moves so they can be seen.
+
+CSS
+border-style: groove - border with extruded appearance. Opposite of ridge.
+border style can have up to four values. One value - same all sides. Two values - top and bottom have first style, left and right have second style.
+Three values - first is top, second is left,right, third is bottom.
+Four values - top,right,bottom,left
+    <style type="text/css">
+        h1.groove {
+            color: green;
+            text-align: center;
+            border-width: 20px;
+            border-style: groove;
+            Border-color: #05a100
+        }
+    </style>
+<body>
+    <h1 style="text-align: center;color: green;">
+        Welcome To GeeksforGeeks
+    </h1>
+    <h1 class="groove">Groove Border Style</h1>
+    <h2><strong>Note-:</strong>
+        This effect depend on the border-color value.</h2>
+</body>
+
+div {
+  transform:
+    rotate3d(.5,-.866,0,15deg)
+    rotate(1deg);
+  box-shadow:
+    2em 4em 6em -2em rgba(0,0,0,.5),
+    1em 2em 3.5em -2.5em rgba(0,0,0,.5);
+  transition:
+    transform .4s ease,
+    box-shadow .4s ease;
+  border-radius: .5em;
+
+  &:hover {
+    transform:
+      rotate3d(0,0,0,0deg)
+      rotate(0deg);
+  }
+}
