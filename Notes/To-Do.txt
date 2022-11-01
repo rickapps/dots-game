@@ -86,3 +86,7 @@ div {
       rotate(0deg);
   }
 }
+
+1) Create main screen layout that keeps one section square shaped base on vmin.
+2) Create divs for scoreboard, options, help, and navigation. See if all can fit on main screen. 
+3) Debug flow for mobile screen. All sections should stack. Navigation is collapsed.

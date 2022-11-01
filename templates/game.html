@@ -13,13 +13,19 @@
 </head>
 <body id="gamePage">
     <div id="wrapper">
-        {% include 'includes/header.html' %}
-        <main id="content">
+        <header class="fluid">
+            {% include 'includes/header.html' %}
+        </header>
+        <main class="fluid">
         {% include 'includes/gameboard.html' %}
         {% include 'includes/endgame.html' %}
         </main>
+        <section id="panel" class="fluid">
         {% include 'includes/panel.html' %}
-        {% include 'includes/footer.html' %}
+        </section>
+        <footer class="fluid">
+            {% include 'includes/footer.html' %}
+        </footer>
     </div>
     {% include 'includes/scriptfiles.html' %}
 </body>

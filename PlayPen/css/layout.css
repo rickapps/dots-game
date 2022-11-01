@@ -4,31 +4,74 @@ body {
 }
 
 #wrapper {
-    width: 90%;
-    margin: 0 auto;
+    display: grid;
+    justify-content: center;
     background-color: var(--wrapper-color);
 }
 
 main {
-    position: relative;
+    width: 90vmin;
+    aspect-ratio: 1/1;
     background-color: var(--main-color);
-    width: 70%;
-    float: right;
+}
+
+main.fluid {
+    grid-row: 2;
+    grid-column: 1;
 }
 
 #panel {
-    float: left;
-    width: 30%;
     background-color: var(--panel-color);
 }
-  
-#branding {
+
+#panel.fluid {
+    grid-row: 3;
+    grid-column: 1;
+}
+
+header {
+    padding: 5vmin 1rem;
     text-align: center;
 }
-  
+
+header.fluid {
+    grid-row: 1;
+    grid-column: 1;
+}
+
 footer {
-    clear: both;
     background-color: var(--footer-color);
 }
+
+footer.fluid {
+    grid-row: 4;
+    grid-column: 1;
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (min-width: 150vmin) {
+  /* Layout for landscape */
+  #wrapper {
+    grid-template-columns: min-content auto;
+    justify-content: normal;
+  }
+  header.fluid {
+    grid-row: 1;
+    grid-column: 2;
+  }
+  main.fluid {
+    grid-row: 1/4;
+    grid-column: 1;
+  }
+  #panel.fluid {
+    grid-row: 2;
+    grid-column: 2;
+  }
+  footer.fluid {
+    grid-row: 3;
+    grid-column: 2;
+  }
+}
+  
   
   
