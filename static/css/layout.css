@@ -32,6 +32,9 @@ main {
   width: 90vmin;
   aspect-ratio: 1/1;
   background-color: var(--main-color);
+  /* Makes absolute positioning for .modal-dialog work, */
+  /* does not seem to affect grid position.             */
+  position: relative; 
 }
 
 main.fluid {
@@ -76,7 +79,17 @@ footer.fluid {
   text-align: right;
 } 
 
-.modal {
+.modal-dialog {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 90vmin;
+  height: 90vmin;
+  background-color: rgba(0,0,0,0.7);
+  display: none;
+}
+
+.modal-dialog-message {
   position: absolute;
    top: 50%;
    left: 50%;
@@ -84,32 +97,22 @@ footer.fluid {
    background-color: blue;
  }
  
-.modal-dialog {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(0,0,0,0.7);
-  display: none;
-}
-
-.show-dlg {
+.modal-dialog-show {
   display: block;
 }
 
 /**************************/
 /* Special for index page */
 /**************************/
-#indexPage #content {
+#optionPage #content {
   width:60%;
 }
 
-#indexPage #panel {
+#optionPage #panel {
   width:40%;
 }
 
-#indexPage span {
+#optionPage span {
   display: block;
 }
 
@@ -154,11 +157,11 @@ footer.fluid {
     grid-column: 2;
   }
 
-  #indexPage #panel {
+  #optionPage #panel {
     width: 100%;
   }
 
-  #indexPage #content {
+  #optionPage #content {
     width: 100%;
   }
 

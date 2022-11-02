@@ -210,7 +210,7 @@ pydots.playerMove = function (evt) {
 pydots.endGame = function() {
     pydots.dotgame.clearGameValues();
     let dlg = document.getElementById('endGameDlg');
-    dlg.classList.toggle('show-dlg');
+    dlg.classList.toggle('modal-dialog-show');
 }
 
 // Response to drawMove event.

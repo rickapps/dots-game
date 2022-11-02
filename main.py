@@ -47,7 +47,7 @@ def new_game():
     theme = request.form['gcolors']
     lines = dotgame.init_game(size);
     boxes = dotgame.game_board(size, lines)
-    return render_template('game.html',size=size, theme=theme, \
+    return render_template('index.html',size=size, theme=theme, \
          lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
 # Resume a game using values from local storage
@@ -61,7 +61,7 @@ def resume_game():
     lines = list(map(int, request.form['lines'][1:-1].split(',')))
     claims = list(map(int, request.form['claims'][1:-1].split(',')))
     boxes = dotgame.game_board(size, lines, claims)
-    return render_template('game.html',size=size, theme=theme, \
+    return render_template('index.html',size=size, theme=theme, \
         lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
 # Return a list of moves to make for the specified lines array.
@@ -88,16 +88,23 @@ def verify_user_move():
     # Return a tuple (line, boxA, boxB) as json
     return json.dumps(dotgame.verify_move(size, lines, line))
 
+# Display the options page.
+@app.route("/options/")
+def show_options():
+    return render_template('options.html', size=size, theme=theme, \
+        lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes, \
+        gplayers=gplayers, machine=machine, nomachine=nomachine, \
+        pnames=pnames)
+
 # A catch-all for unknown requests. Must be a POST request to get to
 # game page. path is here for future use. We route them to index page
 @app.route("/", defaults={'path': ''})
 @app.route('/<path:path>')
 def home(path):
-    return render_template('index.html', size=size, theme=theme, \
-        lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes, \
-        gplayers=gplayers, machine=machine, nomachine=nomachine, \
-        pnames=pnames)
-
+    lines = dotgame.init_game(size);
+    boxes = dotgame.game_board(size, lines)
+    return render_template('index.html',size=size, theme=theme, \
+         lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
 if __name__ == "__main__":
     app.run(debug=True)
