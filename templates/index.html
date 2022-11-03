@@ -3,30 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Dots and Boxes Game. Play against the computer or with up to four other players.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="The old pencil and paper dots game from school updated for the web. One to four players.">
-    <title>Play Dots and Boxes free at this website. One to four players. No ads. No signup.</title>
     <meta name="author" content="RickApps">
+    <title>Play Dots and Boxes Game Here</title>
     <link rel="stylesheet" href="/static/css/themes.css">
     <link rel="stylesheet" href="/static/css/layout.css">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body id="mainPage">
-    <div id="wrapper">
-        <header class="fluid">
-            {% include 'includes/header.html' %}
-        </header>
-        <main class="fluid">
-        {% include 'includes/gameboard.html' %}
-        {% include 'includes/endgame.html' %}
-        </main>
-        <section id="panel" class="fluid">
-        {% include 'includes/panel.html' %}
-        </section>
-        <footer class="fluid">
-            {% include 'includes/footer.html' %}
-        </footer>
-    </div>
+<body>
+    <h1>Dots and Boxes Game</h1>   
     {% include 'includes/scriptfiles.html' %}
+    <script src="/static/js/dotgame.js"></script>
+    <script src="/static/js/startup.js"></script>
 </body>
 </html>
