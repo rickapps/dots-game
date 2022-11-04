@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Play a game of Dots and Boxes here. Play against the computer or with up to four other players. Also called Dots and Dashes, or just Dots.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dots and Boxes Game</title>
+    <link rel="stylesheet" href="/static/css/themes.css" media="screen">
+    <link rel="stylesheet" href="/static/css/layout.css" media="screen">
+    <link rel="stylesheet" href="/static/css/style.css" media="screen">
+</head>
+<body>
+    <h1>Dots and Boxes Game</h1>   
+    <p>Play a game of dots here. Play against the computer or other players.</p>
+    <a class="anchor-btn" href="/options/">Change Game</a>
+    <form action="/resume/" method="POST" name="resumeGame">
+        <input type="hidden" name="size" id="size">
+        <input type="hidden" name="theme" id="theme">
+        <input type="hidden" name="lines" id="lines">
+        <input type="hidden" name="claims" id="claims">
+    </form>
+
+    <form action="/new/" method="POST" name="startNewGame">
+        <input type="input" name="glevel" id="glevel">
+        <input type="hidden" name="gcolors" id="gcolors">
+    </form>
+
+    <!-- Values from Flask to transfer to javascript -->
+    {% include 'includes/scriptfiles.html' %}
+    <script src="/static/js/dotgame.js"></script>
+    <script src="/static/js/startup.js"></script>
+</body>
+</html>

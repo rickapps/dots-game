@@ -47,7 +47,7 @@ def new_game():
     theme = request.form['gcolors']
     lines = dotgame.init_game(size);
     boxes = dotgame.game_board(size, lines)
-    return render_template('index.html',size=size, theme=theme, \
+    return render_template('mainpage.html',size=size, theme=theme, \
          lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
 # Resume a game using values from local storage
@@ -61,7 +61,7 @@ def resume_game():
     lines = list(map(int, request.form['lines'][1:-1].split(',')))
     claims = list(map(int, request.form['claims'][1:-1].split(',')))
     boxes = dotgame.game_board(size, lines, claims)
-    return render_template('index.html',size=size, theme=theme, \
+    return render_template('mainpage.html',size=size, theme=theme, \
         lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
 # Return a list of moves to make for the specified lines array.
@@ -103,7 +103,7 @@ def show_options():
 def home(path):
     lines = dotgame.init_game(size);
     boxes = dotgame.game_board(size, lines)
-    return render_template('index.html',size=size, theme=theme, \
+    return render_template('startup.html',size=size, theme=theme, \
          lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
 if __name__ == "__main__":

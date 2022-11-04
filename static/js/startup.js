@@ -10,31 +10,35 @@
 var pydots = pydots || {};
 pydots.startup = pydots.startup || {};
 
+window.addEventListener("DOMContentLoaded", (event) => {
+    window.addEventListener("load", pydots.startup.gameSetup);
+});
+
 //////////////////////////////////
 // EVENT HANDLERS 
 //////////////////////////////////
 // Check if we have a stored game. If so, set up
 // the panel with display values. Set up the rest
 // of the page with default values.
-pydots.initIndexPage = function () {
+pydots.startup.gameSetup = function () {
     let moves = pydots.dotgame.getHistory();
     let len = moves.length;
     // Was there any progress on the previous game?
     if (len > 0)
     {
-        pydots.displayScores("resumeGame");
+        document.getElementById('size').value = pydots.dotgame.getLevel();
+        document.getElementById('theme').value = pydots.dotgame.getTheme();
+        document.getElementById('lines').value = JSON.stringify(pydots.dotgame.getLines());
+        document.getElementById('claims').value = JSON.stringify(pydots.dotgame.getClaims());
+        // Submit our form
+        document.resumeGame.submit();
     }
     else
     {
-        // Clear our stored values and start from scratch
-        pydots.dotgame.clearGameValues();
-        // Hide the resume section
-        document.getElementById("resumeGame").style.display="none";
+        // We will start a new game using the level and theme
+        document.getElementById('glevel').value = pydots.dotgame.getLevel();
+        document.getElementById('gcolors').value = pydots.dotgame.getTheme();
+        // Submit our form
+        document.startNewGame.submit();
     }
-
-    // Set the new game values.
-    let numplayersdrop = document.getElementById('players');
-    let machinedrop = document.getElementById('machine');
-    pydots.setMachineList(machinedrop, numplayersdrop.value);
-    pydots.setPlayerList(numplayersdrop.value, machinedrop.value);
 };
