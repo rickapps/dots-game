@@ -40,12 +40,13 @@ theme = gthemes[default_theme][1]
 lines = []
 boxes = []
 
-# Start a new game with values specified by the user. 
-@app.route("/new/", methods = ['POST'])
+# Start a new game with values specified by the user (or not). 
+@app.route("/new/", methods = ['GET', 'POST'])
 def new_game():
-    size = int(request.form['glevel'])
-    theme = request.form['gcolors']
-    lines = dotgame.init_game(size);
+    if request.method == 'POST':
+        size = int(request.form['glevel'])
+        theme = request.form['gcolors']
+    lines = dotgame.init_game(size)
     boxes = dotgame.game_board(size, lines)
     return render_template('mainpage.html',size=size, theme=theme, \
          lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
@@ -96,13 +97,10 @@ def show_options():
         gplayers=gplayers, machine=machine, nomachine=nomachine, \
         pnames=pnames)
 
-# A catch-all for unknown requests. Must be a POST request to get to
-# game page. path is here for future use. We route them to index page
+# A catch-all for unknown requests. path is here for future use.
 @app.route("/", defaults={'path': ''})
 @app.route('/<path:path>')
 def home(path):
-    lines = dotgame.init_game(size);
-    boxes = dotgame.game_board(size, lines)
     return render_template('startup.html',size=size, theme=theme, \
          lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 

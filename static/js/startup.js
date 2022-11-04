@@ -31,7 +31,7 @@ pydots.startup.gameSetup = function () {
         document.getElementById('lines').value = JSON.stringify(pydots.dotgame.getLines());
         document.getElementById('claims').value = JSON.stringify(pydots.dotgame.getClaims());
         // Submit our form
-        document.resumeGame.submit();
+        //document.resumeGame.submit();
     }
     else
     {
@@ -39,6 +39,6 @@ pydots.startup.gameSetup = function () {
         document.getElementById('glevel').value = pydots.dotgame.getLevel();
         document.getElementById('gcolors').value = pydots.dotgame.getTheme();
         // Submit our form
-        document.startNewGame.submit();
+        //document.startNewGame.submit();
     }
 };
