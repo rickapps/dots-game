@@ -11,7 +11,7 @@ var pydots = pydots || {};
 pydots.startup = pydots.startup || {};
 
 window.addEventListener("DOMContentLoaded", (event) => {
-    window.addEventListener("load", pydots.startup.gameSetup);
+   window.addEventListener("load", pydots.startup.gameSetup);
 });
 
 //////////////////////////////////
