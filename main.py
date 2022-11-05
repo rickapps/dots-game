@@ -40,9 +40,18 @@ theme = gthemes[default_theme][1]
 lines = []
 boxes = []
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('error.html'), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('error.html'), 500
+    
 # Start a new game with values specified by the user (or not). 
 @app.route("/new/", methods = ['GET', 'POST'])
 def new_game():
+    global size, theme
     if request.method == 'POST':
         size = int(request.form['glevel'])
         theme = request.form['gcolors']
