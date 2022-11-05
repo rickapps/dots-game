@@ -102,3 +102,10 @@ If saved game, set up for resume.
 If no saved game, setup based on localStorage options. But if localStorage is not
 person against computer, revert players to default. Keep game level and theme.
 If no localStorage use all defaults.
+
+11/04/2022
+Add reset=true to render_template to clear game scores and other remnants
+Remove unused values from render_template
+Remove unused js code 
+Create navigation menu
+New layout for options page
