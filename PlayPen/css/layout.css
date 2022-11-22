@@ -4,7 +4,7 @@ body {
 }
 
 #wrapper {
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
     background-color: var(--wrapper-color);
 }
@@ -12,22 +12,28 @@ body {
 main {
     position: relative;
     background-color: var(--main-color);
-    width: 70%;
-    float: right;
+    width: 95vmin;
+    height: 95vmin;
+    float: left;
 }
 
 #panel {
-    float: left;
-    width: 30%;
+    float: none;
+    overflow: hidden;
+    height: 95vmin;
     background-color: var(--panel-color);
 }
   
-#branding {
+header {
+    position: fixed;
+    top: 0px;
     text-align: center;
+    background-color: var(--dot-color);
 }
   
 footer {
-    clear: both;
+    position: fixed;
+    bottom: 0px;
     background-color: var(--footer-color);
 }
   
