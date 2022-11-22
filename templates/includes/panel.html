@@ -1,28 +1,26 @@
 {% block body %}
 <!-- Our scoreboard on the game page -->
-<div id="panel">
-    <fieldset id="scoreBoard">
-        <legend>Scores:</legend>
-        <span id="level"></span><br>
-        <img class="indicator invisible" src='/static/img/indicator.svg'><span class="bold" id="score1" class="claim1"></span><br>
-        <img class="indicator invisible" src='/static/img/indicator.svg'><span class="bold" id="score2" class="claim2"></span><br>
-        <img class="indicator invisible" src='/static/img/indicator.svg'><span class="bold" id="score3" class="claim3"></span><br>
-        <img class="indicator invisible" src='/static/img/indicator.svg'><span class="bold" id="score4" class="claim4"></span>
+<fieldset id="scoreBoard">
+    <legend>Scores:</legend>
+    <span id="level"></span><br>
+    <img class="indicator invisible" src='/static/img/indicator.svg'><span class="bold" id="score1" class="claim1"></span><br>
+    <img class="indicator invisible" src='/static/img/indicator.svg'><span class="bold" id="score2" class="claim2"></span><br>
+    <img class="indicator invisible" src='/static/img/indicator.svg'><span class="bold" id="score3" class="claim3"></span><br>
+    <img class="indicator invisible" src='/static/img/indicator.svg'><span class="bold" id="score4" class="claim4"></span>
+</fieldset>
+<form action="/new/" method="POST" id="restartGame">
+    <fieldset>
+        <input type="hidden" name="glevel" value="{{size|tojson}}">
+        <legend>Options:</legend>
+        <label for="gcolors">Colors:</label>
+        <select type="text" id="gcolors" name="gcolors">
+        <!-- The dropdown list values come from config.py GAME_THEMES -->
+        {% for theme in gthemes %}
+        <option value="{{theme[1]}}">{{theme[0]}}</option>
+        {% endfor %}            
+        </select><br><br>
+        <input type="submit" value="Restart Game">
+        <a class="anchor-btn" href="/options/">Change Game</a>
     </fieldset>
-    <form action="/new/" method="POST" id="restartGame">
-        <fieldset>
-         <input type="hidden" name="glevel" value="{{size|tojson}}">
-         <legend>Options:</legend>
-         <label for="gcolors">Colors:</label>
-         <select type="text" id="gcolors" name="gcolors">
-         <!-- The dropdown list values come from config.py GAME_THEMES -->
-         {% for theme in gthemes %}
-            <option value="{{theme[1]}}">{{theme[0]}}</option>
-         {% endfor %}            
-         </select><br><br>
-         <input type="submit" value="Restart Game">
-         <a class="anchor-btn" href="/">Change Game</a>
-        </fieldset>
-    </form>
-</div>
+</form>
 {% endblock %}

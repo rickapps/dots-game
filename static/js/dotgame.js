@@ -5,9 +5,9 @@
 //
 // Javascript functions that communicate with the server.
 // Based on server responses, events are triggered. These
-// events are handled by functions in file custom.js.
+// events are handled by functions in file mainpage.js.
 // If you want to modify the look of the game, you should
-// probably edit custom.js instead of this file.
+// probably edit mainpage.js instead of this file.
 var pydots = pydots || {};
 pydots.dotgame= pydots.dotgame || {};
 
@@ -419,6 +419,7 @@ pydots.dotgame.isMachineTurn = function()
     return player == this.getMachinePlayer();
 }
 
+// Which player is the machine?
 pydots.dotgame.getMachinePlayer = function()
 {
     let machine = JSON.parse(localStorage.getItem('Machine'));

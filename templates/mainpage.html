@@ -11,16 +11,24 @@
     <link rel="stylesheet" href="/static/css/layout.css">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body id="gamePage">
+<body id="mainPage">
     <div id="wrapper">
-        {% include 'includes/header.html' %}
-        <main id="content">
+        <header>
+            {% include 'includes/header.html' %}
+        </header>
+        <main>
         {% include 'includes/gameboard.html' %}
         {% include 'includes/endgame.html' %}
         </main>
+        <section id="panel">
         {% include 'includes/panel.html' %}
-        {% include 'includes/footer.html' %}
+        </section>
+        <footer>
+            {% include 'includes/footer.html' %}
+        </footer>
     </div>
     {% include 'includes/scriptfiles.html' %}
-</body>
+    <script src="/static/js/dotgame.js"></script>
+    <script src="/static/js/mainpage.js"></script>
+    </body>
 </html>

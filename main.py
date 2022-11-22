@@ -40,14 +40,24 @@ theme = gthemes[default_theme][1]
 lines = []
 boxes = []
 
-# Start a new game with values specified by the user. 
-@app.route("/new/", methods = ['POST'])
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('error.html'), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('error.html'), 500
+    
+# Start a new game with values specified by the user (or not). 
+@app.route("/new/", methods = ['GET', 'POST'])
 def new_game():
-    size = int(request.form['glevel'])
-    theme = request.form['gcolors']
-    lines = dotgame.init_game(size);
+    global size, theme
+    if request.method == 'POST':
+        size = int(request.form['glevel'])
+        theme = request.form['gcolors']
+    lines = dotgame.init_game(size)
     boxes = dotgame.game_board(size, lines)
-    return render_template('game.html',size=size, theme=theme, \
+    return render_template('mainpage.html',size=size, theme=theme, \
          lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
 # Resume a game using values from local storage
@@ -61,7 +71,7 @@ def resume_game():
     lines = list(map(int, request.form['lines'][1:-1].split(',')))
     claims = list(map(int, request.form['claims'][1:-1].split(',')))
     boxes = dotgame.game_board(size, lines, claims)
-    return render_template('game.html',size=size, theme=theme, \
+    return render_template('mainpage.html',size=size, theme=theme, \
         lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
 # Return a list of moves to make for the specified lines array.
@@ -88,16 +98,20 @@ def verify_user_move():
     # Return a tuple (line, boxA, boxB) as json
     return json.dumps(dotgame.verify_move(size, lines, line))
 
-# A catch-all for unknown requests. Must be a POST request to get to
-# game page. path is here for future use. We route them to index page
-@app.route("/", defaults={'path': ''})
-@app.route('/<path:path>')
-def home(path):
-    return render_template('index.html', size=size, theme=theme, \
+# Display the options page.
+@app.route("/options/")
+def show_options():
+    return render_template('options.html', size=size, theme=theme, \
         lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes, \
         gplayers=gplayers, machine=machine, nomachine=nomachine, \
         pnames=pnames)
 
+# A catch-all for unknown requests. path is here for future use.
+@app.route("/", defaults={'path': ''})
+@app.route('/<path:path>')
+def home(path):
+    return render_template('startup.html',size=size, theme=theme, \
+         lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
 
 if __name__ == "__main__":
     app.run(debug=True)

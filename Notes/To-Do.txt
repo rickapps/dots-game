@@ -86,3 +86,26 @@ div {
       rotate(0deg);
   }
 }
+
+1) Create main screen layout that keeps one section square shaped base on vmin.
+2) Create divs for scoreboard, options, help, and navigation. See if all can fit on main screen. 
+3) Debug flow for mobile screen. All sections should stack. Navigation is collapsed.
+
+11/02/2022
+1) Create navigation menu
+2) Onload events for index page. Needs to check if new game or resume game
+3) Refine new layout. Size header/footer. 
+4) New layout for options page.
+
+Behavior for load event.
+If saved game, set up for resume.
+If no saved game, setup based on localStorage options. But if localStorage is not
+person against computer, revert players to default. Keep game level and theme.
+If no localStorage use all defaults.
+
+11/04/2022
+Add reset=true to render_template to clear game scores and other remnants
+Remove unused values from render_template
+Remove unused js code 
+Create navigation menu
+New layout for options page
