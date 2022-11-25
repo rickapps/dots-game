@@ -58,7 +58,8 @@ def new_game():
     lines = dotgame.init_game(size)
     boxes = dotgame.game_board(size, lines)
     return render_template('mainpage.html',size=size, theme=theme, \
-         lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
+        lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes, \
+        reset=True)
 
 # Resume a game using values from local storage
 # The post is done from javascript.
@@ -72,7 +73,8 @@ def resume_game():
     claims = list(map(int, request.form['claims'][1:-1].split(',')))
     boxes = dotgame.game_board(size, lines, claims)
     return render_template('mainpage.html',size=size, theme=theme, \
-        lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
+        lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes, \
+        reset=False)
 
 # Return a list of moves to make for the specified lines array.
 # This is where the 'computer' calculates the best move
@@ -111,7 +113,7 @@ def show_options():
 @app.route('/<path:path>')
 def home(path):
     return render_template('startup.html',size=size, theme=theme, \
-         lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes)
+         lines=lines)
 
 if __name__ == "__main__":
     app.run(debug=True)

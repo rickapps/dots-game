@@ -17,9 +17,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 //////////////////////////////////
 // EVENT HANDLERS 
 //////////////////////////////////
-// Check if we have a stored game. If so, set up
-// the panel with display values. Set up the rest
-// of the page with default values.
+// Check if we are starting a new game or resuming current game.
 pydots.startup.gameSetup = function () {
     let moves = pydots.dotgame.getHistory();
     let len = moves.length;
@@ -36,7 +34,6 @@ pydots.startup.gameSetup = function () {
     else
     {
         // We will start a new game using the level and theme
-        pydots.dotgame.clearGameValues();
         document.getElementById('glevel').value = pydots.dotgame.getLevel();
         document.getElementById('gcolors').value = pydots.dotgame.getTheme();
         // Submit our form

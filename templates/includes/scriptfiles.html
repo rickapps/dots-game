@@ -34,5 +34,8 @@
     {% if glevels is defined %}
     const GAME_LEVELS = {{glevels|tojson}};
     {% endif %}
+    {% if reset is defined %}
+    const RESET = {{reset|tojson}};
+    {% endif %}
 </script>
 {% endblock %}
