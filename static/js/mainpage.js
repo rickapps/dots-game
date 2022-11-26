@@ -131,7 +131,7 @@ if (resume) {
   // For now, we will pull the info from storage and load it into html
   // input fields. Later we will see if we can modify the request header
   // before the form is posted and do away with the input fields.
-  resume.onsubmit = function () {
+  resume.onsubmit = () => {
     document.getElementById('size').value = pydots.dotgame.getLevel();
     document.getElementById('theme').value = pydots.dotgame.getTheme();
     document.getElementById('lines').value = JSON.stringify(pydots.dotgame.getLines());
@@ -173,7 +173,7 @@ pydots.updatePlayer = () => {
   const player = pydots.dotgame.getPlayer();
   const element = document.getElementById('scoreBoard');
   const markers = element.getElementsByTagName('img');
-  for (let i = 0; i < numPlayers; i++) {
+  for (let i = 0; i < numPlayers; i += 1) {
     markers[i].classList.add('invisible');
   }
   markers[player - 1].classList.toggle('invisible');
@@ -186,7 +186,7 @@ pydots.updatePlayer = () => {
 // number and validate it with the server. validateMove
 // will draw the line and claim any approprate boxes.
 pydots.playerMove = (evt) => {
-  pydots.dotgame.validateMove(parseInt(evt.target.id));
+  pydots.dotgame.validateMove(parseInt(evt.target.id, 10));
 };
 
 pydots.endGame = () => {
@@ -258,7 +258,7 @@ pydots.storePlayerInfo = () => {
   // Store the names
   element = document.getElementById('newGamePeople');
   const names = element.getElementsByTagName('input');
-  for (let i = 1; i <= numPlayers; i++) {
+  for (let i = 1; i <= numPlayers; i += 1) {
     pydots.dotgame.storePlayerName(i, names[i - 1].value);
   }
 };
@@ -271,7 +271,7 @@ pydots.setPlayerList = (numPlayers, machine = 0) => {
   const names = fs.getElementsByTagName('input');
   const labels = fs.getElementsByTagName('label');
   let state = 'visible';
-  for (let i = 0; i < names.length; i++) {
+  for (let i = 0; i < names.length; i += 1) {
     if (i >= numPlayers) { state = 'hidden'; }
     names[i].style.visibility = state;
     names[i].readOnly = false;
@@ -290,10 +290,10 @@ pydots.setMachineList = (dropdown, numPlayers) => {
   // We assume the first option is 'Not Playing'.
   // We always leave that option intact.
   const max = dropdown.options.length;
-  for (let i = 1; i < max; i++) {
+  for (let i = 1; i < max; i += 1) {
     dropdown.remove(1);
   }
-  for (let i = 0; i < numPlayers; i++) {
+  for (let i = 0; i < numPlayers; i += 1) {
     const player = document.createElement('option');
     player.text = INIT_NAMES[i][0];
     player.value = INIT_NAMES[i][1];
@@ -312,7 +312,7 @@ pydots.displayScores = (location) => {
   spans[0].textContent = `Skill Level: ${level}`;
   // Update the scores
   const numPlayers = pydots.dotgame.getNumPlayers();
-  for (let i = 1; i < 5; i++) {
+  for (let i = 1; i < 5; i += 1) {
     if (i > numPlayers) {
       spans[i].style.display = 'none';
     } else {
