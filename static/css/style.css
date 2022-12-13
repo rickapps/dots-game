@@ -63,7 +63,7 @@ img.indicator {
 .grid-container {
   display: grid;
   grid-template-columns: repeat(var(--gridSize), auto);
-  background-color: #21f333;
+  background-color: var(--box-background-color);
   padding: 20px;
 }
 

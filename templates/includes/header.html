@@ -1,4 +1,23 @@
 {% block body %}
-<h1>Play Dots and Boxes</h1>
-<h3>Play against the computer or other players. Skill level lets you select the game size. Quit any time. Your game is saved so you can resume it later.</h3>
+<div tabindex="0" class="mnu-button">
+    <span class="mnu-icon"></span>
+    <span class="mnu-logo">
+        <span class="mnu-short">Menu</span>
+        <span class="mnu-long">Dots & Boxes</span>
+    </span>
+ </div>
+<ul class="mnu-list">
+    <li><a href="#">New Game</a></li>
+    <li><a href="#">Settings</a></li>
+    <li><a href="#">Theme</a>
+        <ul>
+            <li><a href="#">Spring</a></li>
+            <li><a href="#">Summer</a></li>
+            <li><a href="#">Fall</a></li>
+            <li><a href="#">Winter</a></li>
+        </ul>
+    </li>
+    <li><a href="#">Undo</a></li>
+    <li><a href="#">Help</a></li>
+</ul>
 {% endblock %}

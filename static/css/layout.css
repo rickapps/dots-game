@@ -6,28 +6,217 @@ Email: rick@rickapps.com
 -----------------------------------------------------------------------------*/
 
 body {
-  margin: 10px;
+  background-color: var(--panel-color);
 }
 
-#wrapper {
+#mainPage #wrapper {
   background-color: var(--wrapper-color);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-header {
-  text-align: center;
+#mainPage header {
+  background-color: var(--header-color);
+  position: relative;
+  height: 2rem;
+  width: 100%;
 }
 
-footer {
-  background-color: var(--footer-color);
-}
-
-main {
+#mainPage main {
+  width: 90vmin;
+  aspect-ratio: 1/1;
   background-color: var(--main-color);
 }
 
-#panel {
+#mainPage #panel {
   background-color: var(--panel-color);
+  flex-grow: 1;
+  min-width: 45vmin;
 }
+
+#mainPage footer {
+  background-color: var(--footer-color);
+  width: 100%;
+}
+
+/***************************************/
+/* Setup the hamburger button and logo */
+/***************************************/
+
+/* Use the label as a button.     */
+/* Float the label to the left    */
+/* It is is a container for the   */
+/* icon and the logo.             */
+.mnu-button {
+  cursor: pointer;
+  float: left;
+  /* Cannot select for copy/paste */
+  user-select: none;
+}
+
+/* The logo floats to right of the icon */
+.mnu-logo {
+  padding: 0;
+  margin: 0 0.5rem;
+  float: right;
+  display: block;
+  color: blue;
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
+.mnu-long {
+  display: none;
+}
+
+.mnu-short {
+  display: inline;
+}
+
+/* Use a hamburger symbol as our icon.     */
+/* We will make the middle line (meat)     */
+/* by setting a solid background color.    */
+.mnu-icon {
+  float: left;
+  /* Left of the logo */
+  position: relative;
+  top: 1rem;
+  /* Move it down to the center */
+  display: block;
+  background: blue;
+  height: 2px;
+  width: 18px;
+  /* Make the meat disappear */
+  transition: background .2s ease-out;
+}
+
+/* Make the two buns of the hamburger.            */
+/* ::before and ::after are pseudo elements       */
+/* placed before and after the specified element. */
+/* By default, they are inline. The css content   */
+/* property specifies what the two added elements */
+/* contain.                                       */
+.mnu-icon::before,
+.mnu-icon::after {
+  background: blue;
+  /* Make an opaque background  */
+  content: '';
+  /* but keep the content empty */
+  display: block;
+  height: 100%;
+  position: absolute;
+  transition: all .2s ease-out;
+  width: 100%;
+}
+
+/* Bottom bun */
+.mnu-icon::before {
+  top: 5px;
+}
+
+/* Top bun */
+.mnu-icon::after {
+  top: -5px;
+}
+
+/*********************************************************/
+/*            Customize our menu list                    */
+/*********************************************************/
+.mnu-list {
+  clear: both;
+}
+
+/* Set properties for our <ul>s */
+.mnu-list, .mnu-list ul {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  /* Can be circle, square, none, or other shape */
+  list-style: none;
+  /* Hide both <ul>s */
+  display: none;
+}
+
+.mnu-list a {
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.mnu-list li {
+  position: relative;
+  display: block;
+  z-index: 10;
+  width: 8rem;
+  float: none;
+  padding: 0.5rem 0 0.5rem 0.5rem;
+  background-color: var(--header-color);
+  color: var(--dot-color);
+}
+
+.mnu-list li:hover {
+  background-color: blue;
+  color: yellow;
+}
+
+.mnu-list ul {
+  margin: 0;
+  padding: 0;
+  /* Position the submenu */
+  position: absolute;
+  top: 0;
+  left: 8.5rem;
+}
+
+.mnu-list li:hover ul {
+  /* Display our submenu */
+  display: block;
+}
+
+/********** Hamburger Button has Focus. *****************/
+/* Turn the hamburger into an X and display the menu.  */
+/*******************************************************/
+
+/* Display the main menu */
+.mnu-button:focus~.mnu-list {
+  /* Display the menu */
+  display: block;
+}
+
+/* Make the middle line (the meat */
+/* of the hamburger) disappear if */
+/* the button has focus           */
+.mnu-button:focus .mnu-icon {
+  background: transparent;
+}
+
+/* Rotate the top line counter clock-wise */
+/* when we have focus.                    */
+.mnu-button:focus .mnu-icon::before {
+  transform: rotate(-45deg);
+}
+
+/* Rotate the bottom line clock-wise */
+/* when the button has focus.        */
+.mnu-button:focus .mnu-icon::after {
+  transform: rotate(45deg);
+}
+
+/* Change the offset of our two buns so they */
+/* intersect when the button has focus.      */
+.mnu-button:focus .mnu-icon::before,
+.mnu-button:focus .mnu-icon::after {
+  top: 0;
+}
+
+/* Allow the 'X' to close the menu */
+.mnu-button:focus {
+  pointer-events: none;
+}
+
 
 article {
   margin: 8px;
@@ -39,37 +228,6 @@ input {
 
 form {
   margin: 8px;
-}
-
-/* Container for header, content, panel, and footer */
-#mainPage #wrapper {
-  display: grid;
-  justify-content: center;
-}
-
-#mainPage main {
-  width: 90vmin;
-  aspect-ratio: 1/1;
-  /* Makes absolute positioning for .modal-dialog work, */
-  /* does not seem to affect grid position.             */
-  position: relative; 
-  grid-row: 2;
-  grid-column: 1;
-}
-
-#mainPage #panel {
-  grid-row: 3;
-  grid-column: 1;
-}
-
-#mainPage header {
-  grid-row: 1;
-  grid-column: 1;
-}
-
-#mainPage footer {
-  grid-row: 4;
-  grid-column: 1;
 }
 
 .credit {
@@ -136,29 +294,52 @@ form {
   clear: both;
 }
 
+/***********************************************************/
+/*                 Media statements                        */
+/***********************************************************/
+
+/* For wider screens, we can display menu all the time */
+/* No need to show the hamburger, just show the logo.  */
+@media only screen and (min-width: 60rem) {
+
+  /* Hide the hamburger button */
+  .mnu-icon {
+      display: none;
+  }
+
+  /* Expand our logo */
+  .mnu-short {
+      display: none;
+  }
+
+  .mnu-long {
+      display: inline;
+  }
+
+  /* Display the menu and move it to the left */
+  .mnu-list {
+      clear: none;
+      display: block;
+      text-align: center;
+      padding: 0 0.5rem;
+      float: left;
+  }
+
+  .mnu-list ul {
+      top: 2rem;
+      left: 0;
+      text-align: center;
+  }
+
+  .mnu-list li {
+      float: left;
+      padding: 0.3rem 0.5rem 0.25rem 0.5rem;
+  }
+}
+
+
 /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
 @media screen and (min-width: 150vmin) {
-  /* Layout for landscape */
-  #mainPage #wrapper {
-    grid-template-columns: min-content auto;
-    justify-content: normal;
-  }
-  #mainPage header {
-    grid-row: 1;
-    grid-column: 2;
-  }
-  #mainPage main {
-    grid-row: 1/4;
-    grid-column: 1;
-  }
-  #mainPage #panel {
-    grid-row: 2;
-    grid-column: 2;
-  }
-  #mainPage footer {
-    grid-row: 3;
-    grid-column: 2;
-  }
 
   #optionPage #panel {
     width: 100%;
