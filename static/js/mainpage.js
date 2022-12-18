@@ -15,23 +15,6 @@
 // The other file, Dotgame.js, implements the business logic. You shouldn't need
 // to alter that file if you just want to change the appearance of the game.
 var pydots = pydots || {};
-//--------------------------------
-// INITIALIZATION
-//--------------------------------
-// Get the style sheet
-const bodyStyles = document.body.style;
-// Set variables in our style sheet.
-bodyStyles.setProperty('--gridSize', GAME_SIZE);
-
-// Initialize the game size drop down on the panel
-const sizeDropDown = document.getElementById('glevel');
-if (sizeDropDown) sizeDropDown.value = GAME_SIZE;
-
-// Define a function to change our css theme
-const changeTheme = (theme) => { document.documentElement.className = theme; };
-// Set the theme to whatever it was before. We keep that value in localStorage
-const theme = pydots.dotgame.getTheme();
-changeTheme(theme);
 
 //--------------------------------
 // ADD EVENT LISTENERS
@@ -46,37 +29,80 @@ window.addEventListener('DOMContentLoaded', () => {
         pydots.playerMove(event);
       }
     });
-    // Add event listener to draw a line on the gameboard.
-    // The arg for event is array of [line,box1,box2]
-    // Drawing a single line could complete up to two boxes.
-    document.addEventListener('drawMove', pydots.drawMove, false);
-    // Add event listener to update the gameboard with current player.
-    document.addEventListener('updatePlayer', pydots.updatePlayer, false);
-    // Add event listener to update the score.
-    document.addEventListener('updateScore', pydots.updateScore);
-    document.addEventListener('gameOver', pydots.endGame);
-    pydots.updatePlayer();
-    pydots.updateScore();
-  }
-  const resume = document.getElementById('resumeGame');
-  if (resume) {
-    // Add event listener to restore a previous game
-    window.addEventListener('load', pydots.initIndexPage);
-  }
+  };
+
+  // Change the theme when requested
+  const colorDropDown = document.getElementById('gcolors');
+  if (colorDropDown) {
+    colorDropDown.addEventListener('change', (e) => {
+      pydots.changeTheme(e.target.value);
+      // Save the value of the theme so we can retrieve it after a POST
+      pydots.dotgame.storeTheme(e.target.value);
+    });
+  };
+
+  // Add event listener to draw a line on the gameboard.
+  // The arg for event is array of [line,box1,box2]
+  // Drawing a single line could complete up to two boxes.
+  document.addEventListener('drawMove', pydots.drawMove, false);
+  // Add event listener to update the gameboard with current player.
+  document.addEventListener('updatePlayer', pydots.updatePlayer, false);
+  // Add event listener to update the score.
+  document.addEventListener('updateScore', pydots.updateScore);
+  document.addEventListener('gameOver', pydots.endGame);
+
+  pydots.initVars();
+  pydots.updatePlayer();
+  pydots.updateScore();
 });
 
+// window.addEventListener('load', pydots.pageSetup);
+
 //--------------------------------
-// CHANGE CSS THEME
+// INIT VARS
 //--------------------------------
-const colorDropDown = document.getElementById('gcolors');
-if (colorDropDown) {
-  colorDropDown.value = theme;
-  colorDropDown.onchange = () => {
-    changeTheme(this.value);
-    // Save the value of the theme so we can retrieve it after a POST
-    pydots.dotgame.storeTheme(this.value);
-  };
-}
+pydots.initVars = () => {
+  // Get the style sheet
+  const bodyStyles = document.body.style;
+  // Set variables in our style sheet.
+  bodyStyles.setProperty('--gridSize', GAME_SIZE);
+
+  // Initialize the game size drop down on the panel
+  const sizeDropDown = document.getElementById('glevel');
+  if (sizeDropDown) sizeDropDown.value = GAME_SIZE;
+
+  // Set the theme to whatever it was before. We keep that value in localStorage
+  const theme = pydots.dotgame.getTheme();
+  pydots.changeTheme(theme);
+  pydots.displayScores('panel');
+};
+
+//--------------------------------
+// ON PAGE LOAD
+//--------------------------------
+// Check if we have a stored game. If so, set up
+// the panel with display values. Set up the rest
+// of the page with default values.
+pydots.pageSetup = () => {
+  displayScores('panel');
+  const moves = pydots.dotgame.getHistory();
+  const len = moves.length;
+  // Was there any progress on the previous game?
+  if (len > 0) {
+    pydots.displayScores('resumeGame');
+  } else {
+    // Clear our stored values and start from scratch
+    pydots.dotgame.clearGameValues();
+    // Hide the resume section
+    document.getElementById('resumeGame').style.display = 'none';
+  }
+
+  // Set the new game values.
+  const numplayersdrop = document.getElementById('players');
+  const machinedrop = document.getElementById('machine');
+  pydots.setMachineList(machinedrop, numplayersdrop.value);
+  pydots.setPlayerList(numplayersdrop.value, machinedrop.value);
+};
 
 //--------------------------------
 // UPDATE INDEX PAGE
@@ -143,29 +169,6 @@ if (resume) {
 //--------------------------------
 // EVENT HANDLERS
 //--------------------------------
-// Check if we have a stored game. If so, set up
-// the panel with display values. Set up the rest
-// of the page with default values.
-pydots.initIndexPage = () => {
-  const moves = pydots.dotgame.getHistory();
-  const len = moves.length;
-  // Was there any progress on the previous game?
-  if (len > 0) {
-    pydots.displayScores('resumeGame');
-  } else {
-    // Clear our stored values and start from scratch
-    pydots.dotgame.clearGameValues();
-    // Hide the resume section
-    document.getElementById('resumeGame').style.display = 'none';
-  }
-
-  // Set the new game values.
-  const numplayersdrop = document.getElementById('players');
-  const machinedrop = document.getElementById('machine');
-  pydots.setMachineList(machinedrop, numplayersdrop.value);
-  pydots.setPlayerList(numplayersdrop.value, machinedrop.value);
-};
-
 // Reset the board to indicate the current player's turn
 pydots.updatePlayer = () => {
   // Update the scoreboard to show the current player
@@ -218,6 +221,10 @@ pydots.updateScore = (player, score) => {
 //--------------------------------
 // HELPER FUNCTIONS
 //--------------------------------
+// Define a function to change our css theme
+pydots.changeTheme = (theme) => { document.documentElement.className = theme; };
+
+
 // Check if the move claims any squares. If so, update the
 // gameboard with the player's color, update the player's
 // score and return true. Otherwise, do nothing and return false.
@@ -303,6 +310,7 @@ pydots.setMachineList = (dropdown, numPlayers) => {
   dropdown.selectedIndex = numPlayers;
 };
 
+// Displays on main page
 pydots.displayScores = (location) => {
   // Get all spans within the specified location. There should be five.
   const element = document.getElementById(location);

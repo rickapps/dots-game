@@ -109,3 +109,14 @@ Remove unused values from render_template
 Remove unused js code 
 Create navigation menu
 New layout for options page
+
+12/15/2022
+Revise javascript to work with new hamburger menu. 
+Implement three startup modes - new game with defaults, new game using last settings, resume game
+Setup hamburger menu so no other pages are required.
+New Game => Easy, Medium, Hard, Expert. Add checkmark to current setting.
+Settings => 2 Players, 3 Players, 4 Players, ------, Computer Player - toggles on,off. Add checkmark
+Theme - Add checkmark
+Changes to Game or settings - prompt with This will end your current game
+Add Help as overlay over gameboard. 
+Config.py should only contain items needed on server. Themes perhaps since they are stored there.

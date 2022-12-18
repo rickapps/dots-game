@@ -7,6 +7,10 @@
 DEFAULT_SIZE_INDEX=1 
 # Set the default theme. The value is the list index in GAME_THEMES
 DEFAULT_THEME_INDEX=0
+# Set the default number of players. The value is the list index in PARTICIPANTS
+DEFAULT_NUM_PLAYERS=0
+# Set the player number for the machine. Zero means the machine is not a player.
+DEFAULT_MACHINE_PLAYER=2
 
 # Game Levels - A size of 3 means there are 3x3 boxes and 4x4 dots on the gameboard.
 GAME_LEVELS =	[

@@ -25,6 +25,11 @@ app.config.from_pyfile('config.py')
 #
 # claims: a list of all boxes on the gameboard. If the value is 0, the box
 # is not claimed. Values greater than zero are the player number of the box owner.
+#
+# boxes: a list of box objects representing the gameboard. boxes are used only on 
+# the server. boxes are not used by javascript. The list is generated with each 
+# server request using size, lines, and claims as input. For a new game, claims
+# is all zeros so it is not needed. 
 #### 
 #  Start the game with default values. 
 glevels = app.config['GAME_LEVELS']

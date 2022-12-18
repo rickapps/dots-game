@@ -56,3 +56,14 @@ until all the other vertical lines are assigned. Then the right edge is numbered
 
         return index;
     }
+
+    main.py - 
+    /new/ - Start a new game. Server requires size and theme. Generates lines, boxes, glevels, gthemes.
+    /resume/ - resume existing game. Server requires size, theme, lines, and claims. Generates boxes, glevels, gthemes.
+    /find/ - calculate best response to supplied line array. Server requires size and lines. Generates list of tuples (line, boxA, boxB) ...
+    /verify/ - evaluate user move to determine what squares it completes. Server requires size, lines, and line. Generates a tuple (line, boxA, boxB)
+    / - display startup screen. Server requires no input. Generates size, theme, and lines.
+    server requires size, lines, 
+
+    startup.html - does not display. Checks to see if a previous game is stored in localStorage. If so, initiates a POST /resume/ request. If not, initiates a POST /new/ request.
+
