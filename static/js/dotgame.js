@@ -11,6 +11,42 @@
 var pydots = pydots || {};
 pydots.dotgame= pydots.dotgame || {};
 
+const GAME_LEVELS =	[
+    ('Easy (3x3)', 3),
+    ('Medium (5x5)', 5),
+    ('Difficult (7x7)', 7),
+    ('Expert (10x10)', 10)
+]
+
+const GAME_THEMES = [
+    ('Spring', 'theme1'),
+    ('Summer', 'theme2'),
+    ('Fall', 'theme3'),
+    ('Winter', 'theme4')
+]
+
+const PARTICIPANTS = [
+    ('2 Players', 2),
+    ('3 Players', 3),
+    ('4 Players', 4)
+]
+
+const PLAYER_NAMES = [
+    ('Player 1', 1),
+    ('Player 2', 2),
+    ('Player 3', 3),
+    ('Player 4', 4)
+]
+
+const MACHINE_NAME='Computer';
+
+const NO_MACHINE='Not Playing';
+
+const DEFAULT_LEVEL_INDEX = 1;
+const DEFAULT_THEME_INDEX = 0;
+const DEFAULT_PARTICIPANT_INDEX = 0;
+const DEFAULT_MACHINE_PLAYER = 2;
+
 // Store line state, history, and claims in local storage to make sure we do not lose the
 // values on page refresh and we can resume games.
 class GameStorage {
@@ -27,6 +63,9 @@ class GameStorage {
         theme: "Theme"
     }
 
+    #maxPlayers = PLAYER_NAMES.length();
+    #numLevels = GAME_LEVELS.length();
+
     get claims() {
         let claims = localStorage.getItem(this.#key.claim);
         if (claims)
@@ -39,6 +78,10 @@ class GameStorage {
         return claims;
     }
 
+    set claims(claims) {
+        localStorage.setItem(this.#key.claim, JSON.stringify(this.claims));
+    }
+
     get history() {
         let history = localStorage.getItem(this.#key.history);
         if (history)
@@ -46,6 +89,10 @@ class GameStorage {
         else
             history = INIT_MOVES;
         return history;
+    }
+
+    set history(history) {
+        localStorage.setItem(this.#key.history, JSON.stringify(this.history));
     }
 
     get level() {
@@ -90,6 +137,10 @@ class GameStorage {
         return lines;
     }
 
+    set lines(lines) {
+        localStorage.setItem(this.#key.lines, JSON.stringify(lines));
+    }
+
     get machinePlayer() {
         let machine = JSON.parse(localStorage.getItem(this.#key.machine));
         if (machine)
@@ -97,6 +148,28 @@ class GameStorage {
         else
             machine = this.numPlayers;
         return machine;
+    }
+
+    set machinePlayer(machine) {
+        localStorage.setItem(this.#key.machine, JSON.stringify(machine));
+    }
+
+    clearPlayerNames() {
+        let name = [];
+        for (let i = 0; i <= this.#maxPlayers; i++)
+        {
+            // Player zero is the machine. The array[0] is not used
+            name.push('');
+        }
+        localStorage.setItem(this.#key.name, JSON.stringify(name));
+    }
+
+    getPlayerName(player) {
+
+    }
+
+    updatePlayerName(player, name) {
+
     }
 
     get numPlayers() {
@@ -108,6 +181,10 @@ class GameStorage {
         return num;
     }
 
+    set numPlayers(num) {
+        localStorage.setItem(this.#key.numPlayers, JSON.stringify(num));
+    }
+
     get player() {
         let player = localStorage.getItem(this.#key.player);
         if (player)
@@ -115,6 +192,37 @@ class GameStorage {
         else
             player = 1;
         return player;
+    }
+
+    initPlayer() {
+        localStorage.setItem(this.#key.player, JSON.stringify(1));
+    }
+
+    switchPlayer() {
+        let numPlayers = this.numPlayers;
+        let player = this.player;
+        // Move to the next player
+        player = (player == numPlayers) ? 1 : player + 1;
+        localStorage.setItem(this.#key.player, JSON.stringify(player));
+        return player;
+    }
+
+    clearPlayerScores() {
+        let score = [];
+        for (let i = 0; i <= this.#maxPlayers; i++)
+        {
+            // Player zero is the machine. The array[0] is not used
+            score.push(0);
+        }
+        localStorage.setItem(this.#key.score, JSON.stringify(score));
+    }
+
+    getPlayerScore(player) {
+
+    }
+
+    updatePlayerScore(player, move) {
+
     }
 
     get theme() {
@@ -176,15 +284,6 @@ class GameStorage {
         return add;
     }
 
-    switchPlayer() {
-        let numPlayers = this.numPlayers;
-        let player = this.player;
-        // Move to the next player
-        player = (player == numPlayers) ? 1 : player + 1;
-        localStorage.setItem(this.#key.player, JSON.stringify(player));
-        return player;
-    }
-
     getPlayerName(player) {
         let names = localStorage.getItem(this.#key.name);
         if (names)
@@ -195,13 +294,13 @@ class GameStorage {
         return names[player];
     }
 
-    storePlayerName(player, name) {
+    storePlayerName(player, pname) {
         let names = localStorage.getItem(this.#key.name);
         if (names)
             names = JSON.parse(names);
         else
             names = INIT_NAMES;
-        names[player] = name;
+        names[player] = pname;
         localStorage.setItem(this.#key.name, JSON.stringify(names));
     }
 
