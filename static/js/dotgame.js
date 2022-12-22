@@ -11,393 +11,7 @@
 var pydots = pydots || {};
 pydots.dotgame= pydots.dotgame || {};
 
-const GAME_LEVELS =	[
-    ('Easy (3x3)', 3),
-    ('Medium (5x5)', 5),
-    ('Difficult (7x7)', 7),
-    ('Expert (10x10)', 10)
-]
-
-const GAME_THEMES = [
-    ('Spring', 'theme1'),
-    ('Summer', 'theme2'),
-    ('Fall', 'theme3'),
-    ('Winter', 'theme4')
-]
-
-const PARTICIPANTS = [
-    ('2 Players', 2),
-    ('3 Players', 3),
-    ('4 Players', 4)
-]
-
-const PLAYER_NAMES = [
-    ('Player 1', 1),
-    ('Player 2', 2),
-    ('Player 3', 3),
-    ('Player 4', 4)
-]
-
-const MACHINE_NAME='Computer';
-
-const NO_MACHINE='Not Playing';
-
-const DEFAULT_LEVEL_INDEX = 1;
-const DEFAULT_THEME_INDEX = 0;
-const DEFAULT_PARTICIPANT_INDEX = 0;
-const DEFAULT_MACHINE_PLAYER = 2;
-
-// Store line state, history, and claims in local storage to make sure we do not lose the
-// values on page refresh and we can resume games.
-class GameStorage {
-    #key = {
-        claim: "Claims",
-        history: "History",
-        level: "Level",
-        lines: "Lines",
-        machine: "Machine",
-        name: "Names",
-        numPlayers: "NumPlayers",
-        player: "Player",
-        score: "Scores",
-        theme: "Theme"
-    }
-
-    #maxPlayers = PLAYER_NAMES.length();
-    #numLevels = GAME_LEVELS.length();
-
-    get claims() {
-        let claims = localStorage.getItem(this.#key.claim);
-        if (claims)
-            claims = JSON.parse(claims);
-        else
-            claims = [];  
-            
-        if (claims.length == 0)
-            claims = new Array(pydots.dotgame.getLevel()**2).fill(0);;
-        return claims;
-    }
-
-    set claims(claims) {
-        localStorage.setItem(this.#key.claim, JSON.stringify(this.claims));
-    }
-
-    get history() {
-        let history = localStorage.getItem(this.#key.history);
-        if (history)
-            history = JSON.parse(history);
-        else
-            history = INIT_MOVES;
-        return history;
-    }
-
-    set history(history) {
-        localStorage.setItem(this.#key.history, JSON.stringify(this.history));
-    }
-
-    get level() {
-        let level = localStorage.getItem(this.#key.level);
-        if (level)
-            level = JSON.parse(level);
-        else
-            level = GAME_SIZE;
-    
-        return level;
-    }
-
-    set level(level) {
-        // Check level >= 0 < GAME_LEVELS.length
-        if (level >= 0 && level < GAME_LEVELS.length)
-            localStorage.setItem(this.#key.level, JSON.stringify(level));
-        else
-            throw new Error('Invalid game level');
-
-    }
-
-    get levelName() {
-        let level = this.Level();
-        let name = 'Not found';
-        for (let i=0; i<GAME_LEVELS.length; i++)
-        {
-            if (level == GAME_LEVELS[i][1])
-            {
-                name = GAME_LEVELS[i][0];
-                break;
-            }
-        }
-        return name;
-    }
-
-    get lines() {
-        let lines = localStorage.getItem(this.#key.lines);
-        if (lines)
-            lines = JSON.parse(lines);
-        else
-            lines = INIT_LINES;
-        return lines;
-    }
-
-    set lines(lines) {
-        localStorage.setItem(this.#key.lines, JSON.stringify(lines));
-    }
-
-    get machinePlayer() {
-        let machine = JSON.parse(localStorage.getItem(this.#key.machine));
-        if (machine)
-            machine = JSON.parse(machine);
-        else
-            machine = this.numPlayers;
-        return machine;
-    }
-
-    set machinePlayer(machine) {
-        localStorage.setItem(this.#key.machine, JSON.stringify(machine));
-    }
-
-    clearPlayerNames() {
-        let name = [];
-        for (let i = 0; i <= this.#maxPlayers; i++)
-        {
-            // Player zero is the machine. The array[0] is not used
-            name.push('');
-        }
-        localStorage.setItem(this.#key.name, JSON.stringify(name));
-    }
-
-    getPlayerName(player) {
-
-    }
-
-    updatePlayerName(player, name) {
-
-    }
-
-    get numPlayers() {
-        let num = localStorage.getItem(this.#key.numPlayers);
-        if (num)
-            num = JSON.parse(num);
-        else
-            num = NUM_PLAYERS;
-        return num;
-    }
-
-    set numPlayers(num) {
-        localStorage.setItem(this.#key.numPlayers, JSON.stringify(num));
-    }
-
-    get player() {
-        let player = localStorage.getItem(this.#key.player);
-        if (player)
-            player = JSON.parse(player);
-        else
-            player = 1;
-        return player;
-    }
-
-    initPlayer() {
-        localStorage.setItem(this.#key.player, JSON.stringify(1));
-    }
-
-    switchPlayer() {
-        let numPlayers = this.numPlayers;
-        let player = this.player;
-        // Move to the next player
-        player = (player == numPlayers) ? 1 : player + 1;
-        localStorage.setItem(this.#key.player, JSON.stringify(player));
-        return player;
-    }
-
-    clearPlayerScores() {
-        let score = [];
-        for (let i = 0; i <= this.#maxPlayers; i++)
-        {
-            // Player zero is the machine. The array[0] is not used
-            score.push(0);
-        }
-        localStorage.setItem(this.#key.score, JSON.stringify(score));
-    }
-
-    getPlayerScore(player) {
-
-    }
-
-    updatePlayerScore(player, move) {
-
-    }
-
-    get theme() {
-        let theme = localStorage.getItem(this.#key.theme);
-        if (theme === null) theme = INIT_THEME;
-        return theme;
-    }
-
-    set theme(theme) {
-        localStorage.setItem(this.#key.theme, theme);
-    }
-
-    pushMove(move) {
-        let history = this.history;
-        // Add the move to our history
-        history.push(move);
-        localStorage.setItem(this.#key.history, JSON.stringify(history));
-        // Add the move to our lines array
-        let lines = this.lines;
-        let line = move[0];
-        lines[line] = 1;
-        localStorage.setItem(this.#key.lines, JSON.stringify(lines));
-        // Add the move to our claims array 
-        if (move[1] + move[2] > -2)
-        {
-            let claims = this.claims;
-            if (move[1] >= 0)
-            {
-                claims[move[1]] = this.player;
-            }
-            if (move[2] >= 0)
-            {
-                claims[move[2]] = this.player;
-            }
-            localStorage.setItem(this.#key.claim, JSON.stringify(claims));
-        }
-        return history;
-    }
-
-    updateScore(move) {
-        let add = 0;
-        if (move[1] >= 0)
-            add = add + 1;
-        if (move[2] >= 0)
-            add = add + 1;
-        if (add > 0)
-        {
-            let player = this.player;
-            let scores = JSON.parse(localStorage.getItem('Scores'));
-            if (scores)
-                scores = JSON.parse(scores);
-            else
-                throw new Error('Scores not initialized');
-               
-            let newScore = scores[player] + add;
-            scores[player] = newScore;
-            localStorage.setItem('Scores', JSON.stringify(scores));
-        }
-        return add;
-    }
-
-    getPlayerName(player) {
-        let names = localStorage.getItem(this.#key.name);
-        if (names)
-            names = JSON.parse(names);
-        else
-            names = INIT_NAMES;
-    
-        return names[player];
-    }
-
-    storePlayerName(player, pname) {
-        let names = localStorage.getItem(this.#key.name);
-        if (names)
-            names = JSON.parse(names);
-        else
-            names = INIT_NAMES;
-        names[player] = pname;
-        localStorage.setItem(this.#key.name, JSON.stringify(names));
-    }
-
-    storeGameSetup(numPlayers, machine) {
-        // Error if numbers are not within range
-        if (numPlayers < 2 || numPlayers > 4)
-            throw new Error('Number of players must be between 2 and 4');
-        if (machine < 0 || machine > numPlayers)
-            throw new Error('Machine player cannot be greater than numPlayers');
-        localStorage.setItem(this.#key.numPlayers, JSON.stringify(numPlayers));
-        localStorage.setItem(this.#key.machine, JSON.stringify(machine));
-        // Start with 1. The number denotes which player has control of the board:
-        // (1,2,3, or 4). 
-        localStorage.setItem(this.#key.player, JSON.stringify(Number(1)));
-        // Set up the scores for the players
-        let score = [];
-        let name = [];
-        for (let i = 0; i <= numPlayers; i++)
-        {
-            // Player zero is the machine. The array[0] is not used
-            score.push(0);
-            name.push('');
-        }
-        localStorage.setItem(this.#key.score, JSON.stringify(score));
-        localStorage.setItem(this.#key.name, JSON.stringify(name));
-    }
-
-}
-
-pydots.dotgame.pushMove = function (move)
-{
-    let history = pydots.dotgame.getHistory();
-    // Add the move to our history
-    history.push(move);
-    localStorage.setItem('History', JSON.stringify(history));
-    // Add the move to our lines array
-    let lines = pydots.dotgame.getLines();
-    let line = move[0];
-    lines[line] = 1;
-    localStorage.setItem('Lines', JSON.stringify(lines));
-    // Add the move to our claims array 
-    if (move[1] + move[2] > -2)
-    {
-        let claims = pydots.dotgame.getClaims();
-        if (move[1] >= 0)
-        {
-            claims[move[1]] = pydots.dotgame.getPlayer();
-        }
-        if (move[2] >= 0)
-        {
-            claims[move[2]] = pydots.dotgame.getPlayer();
-        }
-        localStorage.setItem('Claims', JSON.stringify(claims));
-    }
-    return history;
-}
-
-// Update our scores. Return the number of points added
-// to the current player's score by the specified move
-pydots.dotgame.calculateScore = function (move)
-{
-    let add = 0;
-    if (move[1] >= 0)
-        add = add + 1;
-    if (move[2] >= 0)
-        add = add + 1;
-    if (add > 0)
-    {
-        let player = pydots.dotgame.getPlayer();
-        let scores = JSON.parse(localStorage.getItem('Scores'));
-        let newScore = scores[player] + add;
-        scores[player] = newScore;
-        localStorage.setItem('Scores', JSON.stringify(scores));
-    }
-    return add;
-}
-
-// Pop the last move from storage. 
-pydots.dotgame.popLastMove = function ()
-{
-    let moves = pydots.dotgame.getHistory();
-    let popped = moves.pop();
-    localStorage.setItem('History', JSON.stringify(moves));
-    return popped;
-}
-
-// Clear all game specific values from storage
-pydots.dotgame.clearGameValues = function ()
-{
-    localStorage.setItem('History', JSON.stringify(INIT_MOVES)); // Remove does not remove the key
-    localStorage.removeItem('Lines');
-    localStorage.setItem('Claims', JSON.stringify([])); // Remove does not remove the key
-    // Set the current player back to player 1
-    localStorage.setItem('Player', JSON.stringify(1));
-    // Reset game scores to zeros
-    localStorage.setItem('Scores', JSON.stringify(INIT_SCORE));
-}
+pydots.dotgame.storage = new GameStorage();
 
 // Retrieve saved game from localstorage and POST it to server
 // Need to try different way. Cannot get fetch to change url.
@@ -406,10 +20,10 @@ pydots.dotgame.clearGameValues = function ()
 pydots.dotgame.resumeGame = function()
 {
     let game = {
-        "size": pydots.dotgame.getLevel(),
-        "theme": pydots.dotgame.getTheme(),
-        "lines": pydots.dotgame.getLines(),
-        "claims": pydots.dotgame.getClaims()
+        "size": pydots.dotgame.storage.level,
+        "theme": pydots.dotgame.storage.theme,
+        "lines": pydots.dotgame.storage.lines,
+        "claims": pydots.dotgame.storage.claims
     }
     // Tell fetch we want a POST using JSON data
     // and send the request.
@@ -443,7 +57,7 @@ pydots.dotgame.validateMove = function (line, bAnimate=true)
     // The body of the request contains the current game state.
     let specs = {
         "size": GAME_SIZE,
-        "lines": pydots.dotgame.getLines(),
+        "lines": pydots.dotgame.storage.lines,
         "newline": line
     }
     // Tell fetch we want a POST using JSON data
@@ -474,7 +88,7 @@ pydots.dotgame.validateMove = function (line, bAnimate=true)
                     event = new CustomEvent("drawMove", {detail: {move: move}});
                     document.dispatchEvent(event);
                     // Update our internal score
-                    if (pydots.dotgame.calculateScore(move) > 0)
+                    if (pydots.dotgame.storage.updatePlayerScore(move) > 0)
                     {
                         // Send an event to update the scoreboard on the UI
                         let event = new CustomEvent("updateScore");
@@ -483,7 +97,7 @@ pydots.dotgame.validateMove = function (line, bAnimate=true)
                     else
                     {
                         // Move to the other player
-                        pydots.dotgame.switchPlayers();
+                        pydots.dotgame.storage.switchPlayer();
                         event = new CustomEvent("updatePlayer");
                         document.dispatchEvent(event);
                     }
@@ -502,8 +116,8 @@ pydots.dotgame.makeMove = function ()
     // Send a POST request to the server asking for the best move.
     // The body of the request contains the current game state.
     let specs = {
-        "size": GAME_SIZE,
-        "lines": pydots.dotgame.getLines()
+        "size": pydots.dotgame.storage.level,
+        "lines": pydots.dotgame.storage.lines
     }
     // Tell fetch we want a POST using JSON data
     // and send the request.
@@ -566,137 +180,6 @@ pydots.dotgame.eraseMove = function (moves, bAnimate=true)
     return;
 }
 
-// Write the specified theme to storage
-pydots.dotgame.storeTheme = function (theme)
-{
-    localStorage.setItem('Theme', theme);
-}
-
-// Retrieve the last theme from storage
-pydots.dotgame.getTheme = function ()
-{
-    let theme = localStorage.getItem('Theme');
-    if (theme === null) theme = INIT_THEME;
-    return theme;
-}
-
-// Store the skill level of the current game
-pydots.dotgame.storeLevel = function(level)
-{
-    localStorage.setItem('Level', JSON.stringify(level));
-}
-
-// Retrieve the skill level from storage
-pydots.dotgame.getLevel = function()
-{
-    let level = localStorage.getItem('Level');
-    if (level)
-        level = JSON.parse(level);
-    else
-        level = GAME_SIZE;
-
-    return level;
-}
-
-// Get the skill level name
-pydots.dotgame.getLevelName = function()
-{
-    let level = pydots.dotgame.getLevel();
-    let name = 'Not found';
-    for (let i=0; i<GAME_LEVELS.length; i++)
-    {
-        if (level == GAME_LEVELS[i][1])
-        {
-            name = GAME_LEVELS[i][0];
-            break;
-        }
-    }
-    return name;
-}
-
-// Retrieve the number of players from storage
-pydots.dotgame.getNumPlayers = function()
-{
-    let num = JSON.parse(localStorage.getItem('NumPlayers'));
-    if (num)
-        num = JSON.parse(num);
-    else
-        num = NUM_PLAYERS;
-    return num;
-}
-
-// Store the name of the specified player in storage
-pydots.dotgame.storePlayerName = function(player, name)
-{
-    let names = localStorage.getItem('Names');
-    if (names)
-        names = JSON.parse(names);
-    else
-        names = INIT_NAMES;
-    names[player] = name;
-    localStorage.setItem('Names', JSON.stringify(names));
-}
-
-// Retrieve the name of the specified player from storage
-pydots.dotgame.getPlayerName = function(player)
-{
-    let names = localStorage.getItem('Names');
-    if (names)
-        names = JSON.parse(names);
-    else
-        names = INIT_NAMES;
-
-    return names[player];
-}
-
-// Return a list of all moves.
-pydots.dotgame.getHistory = function ()
-{
-    let history = localStorage.getItem('History');
-    if (history)
-        history = JSON.parse(history);
-    else
-        history = INIT_MOVES;
-    return history;
-}
-
-// Return the state of all game board lines
-pydots.dotgame.getLines = function ()
-{
-    let lines = localStorage.getItem('Lines');
-    if (lines)
-        lines = JSON.parse(lines);
-    else
-        lines = INIT_LINES;
-    return lines;
-}
-
-// Return the state of all game board squares
-// We call them claims when the squares are complete.
-pydots.dotgame.getClaims = function ()
-{
-    let claims = localStorage.getItem('Claims');
-    if (claims)
-        claims = JSON.parse(claims);
-    else
-        claims = [];  
-        
-    if (claims.length == 0)
-        claims = new Array(pydots.dotgame.getLevel()**2).fill(0);;
-    return claims;
-}
-
-// Return the score for the indicated player
-// If it comes back negative, we have an error
-pydots.dotgame.getScore = function (player)
-{
-    let score = -1;
-    let scores = JSON.parse(localStorage.getItem('Scores'));
-    if (scores)
-        score = scores[player];
-    return score;
-}
-
 // Set the number of players: 2,3,or 4. Indicate which player
 // is the computer: 0,1,2,3,or 4. 0 means all players are
 // human. storePlayers(4,0) all are human. storePlayers(4,2)
@@ -726,13 +209,6 @@ pydots.dotgame.storePlayers = function(numPlayers, machine)
     localStorage.setItem('Names', JSON.stringify(name));
 }
 
-// Return the player that has control of the board
-pydots.dotgame.getPlayer = function ()
-{
-    let player = JSON.parse(localStorage.getItem('Player'));
-    return player;
-}
-
 // Return true if it is the machine's turn.
 pydots.dotgame.isMachineTurn = function()
 {
@@ -740,21 +216,298 @@ pydots.dotgame.isMachineTurn = function()
     return player == this.getMachinePlayer();
 }
 
-// Which player is the machine?
-pydots.dotgame.getMachinePlayer = function()
-{
-    let machine = JSON.parse(localStorage.getItem('Machine'));
-    return machine;
-}
+// Store line state, history, and claims in local storage to make sure we do not lose the
+// values on page refresh and we can resume games.
+class GameStorage {
+    constructor(size=0, lines=null) {
+        this.#key = {
+            claim: "Claims",
+            history: "History",
+            level: "Level",
+            lines: "Lines",
+            machine: "Machine",
+            name: "Names",
+            numPlayers: "NumPlayers",
+            player: "Player",
+            score: "Scores",
+            theme: "Theme"
+        }
 
-// Set the current player to the next player
-pydots.dotgame.switchPlayers = function ()
-{
-    let numPlayers = this.getNumPlayers();
-    let player = this.getPlayer();
-    // Move to the next player
-    player = (player == numPlayers) ? 1 : player + 1;
-    localStorage.setItem('Player', JSON.stringify(player));
-    return player;
+        this.#maxPlayers = PLAYER_NAMES.length();
+        this.#numLevels = GAME_LEVELS.length();
+        this.#numThemes = GAME_THEMES.length();
+
+        if (size > 0) {
+            this.level = size;
+        }
+        if (lines) {
+            this.lines = lines;
+        }
+    }
+    get claims() {
+        let claims = localStorage.getItem(this.#key.claim);
+        if (claims)
+            claims = JSON.parse(claims);
+        else
+            claims = [];  
+            
+        if (claims.length == 0)
+            claims = new Array(this.level**2).fill(0);;
+        return claims;
+    }
+
+    set claims(claims) {
+        localStorage.setItem(this.#key.claim, JSON.stringify(this.claims));
+    }
+
+    get history() {
+        let history = localStorage.getItem(this.#key.history);
+        if (history)
+            history = JSON.parse(history);
+        else
+            history = [];
+        return history;
+    }
+
+    set history(history) {
+        localStorage.setItem(this.#key.history, JSON.stringify(this.history));
+    }
+
+    get level() {
+        let level = localStorage.getItem(this.#key.level);
+        if (level)
+            level = JSON.parse(level);
+        else
+            level = GAME_LEVELS[DEFAULT_LEVEL_INDEX][1];
+    
+        return level;
+    }
+
+    set level(level) {
+         if (level >= 0 && level < this.#numLevels)
+            localStorage.setItem(this.#key.level, JSON.stringify(level));
+        else
+            throw new Error('Invalid game level');
+    }
+
+    get levelName() {
+        let level = this.Level();
+        let name = 'Not found';
+        for (let i=0; i<GAME_LEVELS.length; i++)
+        {
+            if (level == GAME_LEVELS[i][1])
+            {
+                name = GAME_LEVELS[i][0];
+                break;
+            }
+        }
+        return name;
+    }
+
+    get lines() {
+        let lines = localStorage.getItem(this.#key.lines);
+        if (lines)
+            lines = JSON.parse(lines);
+        else
+            throw new Error('Lines array not defined');
+        return lines;
+    }
+
+    set lines(lines) {
+        localStorage.setItem(this.#key.lines, JSON.stringify(lines));
+    }
+
+    get machinePlayer() {
+        let machine = JSON.parse(localStorage.getItem(this.#key.machine));
+        if (machine)
+            machine = JSON.parse(machine);
+        else
+            machine = this.numPlayers;
+        return machine;
+    }
+
+    set machinePlayer(machine) {
+        localStorage.setItem(this.#key.machine, JSON.stringify(machine));
+    }
+
+    get theme() {
+        let theme = localStorage.getItem(this.#key.theme);
+        if (theme === null) theme = INIT_THEME;
+        return theme;
+    }
+
+    set theme(theme) {
+        if (theme >= 0 && theme < this.#numThemes)
+            localStorage.setItem(this.#key.theme, JSON.stringify(theme));
+        else
+            throw new Error('Invalid theme specified');
+    }
+
+    clearPlayerNames() {
+        let names = [];
+        for (let i = 0; i <= this.#maxPlayers; i++)
+        {
+            // Player zero is the machine. The array[0] is not used
+            names.push('');
+        }
+        localStorage.setItem(this.#key.name, JSON.stringify(names));
+        return names;
+    }
+
+    getPlayerName(player) {
+        let names = localStorage.getItem(this.#key.name);
+        if (names)
+            names = JSON.parse(names);
+        else
+            names = this.clearPlayerNames();
+    
+        return names[player];
+    }
+
+    updatePlayerName(player, name) {
+        let names = localStorage.getItem(this.#key.name);
+        if (names)
+            names = JSON.parse(names);
+        else
+            names = this.clearPlayerNames();
+        names[player] = name;
+        localStorage.setItem(this.#key.name, JSON.stringify(names));
+
+        return names[player];
+    }
+
+    get numPlayers() {
+        let num = localStorage.getItem(this.#key.numPlayers);
+        if (num)
+            num = JSON.parse(num);
+        else
+            num = PARTICIPANTS[DEFAULT_PARTICIPANT_INDEX][1];
+        return num;
+    }
+
+    set numPlayers(num) {
+        if (num >= 2 && num < this.#maxPlayers)
+            localStorage.setItem(this.#key.numPlayers, JSON.stringify(num));
+        else
+            throw new Error('Invalid number of players');
+    }
+
+    get player() {
+        let player = localStorage.getItem(this.#key.player);
+        if (player)
+            player = JSON.parse(player);
+        else
+            player = 1;
+        return player;
+    }
+
+    initPlayer() {
+        localStorage.setItem(this.#key.player, JSON.stringify(1));
+    }
+
+    switchPlayer() {
+        let numPlayers = this.numPlayers;
+        let player = this.player;
+        // Move to the next player
+        player = (player == numPlayers) ? 1 : player + 1;
+        localStorage.setItem(this.#key.player, JSON.stringify(player));
+        return player;
+    }
+
+    clearPlayerScores() {
+        let score = [];
+        for (let i = 0; i <= this.#maxPlayers; i++)
+        {
+            // Player zero is the machine. The array[0] is not used
+            score.push(0);
+        }
+        localStorage.setItem(this.#key.score, JSON.stringify(score));
+        return score;
+    }
+
+    getPlayerScore(player) {
+        let scores = localStorage.getItem(this.#key.score);
+        if (scores)
+            scores = JSON.parse(scores);
+        else
+            scores = this.clearPlayerScores();
+    
+        return scores[player];
+    }
+
+    updatePlayerScore(player, move) {
+        let add = 0;
+        if (move[1] >= 0)
+            add = add + 1;
+        if (move[2] >= 0)
+            add = add + 1;
+        if (add > 0) {
+            let scores = localStorage.getItem(this.#key.score);
+            if (scores)
+                scores = JSON.parse(scores);
+            else
+                scores = this.clearPlayerScores();
+            let newScore = scores[player] + add;
+            scores[player] = newScore;
+            localStorage.setItem(this.#key.score, JSON.stringify(scores));
+        }
+
+        return scores[player];
+    }
+
+    pushMove(move) {
+        let history = this.history;
+        // Add the move to our history
+        history.push(move);
+        this.history = history;
+        // Add the move to our lines array
+        let lines = this.lines;
+        let line = move[0];
+        lines[line] = 1;
+        this.lines = lines;
+        // Add the move to our claims array 
+        if (move[1] + move[2] > -2)
+        {
+            let claims = this.claims;
+            if (move[1] >= 0)
+            {
+                claims[move[1]] = this.player;
+            }
+            if (move[2] >= 0)
+            {
+                claims[move[2]] = this.player;
+            }
+            this.claims = claims;
+        }
+        return history;
+    }
+     
+    storeNewGameSetup(numPlayers, machine) {
+        this.numPlayers = numPlayers;
+        this.machinePlayer = machine;
+        this.clearPlayerNames();
+        this.clearGameValues();
+    }
+    
+    // Pop the last move from storage. 
+    popLastMove() {
+        let moves = this.history;
+        let popped = moves.pop();
+        this.history = moves;
+        return popped;
+    }
+    
+    // Clear all game specific values from storage
+    clearGameValues()
+    {
+        let clear = [];
+        this.history = clear; // Remove does not remove the key
+        this.claims = clear; // Remove does not remove the key
+        localStorage.removeItem(this.#key.lines);
+        // Set the current player back to player 1
+        this.initPlayer();
+        // Reset game scores to zeros
+        this.clearPlayerScores();
+    }
 }
 

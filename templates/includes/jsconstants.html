@@ -14,28 +14,45 @@
     {% if lines is defined %}
     const INIT_LINES = {{lines|tojson}};
     {% endif %}
-    // When a square is completed, the array will be updated
-    // with the player# that completed the square.
-    const INIT_CLAIMS = [];
-    const INIT_MOVES = [];
-    const INIT_SCORE = [0,0,0,0];
-    // The names we will use for human players. The user can 
-    // override these names with their own.
-    {% if pnames is defined %}
-    const INIT_NAMES = {{pnames|tojson}};
-    {% endif %}
-    // The name we will use for the computer player
-    {% if machine is defined %}
-    const COMPUTER_PLAYER = {{machine|tojson}};
-    {% endif %}
-    {% if theme is defined %}
-    const INIT_THEME = {{theme|tojson}};
-    {% endif %}
-    {% if glevels is defined %}
-    const GAME_LEVELS = {{glevels|tojson}};
-    {% endif %}
     {% if reset is defined %}
     const RESET = {{reset|tojson}};
     {% endif %}
+
+    const GAME_LEVELS =	[
+    ('Easy (3x3)', 3),
+    ('Medium (5x5)', 5),
+    ('Difficult (7x7)', 7),
+    ('Expert (10x10)', 10)
+]
+
+const GAME_THEMES = [
+    ('Spring', 'theme1'),
+    ('Summer', 'theme2'),
+    ('Fall', 'theme3'),
+    ('Winter', 'theme4')
+]
+
+const PARTICIPANTS = [
+    ('2 Players', 2),
+    ('3 Players', 3),
+    ('4 Players', 4)
+]
+
+const PLAYER_NAMES = [
+    ('Player 1', 1),
+    ('Player 2', 2),
+    ('Player 3', 3),
+    ('Player 4', 4)
+]
+
+const MACHINE_NAME='Computer';
+
+const NO_MACHINE='Not Playing';
+
+const DEFAULT_LEVEL_INDEX = 1;
+const DEFAULT_THEME_INDEX = 0;
+const DEFAULT_PARTICIPANT_INDEX = 0;
+const DEFAULT_MACHINE_PLAYER = 2;
+
 </script>
 {% endblock %}
