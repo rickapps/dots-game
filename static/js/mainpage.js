@@ -37,7 +37,7 @@ window.addEventListener('DOMContentLoaded', () => {
     colorDropDown.addEventListener('change', (e) => {
       pydots.changeTheme(e.target.value);
       // Save the value of the theme so we can retrieve it after a POST
-      pydots.dotgame.storeTheme(e.target.value);
+      pydots.dotgame.storage.theme = e.target.value;
     });
   };
 
@@ -72,7 +72,7 @@ pydots.initVars = () => {
   if (sizeDropDown) sizeDropDown.value = GAME_SIZE;
 
   // Set the theme to whatever it was before. We keep that value in localStorage
-  const theme = pydots.dotgame.getTheme();
+  const theme = pydots.dotgame.storage.theme;
   pydots.changeTheme(theme);
   pydots.displayScores('panel');
 };
@@ -84,24 +84,6 @@ pydots.initVars = () => {
 // the panel with display values. Set up the rest
 // of the page with default values.
 pydots.pageSetup = () => {
-  displayScores('panel');
-  const moves = pydots.dotgame.getHistory();
-  const len = moves.length;
-  // Was there any progress on the previous game?
-  if (len > 0) {
-    pydots.displayScores('resumeGame');
-  } else {
-    // Clear our stored values and start from scratch
-    pydots.dotgame.clearGameValues();
-    // Hide the resume section
-    document.getElementById('resumeGame').style.display = 'none';
-  }
-
-  // Set the new game values.
-  const numplayersdrop = document.getElementById('players');
-  const machinedrop = document.getElementById('machine');
-  pydots.setMachineList(machinedrop, numplayersdrop.value);
-  pydots.setPlayerList(numplayersdrop.value, machinedrop.value);
 };
 
 //--------------------------------
@@ -126,9 +108,8 @@ const newGame = document.getElementById('startNewGame');
 if (newGame) {
   newGame.onsubmit = () => {
     // Clear our local storage values
-    pydots.dotgame.clearGameValues();
+    pydots.dotgame.storage.clearGameValues();
     // Store player info - number, names
-    pydots.storePlayerInfo();
     return true;
   };
 }
@@ -140,11 +121,11 @@ const restart = document.getElementById('restartGame');
 if (restart) {
   restart.onsubmit = () => {
     // Verify it is what our user wants to do
-    const moves = pydots.dotgame.getHistory();
+    const moves = pydots.dotgame.storage.history;
     if (moves.length > 0) {
       const isConfirmed = confirm('Do you want to end your current game?');
       // Clear our local storage values
-      if (isConfirmed) { pydots.dotgame.clearGameValues(); } else { return false; }
+      if (isConfirmed) { pydots.dotgame.storage.clearGameValues(); } else { return false; }
     }
   };
 }
@@ -158,10 +139,10 @@ if (resume) {
   // input fields. Later we will see if we can modify the request header
   // before the form is posted and do away with the input fields.
   resume.onsubmit = function () {
-    document.getElementById('size').value = pydots.dotgame.getLevel();
-    document.getElementById('theme').value = pydots.dotgame.getTheme();
-    document.getElementById('lines').value = JSON.stringify(pydots.dotgame.getLines());
-    document.getElementById('claims').value = JSON.stringify(pydots.dotgame.getClaims());
+    document.getElementById('size').value = pydots.dotgame.storage.level;
+    document.getElementById('theme').value = pydots.dotgame.storage.theme;
+    document.getElementById('lines').value = JSON.stringify(pydots.dotgame.storage.lines);
+    document.getElementById('claims').value = JSON.stringify(pydots.dotgame.storage.claims);
     return true;
   };
 }
@@ -172,8 +153,8 @@ if (resume) {
 // Reset the board to indicate the current player's turn
 pydots.updatePlayer = () => {
   // Update the scoreboard to show the current player
-  const numPlayers = pydots.dotgame.getNumPlayers();
-  const player = pydots.dotgame.getPlayer();
+  const numPlayers = pydots.dotgame.storage.numPlayers;
+  const player = pydots.dotgame.storage.player;
   const element = document.getElementById('scoreBoard');
   const markers = element.getElementsByTagName('img');
   for (let i = 0; i < numPlayers; i++) {
@@ -193,7 +174,7 @@ pydots.playerMove = (evt) => {
 };
 
 pydots.endGame = () => {
-  pydots.dotgame.clearGameValues();
+  pydots.dotgame.storage.clearGameValues();
   const dlg = document.getElementById('endGameDlg');
   dlg.classList.toggle('modal-dialog-show');
 };
@@ -204,7 +185,7 @@ pydots.drawMove = (evt) => {
   const { move } = evt.detail;
   if (move[0] >= 0) {
     // Store the move
-    pydots.dotgame.pushMove(move);
+    pydots.dotgame.storage.pushMove(move);
     // Next two statements draw our line
     const line = document.getElementById(move[0].toString());
     line.classList.add('selected');
@@ -266,7 +247,7 @@ pydots.storePlayerInfo = () => {
   element = document.getElementById('newGamePeople');
   const names = element.getElementsByTagName('input');
   for (let i = 1; i <= numPlayers; i++) {
-    pydots.dotgame.storePlayerName(i, names[i - 1].value);
+    pydots.dotgame.storage.updatePlayerName(i, names[i - 1].value);
   }
 };
 
@@ -316,16 +297,16 @@ pydots.displayScores = (location) => {
   const element = document.getElementById(location);
   const spans = element.getElementsByTagName('span');
   // Skill Level
-  const level = pydots.dotgame.getLevelName();
+  const level = pydots.dotgame.storage.levellName;
   spans[0].textContent = `Skill Level: ${level}`;
   // Update the scores
-  const numPlayers = pydots.dotgame.getNumPlayers();
+  const numPlayers = pydots.dotgame.storage.numPlayers;
   for (let i = 1; i < 5; i++) {
     if (i > numPlayers) {
       spans[i].style.display = 'none';
     } else {
-      const name = pydots.dotgame.getPlayerName(i);
-      const score = pydots.dotgame.getScore(i);
+      const name = pydots.dotgame.storage.getPlayerName(i);
+      const score = pydots.dotgame.storage.getPlayerScore(i);
       spans[i].textContent = `${name}: ${score}`;
     }
   }

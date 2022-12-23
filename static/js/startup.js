@@ -11,32 +11,32 @@ var pydots = pydots || {};
 pydots.startup = pydots.startup || {};
 
 window.addEventListener("DOMContentLoaded", (event) => {
-   window.addEventListener("load", pydots.startup.gameSetup);
+    window.addEventListener("load", pydots.startup.gameSetup);
 });
-
+ 
 //////////////////////////////////
 // EVENT HANDLERS 
 //////////////////////////////////
 // Check if we are starting a new game or resuming current game.
 pydots.startup.gameSetup = function () {
-    let moves = pydots.dotgame.getHistory();
+    let moves = pydots.dotgame.storage.history;
     let len = moves.length;
     // Was there any progress on the previous game?
     if (len > 0)
     {
-        document.getElementById('size').value = pydots.dotgame.getLevel();
-        document.getElementById('theme').value = pydots.dotgame.getTheme();
-        document.getElementById('lines').value = JSON.stringify(pydots.dotgame.getLines());
-        document.getElementById('claims').value = JSON.stringify(pydots.dotgame.getClaims());
+        document.getElementById('size').value = pydots.dotgame.storage.level;
+        document.getElementById('theme').value = pydots.dotgame.storage.theme;
+        document.getElementById('lines').value = JSON.stringify(pydots.dotgame.storage.lines);
+        document.getElementById('claims').value = JSON.stringify(pydots.dotgame.storage.claims);
         // Submit our form
         document.resumeGame.submit();
     }
     else
     {
         // Set everything back to defaults except for level and theme.
-        pydots.dotgame.setGameDefaults();
-        document.getElementById('glevel').value = pydots.dotgame.getLevel();
-        document.getElementById('gcolors').value = pydots.dotgame.getTheme();
+        pydots.dotgame.storage.clearGameValues();
+        document.getElementById('glevel').value = pydots.dotgame.storage.level;
+        document.getElementById('gcolors').value = pydots.dotgame.storage.theme;
         // Submit our form
         document.startNewGame.submit();
     }

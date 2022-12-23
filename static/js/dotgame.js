@@ -11,232 +11,26 @@
 var pydots = pydots || {};
 pydots.dotgame= pydots.dotgame || {};
 
-pydots.dotgame.storage = new GameStorage();
-
-// Retrieve saved game from localstorage and POST it to server
-// Need to try different way. Cannot get fetch to change url.
-// Will try to use js to modify the request header, but still
-// post using an html form.
-pydots.dotgame.resumeGame = function()
-{
-    let game = {
-        "size": pydots.dotgame.storage.level,
-        "theme": pydots.dotgame.storage.theme,
-        "lines": pydots.dotgame.storage.lines,
-        "claims": pydots.dotgame.storage.claims
-    }
-    // Tell fetch we want a POST using JSON data
-    // and send the request.
-    let options = {
-        method: 'POST',
-        headers: {
-            'Content-Type':
-                'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(game)
-    }
-    let fetchRes = fetch('/resume/', options);
-    fetchRes.then(res => res.text()).then((data) =>
-    {
-        return data;
-    });
-}
-
-// A human player has drawn one line on the gameboard.
-// Send the user's desired move to the server to determine if it
-// completes any squares. The server returns a tuple containing
-// (lineNum, box1, box2) where box1 and box2 indicate any completed
-// squares. A value of -1 means square not completed.
-// End game if move is (-1,-1,-1). Triggers other events to
-// notify UI.
-pydots.dotgame.validateMove = function (line, bAnimate=true)
-{
-    let moves = [];
-    let event;
-    // Send a POST request to the server informing it of our move
-    // The body of the request contains the current game state.
-    let specs = {
-        "size": GAME_SIZE,
-        "lines": pydots.dotgame.storage.lines,
-        "newline": line
-    }
-    // Tell fetch we want a POST using JSON data
-    // and send the request.
-    let options = {
-        method: 'POST',
-        headers: {
-            'Content-Type':
-                'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(specs)
-    }
-    let fetchRes = fetch('/verify/', options);
-    fetchRes.then(res =>
-        res.json()).then(d => {
-            d.forEach(move => {
-                // The final move in the list may signal the game is over
-                let gameIsOver = pydots.dotgame.gameOver(move);
-                if (gameIsOver)
-                {
-                    event = new CustomEvent("gameOver");
-                    document.dispatchEvent(event);
-                }
-                else
-                {
-                    moves.push(move);
-                    // Send an event to update the UI
-                    event = new CustomEvent("drawMove", {detail: {move: move}});
-                    document.dispatchEvent(event);
-                    // Update our internal score
-                    if (pydots.dotgame.storage.updatePlayerScore(move) > 0)
-                    {
-                        // Send an event to update the scoreboard on the UI
-                        let event = new CustomEvent("updateScore");
-                        document.dispatchEvent(event);
-                    }
-                    else
-                    {
-                        // Move to the other player
-                        pydots.dotgame.storage.switchPlayer();
-                        event = new CustomEvent("updatePlayer");
-                        document.dispatchEvent(event);
-                    }
-                }
-            })
-        });
-    return;
-}
-
-// Ask the computer for its move(s). For each move,
-// trigger drawMove event and others to notify UI.
-pydots.dotgame.makeMove = function ()
-{
-    let moves = [];
-    let event;
-    // Send a POST request to the server asking for the best move.
-    // The body of the request contains the current game state.
-    let specs = {
-        "size": pydots.dotgame.storage.level,
-        "lines": pydots.dotgame.storage.lines
-    }
-    // Tell fetch we want a POST using JSON data
-    // and send the request.
-    let options = {
-        method: 'POST',
-        headers: {
-            'Content-Type':
-                'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(specs)
-    }
-    let fetchRes = fetch('/find/', options);
-    fetchRes.then(res =>
-        res.json()).then(d => {
-                d.forEach(move => {
-                    // A list of moves is returned. The final entry in the
-                    // list may indicate the game has ended.
-                    let gameIsOver = pydots.dotgame.gameOver(move);
-                    if (gameIsOver)
-                    {
-                        // Tell the UI the game is ended
-                        event = new CustomEvent("gameOver");   
-                        document.dispatchEvent(event);
-                    }
-                    else
-                    {
-                        moves.push(move);
-                        // We have a valid move - update the gameboard
-                        event = new CustomEvent("drawMove", {detail: {move: move}});   
-                        document.dispatchEvent(event);
-                        // Do we need to update the score?
-                        if (pydots.dotgame.calculateScore(move) > 0)
-                        {
-                            // Send event to update the score
-                            event = new CustomEvent("updateScore");
-                            document.dispatchEvent(event);
-                        }
-                        else
-                        {
-                            // Machine turn has ended. Switch to human player
-                            pydots.dotgame.switchPlayers();
-                            event = new CustomEvent("updatePlayer");
-                            document.dispatchEvent(event);
-                        }
-                    }
-                })
-            });
-    return;
-}
-
-pydots.dotgame.gameOver = function (move)
-{
-    return move[0] < 0;
-}
-
-// Remove the indicated lines and box claims from the game board.
-// moves is a list of tuples (line_id, box_id), (line_id, box_id), ...
-pydots.dotgame.eraseMove = function (moves, bAnimate=true)
-{
-    return;
-}
-
-// Set the number of players: 2,3,or 4. Indicate which player
-// is the computer: 0,1,2,3,or 4. 0 means all players are
-// human. storePlayers(4,0) all are human. storePlayers(4,2)
-// means player 2 is the computer.
-pydots.dotgame.storePlayers = function(numPlayers, machine)
-{
-    // Error if numbers are not within range
-    if (numPlayers < 2 || numPlayers > 4)
-        throw new Error('Number of players must be between 2 and 4');
-    if (machine < 0 || machine > numPlayers)
-        throw new Error('Machine player cannot be greater than numPlayers');
-    localStorage.setItem('NumPlayers', JSON.stringify(numPlayers));
-    localStorage.setItem('Machine', JSON.stringify(machine));
-    // Start with 1. The number denotes which player has control of the board:
-    // (1,2,3, or 4). 
-    localStorage.setItem('Player', JSON.stringify(Number(1)));
-    // Set up the scores for the players
-    let score = [];
-    let name = [];
-    for (let i = 0; i <= numPlayers; i++)
-    {
-        // Player zero is the machine. The array[0] is not used
-        score.push(0);
-        name.push('');
-    }
-    localStorage.setItem('Scores', JSON.stringify(score));
-    localStorage.setItem('Names', JSON.stringify(name));
-}
-
-// Return true if it is the machine's turn.
-pydots.dotgame.isMachineTurn = function()
-{
-    let player = this.getPlayer();
-    return player == this.getMachinePlayer();
-}
-
 // Store line state, history, and claims in local storage to make sure we do not lose the
 // values on page refresh and we can resume games.
 class GameStorage {
+    #key = {
+        claim: "Claims",
+        history: "History",
+        level: "Level",
+        lines: "Lines",
+        machine: "Machine",
+        name: "Names",
+        numPlayers: "NumPlayers",
+        player: "Player",
+        score: "Scores",
+        theme: "Theme"
+    }
+    #maxPlayers = PLAYER_NAMES.length;
+    #numLevels = GAME_LEVELS.length;
+    #numThemes = GAME_THEMES.length;
+
     constructor(size=0, lines=null) {
-        this.#key = {
-            claim: "Claims",
-            history: "History",
-            level: "Level",
-            lines: "Lines",
-            machine: "Machine",
-            name: "Names",
-            numPlayers: "NumPlayers",
-            player: "Player",
-            score: "Scores",
-            theme: "Theme"
-        }
-
-        this.#maxPlayers = PLAYER_NAMES.length();
-        this.#numLevels = GAME_LEVELS.length();
-        this.#numThemes = GAME_THEMES.length();
-
         if (size > 0) {
             this.level = size;
         }
@@ -244,6 +38,7 @@ class GameStorage {
             this.lines = lines;
         }
     }
+    
     get claims() {
         let claims = localStorage.getItem(this.#key.claim);
         if (claims)
@@ -509,5 +304,181 @@ class GameStorage {
         // Reset game scores to zeros
         this.clearPlayerScores();
     }
+}
+
+pydots.dotgame.storage = new GameStorage();
+
+// Retrieve saved game from localstorage and POST it to server
+// Need to try different way. Cannot get fetch to change url.
+// Will try to use js to modify the request header, but still
+// post using an html form.
+pydots.dotgame.resumeGame = function()
+{
+    let game = {
+        "size": pydots.dotgame.storage.level,
+        "theme": pydots.dotgame.storage.theme,
+        "lines": pydots.dotgame.storage.lines,
+        "claims": pydots.dotgame.storage.claims
+    }
+    // Tell fetch we want a POST using JSON data
+    // and send the request.
+    let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type':
+                'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(game)
+    }
+    let fetchRes = fetch('/resume/', options);
+    fetchRes.then(res => res.text()).then((data) =>
+    {
+        return data;
+    });
+}
+
+// A human player has drawn one line on the gameboard.
+// Send the user's desired move to the server to determine if it
+// completes any squares. The server returns a tuple containing
+// (lineNum, box1, box2) where box1 and box2 indicate any completed
+// squares. A value of -1 means square not completed.
+// End game if move is (-1,-1,-1). Triggers other events to
+// notify UI.
+pydots.dotgame.validateMove = function (line, bAnimate=true)
+{
+    let moves = [];
+    let event;
+    // Send a POST request to the server informing it of our move
+    // The body of the request contains the current game state.
+    let specs = {
+        "size": GAME_SIZE,
+        "lines": pydots.dotgame.storage.lines,
+        "newline": line
+    }
+    // Tell fetch we want a POST using JSON data
+    // and send the request.
+    let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type':
+                'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(specs)
+    }
+    let fetchRes = fetch('/verify/', options);
+    fetchRes.then(res =>
+        res.json()).then(d => {
+            d.forEach(move => {
+                // The final move in the list may signal the game is over
+                let gameIsOver = pydots.dotgame.gameOver(move);
+                if (gameIsOver)
+                {
+                    event = new CustomEvent("gameOver");
+                    document.dispatchEvent(event);
+                }
+                else
+                {
+                    moves.push(move);
+                    // Send an event to update the UI
+                    event = new CustomEvent("drawMove", {detail: {move: move}});
+                    document.dispatchEvent(event);
+                    // Update our internal score
+                    if (pydots.dotgame.storage.updatePlayerScore(move) > 0)
+                    {
+                        // Send an event to update the scoreboard on the UI
+                        let event = new CustomEvent("updateScore");
+                        document.dispatchEvent(event);
+                    }
+                    else
+                    {
+                        // Move to the other player
+                        pydots.dotgame.storage.switchPlayer();
+                        event = new CustomEvent("updatePlayer");
+                        document.dispatchEvent(event);
+                    }
+                }
+            })
+        });
+    return;
+}
+
+// Ask the computer for its move(s). For each move,
+// trigger drawMove event and others to notify UI.
+pydots.dotgame.makeMove = function ()
+{
+    let moves = [];
+    let event;
+    // Send a POST request to the server asking for the best move.
+    // The body of the request contains the current game state.
+    let specs = {
+        "size": pydots.dotgame.storage.level,
+        "lines": pydots.dotgame.storage.lines
+    }
+    // Tell fetch we want a POST using JSON data
+    // and send the request.
+    let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type':
+                'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(specs)
+    }
+    let fetchRes = fetch('/find/', options);
+    fetchRes.then(res =>
+        res.json()).then(d => {
+                d.forEach(move => {
+                    // A list of moves is returned. The final entry in the
+                    // list may indicate the game has ended.
+                    let gameIsOver = pydots.dotgame.gameOver(move);
+                    if (gameIsOver)
+                    {
+                        // Tell the UI the game is ended
+                        event = new CustomEvent("gameOver");   
+                        document.dispatchEvent(event);
+                    }
+                    else
+                    {
+                        moves.push(move);
+                        // We have a valid move - update the gameboard
+                        event = new CustomEvent("drawMove", {detail: {move: move}});   
+                        document.dispatchEvent(event);
+                        // Do we need to update the score?
+                        if (pydots.dotgame.calculateScore(move) > 0)
+                        {
+                            // Send event to update the score
+                            event = new CustomEvent("updateScore");
+                            document.dispatchEvent(event);
+                        }
+                        else
+                        {
+                            // Machine turn has ended. Switch to human player
+                            pydots.dotgame.switchPlayers();
+                            event = new CustomEvent("updatePlayer");
+                            document.dispatchEvent(event);
+                        }
+                    }
+                })
+            });
+    return;
+}
+
+pydots.dotgame.gameOver = function (move)
+{
+    return move[0] < 0;
+}
+
+// Remove the indicated lines and box claims from the game board.
+// moves is a list of tuples (line_id, box_id), (line_id, box_id), ...
+pydots.dotgame.eraseMove = function (moves, bAnimate=true)
+{
+    return;
+}
+
+// Return true if it is the machine's turn.
+pydots.dotgame.isMachineTurn = function()
+{
+    let player = pydots.dotgame.storage.getPlayer;
+    return player == pydots.dotgame.storage.getMachinePlayer;
 }
 
