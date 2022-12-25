@@ -255,7 +255,7 @@ class GameStorage {
             localStorage.setItem(this.#key.score, JSON.stringify(scores));
         }
 
-        return scores[player];
+        return add;
     }
 
     pushMove(move) {
@@ -395,7 +395,7 @@ pydots.dotgame.validateMove = function (line, bAnimate=true)
                     event = new CustomEvent("drawMove", {detail: {move: move}});
                     document.dispatchEvent(event);
                     // Update our internal score
-                    if (pydots.dotgame.storage.updatePlayerScore(move) > 0)
+                    if (pydots.dotgame.storage.updatePlayerScore(pydots.dotgame.storage.player, move) > 0)
                     {
                         // Send an event to update the scoreboard on the UI
                         let event = new CustomEvent("updateScore");
@@ -456,7 +456,7 @@ pydots.dotgame.makeMove = function ()
                         event = new CustomEvent("drawMove", {detail: {move: move}});   
                         document.dispatchEvent(event);
                         // Do we need to update the score?
-                        if (pydots.dotgame.storage.updatePlayerScore(move) > 0)
+                        if (pydots.dotgame.storage.updatePlayerScore(pydots.dotgame.storage.machinePlayer, move) > 0)
                         {
                             // Send event to update the score
                             event = new CustomEvent("updateScore");
@@ -465,7 +465,7 @@ pydots.dotgame.makeMove = function ()
                         else
                         {
                             // Machine turn has ended. Switch to human player
-                            pydots.dotgame.switchPlayers();
+                            pydots.dotgame.storage.switchPlayer();
                             event = new CustomEvent("updatePlayer");
                             document.dispatchEvent(event);
                         }
@@ -490,7 +490,7 @@ pydots.dotgame.eraseMove = function (moves, bAnimate=true)
 // Return true if it is the machine's turn.
 pydots.dotgame.isMachineTurn = function()
 {
-    let player = pydots.dotgame.storage.getPlayer;
+    let player = pydots.dotgame.storage.player;
     return player == pydots.dotgame.storage.machinePlayer;
 }
 
