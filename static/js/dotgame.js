@@ -52,7 +52,7 @@ class GameStorage {
     }
 
     set claims(claims) {
-        localStorage.setItem(this.#key.claim, JSON.stringify(this.claims));
+        localStorage.setItem(this.#key.claim, JSON.stringify(claims));
     }
 
     get history() {
@@ -65,7 +65,7 @@ class GameStorage {
     }
 
     set history(history) {
-        localStorage.setItem(this.#key.history, JSON.stringify(this.history));
+        localStorage.setItem(this.#key.history, JSON.stringify(history));
     }
 
     get level() {
