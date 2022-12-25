@@ -47,7 +47,7 @@ class GameStorage {
             claims = [];  
             
         if (claims.length == 0)
-            claims = new Array(this.level**2).fill(0);;
+            claims = new Array(this.level**2).fill(0);
         return claims;
     }
 
@@ -79,16 +79,16 @@ class GameStorage {
     }
 
     set level(level) {
-         if (level >= 0 && level < this.#numLevels)
+         if (level >= 4  && level < 10)
             localStorage.setItem(this.#key.level, JSON.stringify(level));
         else
             throw new Error('Invalid game level');
     }
 
     get levelName() {
-        let level = this.Level();
+        let level = this.level;
         let name = 'Not found';
-        for (let i=0; i<GAME_LEVELS.length; i++)
+        for (let i=0; i<this.#numLevels; i++)
         {
             if (level == GAME_LEVELS[i][1])
             {
@@ -127,12 +127,19 @@ class GameStorage {
 
     get theme() {
         let theme = localStorage.getItem(this.#key.theme);
-        if (theme === null) theme = INIT_THEME;
+        if (theme)
+            theme = JSON.parse(theme);
+        else
+            theme = GAME_THEMES[DEFAULT_THEME_INDEX][1];
         return theme;
     }
 
     set theme(theme) {
-        if (theme >= 0 && theme < this.#numThemes)
+        let valid = false;
+        for (let i=0; i<GAME_THEMES.length; i++) {
+            if (GAME_THEMES[i][1] == theme) valid = true;
+        }
+        if (valid)
             localStorage.setItem(this.#key.theme, JSON.stringify(theme));
         else
             throw new Error('Invalid theme specified');
@@ -140,10 +147,11 @@ class GameStorage {
 
     clearPlayerNames() {
         let names = [];
-        for (let i = 0; i <= this.#maxPlayers; i++)
+        names.push('');
+        for (let i = 0; i < this.#maxPlayers; i++)
         {
             // Player zero is the machine. The array[0] is not used
-            names.push('');
+            names.push(PLAYER_NAMES[i][0]);
         }
         localStorage.setItem(this.#key.name, JSON.stringify(names));
         return names;
@@ -277,7 +285,11 @@ class GameStorage {
         return history;
     }
      
-    storeNewGameSetup(numPlayers, machine) {
+    storeNewGameSetup(numPlayers=0, machine=0) {
+        if (numPlayers === 0)
+            numPlayers = PARTICIPANTS[DEFAULT_PARTICIPANT_INDEX][1];
+        if (machine === 0)
+            machine = DEFAULT_MACHINE_PLAYER;
         this.numPlayers = numPlayers;
         this.machinePlayer = machine;
         this.clearPlayerNames();
@@ -444,7 +456,7 @@ pydots.dotgame.makeMove = function ()
                         event = new CustomEvent("drawMove", {detail: {move: move}});   
                         document.dispatchEvent(event);
                         // Do we need to update the score?
-                        if (pydots.dotgame.calculateScore(move) > 0)
+                        if (pydots.dotgame.storage.updatePlayerScore(move) > 0)
                         {
                             // Send event to update the score
                             event = new CustomEvent("updateScore");
@@ -479,6 +491,6 @@ pydots.dotgame.eraseMove = function (moves, bAnimate=true)
 pydots.dotgame.isMachineTurn = function()
 {
     let player = pydots.dotgame.storage.getPlayer;
-    return player == pydots.dotgame.storage.getMachinePlayer;
+    return player == pydots.dotgame.storage.machinePlayer;
 }
 

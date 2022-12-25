@@ -5,7 +5,7 @@
 //
 // Edit this file to change the look and feel of the dots game.
 // You need to listen for and respond to the following four custom events:
-// 1) drawMove - Draw one line on the game board. Use dotgame.getPlayer()
+// 1) drawMove - Draw one line on the game board. Use pydots.dotgame.storage.player
 // to see who the current player is.
 // 2) updatePlayer - The turn has changed. Update the board to indicate
 // whose turn it is. If it is the computer's turn, call makeMove.
@@ -66,6 +66,8 @@ pydots.initVars = () => {
   const bodyStyles = document.body.style;
   // Set variables in our style sheet.
   bodyStyles.setProperty('--gridSize', GAME_SIZE);
+  pydots.dotgame.storage.level = GAME_SIZE;
+  pydots.dotgame.storage.lines = INIT_LINES;
 
   // Initialize the game size drop down on the panel
   const sizeDropDown = document.getElementById('glevel');
@@ -74,8 +76,8 @@ pydots.initVars = () => {
   // Set the theme to whatever it was before. We keep that value in localStorage
   const theme = pydots.dotgame.storage.theme;
   pydots.changeTheme(theme);
-  pydots.displayScores('panel');
-};
+  pydots.dotgame.storage.theme = theme;
+ };
 
 //--------------------------------
 // ON PAGE LOAD
@@ -190,7 +192,7 @@ pydots.drawMove = (evt) => {
     const line = document.getElementById(move[0].toString());
     line.classList.add('selected');
     // claim any squares
-    pydots.claimSquares(move, pydots.dotgame.getPlayer());
+    pydots.claimSquares(move, pydots.dotgame.storage.player);
   }
 };
 
@@ -297,7 +299,7 @@ pydots.displayScores = (location) => {
   const element = document.getElementById(location);
   const spans = element.getElementsByTagName('span');
   // Skill Level
-  const level = pydots.dotgame.storage.levellName;
+  const level = pydots.dotgame.storage.levelName;
   spans[0].textContent = `Skill Level: ${level}`;
   // Update the scores
   const numPlayers = pydots.dotgame.storage.numPlayers;

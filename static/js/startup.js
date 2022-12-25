@@ -34,7 +34,7 @@ pydots.startup.gameSetup = function () {
     else
     {
         // Set everything back to defaults except for level and theme.
-        pydots.dotgame.storage.clearGameValues();
+        pydots.dotgame.storage.storeNewGameSetup();
         document.getElementById('glevel').value = pydots.dotgame.storage.level;
         document.getElementById('gcolors').value = pydots.dotgame.storage.theme;
         // Submit our form
