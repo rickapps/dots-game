@@ -14,9 +14,6 @@
     {% if lines is defined %}
     const INIT_LINES = {{lines|tojson}};
     {% endif %}
-    {% if reset is defined %}
-    const RESET = {{reset|tojson}};
-    {% endif %}
 
     const GAME_LEVELS =	[
     ['Easy (3x3)', 3],

@@ -6,7 +6,6 @@ from flask import Flask, render_template, request
 import json
 import dotgame
 app = Flask(__name__)
-app.config.from_pyfile('config.py')
 
 # Some definitions:
 # lines: a list of lines on the gameboard. A value of 1 means the line
@@ -31,20 +30,6 @@ app.config.from_pyfile('config.py')
 # server request using size, lines, and claims as input. For a new game, claims
 # is all zeros so it is not needed. 
 #### 
-#  Start the game with default values. 
-glevels = app.config['GAME_LEVELS']
-gthemes = app.config['GAME_THEMES']
-gplayers = app.config['PARTICIPANTS']
-machine = app.config['MACHINE_NAME']
-nomachine = app.config['NO_MACHINE']
-pnames = app.config['PLAYER_NAMES']
-default_size = app.config['DEFAULT_SIZE_INDEX']
-default_theme = app.config['DEFAULT_THEME_INDEX']
-size = int(glevels[default_size][1])
-theme = gthemes[default_theme][1]
-lines = []
-boxes = []
-
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('error.html'), 404
@@ -56,30 +41,26 @@ def internal_error(error):
 # Start a new game with values specified by the user (or not). 
 @app.route("/new/", methods = ['GET', 'POST'])
 def new_game():
-    global size, theme
+    global size
     if request.method == 'POST':
         size = int(request.form['glevel'])
-        theme = request.form['gcolors']
     lines = dotgame.init_game(size)
     boxes = dotgame.game_board(size, lines)
-    return render_template('mainpage.html',size=size, theme=theme, \
-        lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes, \
-        reset=True)
+    return render_template('mainpage.html',size=size, \
+        lines=lines, boxes=boxes)
 
 # Resume a game using values from local storage
 # The post is done from javascript.
 @app.route("/resume/", methods = ['POST'])
 def resume_game():
     size = int(request.form['size'])
-    theme = request.form['theme']
     # There has got to be a better way to do this! How can I
     # send array data on a form?
     lines = list(map(int, request.form['lines'][1:-1].split(',')))
     claims = list(map(int, request.form['claims'][1:-1].split(',')))
     boxes = dotgame.game_board(size, lines, claims)
-    return render_template('mainpage.html',size=size, theme=theme, \
-        lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes, \
-        reset=False)
+    return render_template('mainpage.html',size=size, \
+        lines=lines, boxes=boxes)
 
 # Return a list of moves to make for the specified lines array.
 # This is where the 'computer' calculates the best move
@@ -105,20 +86,11 @@ def verify_user_move():
     # Return a tuple (line, boxA, boxB) as json
     return json.dumps(dotgame.verify_move(size, lines, line))
 
-# Display the options page.
-@app.route("/options/")
-def show_options():
-    return render_template('options.html', size=size, theme=theme, \
-        lines=lines, boxes=boxes, glevels=glevels, gthemes=gthemes, \
-        gplayers=gplayers, machine=machine, nomachine=nomachine, \
-        pnames=pnames)
-
 # A catch-all for unknown requests. path is here for future use.
 @app.route("/", defaults={'path': ''})
 @app.route('/<path:path>')
 def home(path):
-    return render_template('startup.html',size=size, theme=theme, \
-         lines=lines)
+    return render_template('startup.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

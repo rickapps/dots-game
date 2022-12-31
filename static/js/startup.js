@@ -25,7 +25,6 @@ pydots.startup.gameSetup = function () {
     if (len > 0)
     {
         document.getElementById('size').value = pydots.dotgame.storage.level;
-        document.getElementById('theme').value = pydots.dotgame.storage.theme;
         document.getElementById('lines').value = JSON.stringify(pydots.dotgame.storage.lines);
         document.getElementById('claims').value = JSON.stringify(pydots.dotgame.storage.claims);
         // Submit our form
@@ -36,7 +35,6 @@ pydots.startup.gameSetup = function () {
         // Set everything back to defaults except for level and theme.
         pydots.dotgame.storage.storeNewGameSetup();
         document.getElementById('glevel').value = pydots.dotgame.storage.level;
-        document.getElementById('gcolors').value = pydots.dotgame.storage.theme;
         // Submit our form
         document.startNewGame.submit();
     }
