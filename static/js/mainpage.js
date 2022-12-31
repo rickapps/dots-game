@@ -56,8 +56,6 @@ window.addEventListener('DOMContentLoaded', () => {
   pydots.updateScore();
 });
 
-// window.addEventListener('load', pydots.pageSetup);
-
 //--------------------------------
 // INIT VARS
 //--------------------------------
@@ -80,43 +78,6 @@ pydots.initVars = () => {
  };
 
 //--------------------------------
-// ON PAGE LOAD
-//--------------------------------
-// Check if we have a stored game. If so, set up
-// the panel with display values. Set up the rest
-// of the page with default values.
-pydots.pageSetup = () => {
-};
-
-//--------------------------------
-// UPDATE INDEX PAGE
-//--------------------------------
-const playerDropDown = document.getElementById('players');
-if (playerDropDown) {
-  const machineDropDown = document.getElementById('machine');
-  playerDropDown.onchange = () => {
-    pydots.setMachineList(machineDropDown, this.value);
-    pydots.setPlayerList(this.value, machineDropDown.value);
-  };
-  machineDropDown.onchange = () => {
-    pydots.setPlayerList(playerDropDown.value, this.value);
-  };
-}
-
-//--------------------------------
-// START NEW GAME
-//--------------------------------
-const newGame = document.getElementById('startNewGame');
-if (newGame) {
-  newGame.onsubmit = () => {
-    // Clear our local storage values
-    pydots.dotgame.storage.clearGameValues();
-    // Store player info - number, names
-    return true;
-  };
-}
-
-//--------------------------------
 // RESTART GAME
 //--------------------------------
 const restart = document.getElementById('restartGame');
@@ -129,23 +90,6 @@ if (restart) {
       // Clear our local storage values
       if (isConfirmed) { pydots.dotgame.storage.clearGameValues(); } else { return false; }
     }
-  };
-}
-
-//--------------------------------
-// RESUME GAME
-//--------------------------------
-const resume = document.getElementById('resumeGame');
-if (resume) {
-  // For now, we will pull the info from storage and load it into html
-  // input fields. Later we will see if we can modify the request header
-  // before the form is posted and do away with the input fields.
-  resume.onsubmit = function () {
-    document.getElementById('size').value = pydots.dotgame.storage.level;
-    document.getElementById('theme').value = pydots.dotgame.storage.theme;
-    document.getElementById('lines').value = JSON.stringify(pydots.dotgame.storage.lines);
-    document.getElementById('claims').value = JSON.stringify(pydots.dotgame.storage.claims);
-    return true;
   };
 }
 

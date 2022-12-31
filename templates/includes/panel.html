@@ -11,13 +11,7 @@
 <form action="/new/" method="POST" id="restartGame">
     <fieldset>
         <input type="hidden" name="glevel" value="{{size|tojson}}">
-        <legend>Options:</legend>
-        <label for="gcolors">Colors:</label>
-        <select type="text" id="gcolors" name="gcolors">
-        <!-- The dropdown list values come from js code -->
-        </select><br><br>
         <input type="submit" value="Restart Game">
-        <a class="anchor-btn" href="/options/">Change Game</a>
     </fieldset>
 </form>
 {% endblock %}
