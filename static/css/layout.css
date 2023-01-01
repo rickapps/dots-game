@@ -146,6 +146,10 @@ body {
   color: inherit;
 }
 
+.mnu-list hr {
+  margin: 0;
+}
+
 .mnu-list li {
   position: relative;
   display: block;

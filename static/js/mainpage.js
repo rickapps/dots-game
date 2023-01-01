@@ -67,6 +67,14 @@ pydots.initVars = () => {
   pydots.dotgame.storage.level = GAME_SIZE;
   pydots.dotgame.storage.lines = INIT_LINES;
 
+  let parent = document.getElementById('gameSize');
+  pydots.populateMainMenu(parent, GAME_LEVELS);
+  parent = document.getElementById('gameSetting');
+  pydots.populateMainMenu(parent, PARTICIPANTS);
+  pydots.addComputerPlayerToMainMenu(parent, MACHINE_NAME);
+  parent = document.getElementById('gameTheme');
+  pydots.populateMainMenu(parent, GAME_THEMES);
+  parent.addEventListener('click', pydots.selectNewTheme);
   // Initialize the game size drop down on the panel
   const sizeDropDown = document.getElementById('glevel');
   if (sizeDropDown) sizeDropDown.value = GAME_SIZE;
@@ -96,6 +104,10 @@ if (restart) {
 //--------------------------------
 // EVENT HANDLERS
 //--------------------------------
+pydots.selectNewTheme = (evt) => {
+  let myName = 'Rick';
+  let myname = evt.target.id;
+}
 // Reset the board to indicate the current player's turn
 pydots.updatePlayer = () => {
   // Update the scoreboard to show the current player
@@ -176,6 +188,25 @@ pydots.fillSquare = (boxNum, player) => {
   square.classList.add(claim);
 };
 
+pydots.populateMainMenu = (parent, sourceArray) => {
+  for (let vals of sourceArray) {
+    let item = document.createElement('li');
+    item.innerHTML = `<a href="${vals[1]}">${vals[0]}</a>`;
+    parent.appendChild(item);
+  }
+};
+
+pydots.addComputerPlayerToMainMenu = (parent, source) => {
+  let item = document.createElement('hr');
+  parent.appendChild(item);
+  item = document.createElement('li');
+  item.innerHTML = `<a href="#" title="Is one of the players the computer?">${source}</a>`;
+  parent.appendChild(item);
+}
+
+// *********************************************************
+// We can get rid of this stuff                          
+// ******************************************************* */
 // Save the info the user entered into the startNewGame form
 // This is information that is not sent to the server
 pydots.storePlayerInfo = () => {
