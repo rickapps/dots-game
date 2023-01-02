@@ -165,6 +165,7 @@ body {
 .mnu-list li:hover {
   background-color: blue;
   color: yellow;
+  cursor: grab;
 }
 
 .mnu-list ul {

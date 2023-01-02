@@ -106,14 +106,7 @@ if (restart) {
 // EVENT HANDLERS
 //--------------------------------
 pydots.selectNewTheme = (evt) => {
-  let lookup = evt.target.innerHTML;
-  let value = '';
-  for (let pairs of GAME_THEMES) {
-    if (pairs[0] === lookup) {
-      value = pairs[1];
-      break;
-    }
-  } 
+  let value = evt.target.firstElementChild.value;
   if (value.length > 0) {
     pydots.changeTheme(value);
     pydots.dotgame.storage.theme = value;
@@ -202,9 +195,11 @@ pydots.fillSquare = (boxNum, player) => {
 pydots.populateMainMenu = (parent, sourceArray) => {
   for (let vals of sourceArray) {
     let item = document.createElement('li');
-    item.setAttribute('data-lookup', vals[1]);
-  
-    item.innerHTML = `<a href="${vals[1]}">${vals[0]}</a>`;
+    let textnode = document.createTextNode(vals[0]);
+    item.appendChild(textnode);
+    let data = document.createElement('data');
+    data.value = vals[1];
+    item.appendChild(data);
     parent.appendChild(item);
   }
 };
