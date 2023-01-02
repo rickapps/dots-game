@@ -51,9 +51,13 @@ window.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('updateScore', pydots.updateScore);
   document.addEventListener('gameOver', pydots.endGame);
 
+});
+
+window.addEventListener('load', () => {
   pydots.initVars();
   pydots.updatePlayer();
   pydots.updateScore();
+
 });
 
 //--------------------------------
@@ -69,12 +73,9 @@ pydots.initVars = () => {
 
   let parent = document.getElementById('gameSize');
   pydots.populateMainMenu(parent, GAME_LEVELS);
-  parent = document.getElementById('gameSetting');
-  pydots.populateMainMenu(parent, PARTICIPANTS);
-  pydots.addComputerPlayerToMainMenu(parent, MACHINE_NAME);
   parent = document.getElementById('gameTheme');
   pydots.populateMainMenu(parent, GAME_THEMES);
-  parent.addEventListener('click', pydots.selectNewTheme);
+  parent.addEventListener('click', pydots.selectNewTheme, false);
   // Initialize the game size drop down on the panel
   const sizeDropDown = document.getElementById('glevel');
   if (sizeDropDown) sizeDropDown.value = GAME_SIZE;
@@ -105,8 +106,18 @@ if (restart) {
 // EVENT HANDLERS
 //--------------------------------
 pydots.selectNewTheme = (evt) => {
-  let myName = 'Rick';
-  let myname = evt.target.id;
+  let lookup = evt.target.innerHTML;
+  let value = '';
+  for (let pairs of GAME_THEMES) {
+    if (pairs[0] === lookup) {
+      value = pairs[1];
+      break;
+    }
+  } 
+  if (value.length > 0) {
+    pydots.changeTheme(value);
+    pydots.dotgame.storage.theme = value;
+  }
 }
 // Reset the board to indicate the current player's turn
 pydots.updatePlayer = () => {
@@ -191,6 +202,8 @@ pydots.fillSquare = (boxNum, player) => {
 pydots.populateMainMenu = (parent, sourceArray) => {
   for (let vals of sourceArray) {
     let item = document.createElement('li');
+    item.setAttribute('data-lookup', vals[1]);
+  
     item.innerHTML = `<a href="${vals[1]}">${vals[0]}</a>`;
     parent.appendChild(item);
   }
@@ -200,6 +213,7 @@ pydots.addComputerPlayerToMainMenu = (parent, source) => {
   let item = document.createElement('hr');
   parent.appendChild(item);
   item = document.createElement('li');
+  item.dataset.lookup = 0;
   item.innerHTML = `<a href="#" title="Is one of the players the computer?">${source}</a>`;
   parent.appendChild(item);
 }

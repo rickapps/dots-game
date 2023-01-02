@@ -140,6 +140,7 @@ body {
 }
 
 .mnu-list a {
+  display: block;
   padding: 0;
   margin: 0;
   text-decoration: none;
@@ -156,7 +157,7 @@ body {
   z-index: 10;
   width: 8rem;
   float: none;
-  padding: 0.5rem 0 0.5rem 0.5rem;
+  padding: 0.5rem 0 .5rem 0.5rem;
   background-color: var(--header-color);
   color: var(--dot-color);
 }
@@ -337,7 +338,7 @@ form {
 
   .mnu-list li {
       float: left;
-      padding: 0.3rem 0.5rem 0.25rem 0.5rem;
+      padding: 0.3rem 0.5rem 0.53rem 0.5rem;
   }
 }
 
