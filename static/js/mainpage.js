@@ -50,10 +50,6 @@ window.addEventListener('DOMContentLoaded', () => {
   // Add event listener to update the score.
   document.addEventListener('updateScore', pydots.updateScore);
   document.addEventListener('gameOver', pydots.endGame);
-
-});
-
-window.addEventListener('load', () => {
   pydots.initVars();
   pydots.updatePlayer();
   pydots.updateScore();
@@ -75,7 +71,7 @@ pydots.initVars = () => {
   pydots.populateMainMenu(parent, GAME_LEVELS);
   parent = document.getElementById('gameTheme');
   pydots.populateMainMenu(parent, GAME_THEMES);
-  parent.addEventListener('click', pydots.selectNewTheme, false);
+  parent.addEventListener('click', pydots.selectNewTheme, {useCapture: true});
   // Initialize the game size drop down on the panel
   const sizeDropDown = document.getElementById('glevel');
   if (sizeDropDown) sizeDropDown.value = GAME_SIZE;

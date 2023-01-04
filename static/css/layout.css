@@ -139,18 +139,6 @@ body {
   display: none;
 }
 
-.mnu-list a {
-  display: block;
-  padding: 0;
-  margin: 0;
-  text-decoration: none;
-  color: inherit;
-}
-
-.mnu-list hr {
-  margin: 0;
-}
-
 .mnu-list li {
   position: relative;
   display: block;
@@ -222,7 +210,6 @@ body {
 .mnu-button:focus {
   pointer-events: none;
 }
-
 
 article {
   margin: 8px;

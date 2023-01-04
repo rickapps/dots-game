@@ -7,7 +7,24 @@
 	"launch": {
 		"configurations": [
 			{
-				"type": "pwa-chrome",
+				"name": "Python: Flask",
+				"type": "python",
+				"request": "launch",
+				"module": "flask",
+				"env": {
+					"FLASK_APP": "main.py",
+					"FLASK_DEBUG": "1"
+				},
+				"args": [
+					"run",
+					"--no-debugger",
+					"--no-reload"
+				],
+				"jinja": true,
+				"justMyCode": true
+			},
+			{
+				"type": "chrome",
 				"name": "http://127.0.0.1:5000",
 				"request": "launch",
 				"url": "http://127.0.0.1:5000"
