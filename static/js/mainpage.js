@@ -51,11 +51,6 @@ window.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('updateScore', pydots.updateScore);
   document.addEventListener('gameOver', pydots.endGame);
 
-  document.getElementById('mnuSetting').addEventListener('click', pydots.showSettingDlg);
-  document.getElementById('mnuHelp').addEventListener('click', pydots.showHelpDlg);
-
-  const hbutton = document.getElementById('mnuTheme');
-  hbutton.addEventListener('hover', pydots.initMenu);
   pydots.initVars();
   pydots.updatePlayer();
   pydots.updateScore();
@@ -63,9 +58,35 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 pydots.initMenu = () => {
-  let parent = document.getElementById('mnuNew');
-  parent = document.getElementById('mnuTheme');
-  parent.addEventListener('click', pydots.selectNewTheme);
+  // Note - listen for mousedown rather than click. 
+  // css is based on focus, click changes the focus.
+  const menu = document.querySelector('ul.mnu-list');
+  const items = menu.children;
+  let subMenu;
+  for (let item of items) {
+    switch (item.firstElementChild.value) {
+      case 'mnuNew':
+        subMenu = document.createElement('ul');
+        pydots.populateMainMenu(subMenu, GAME_LEVELS);
+        subMenu.addEventListener('mousedown', pydots.selectNewTheme);
+        item.appendChild(subMenu);
+        break;
+      case 'mnuSettings':
+        item.addEventListener('mousedown', pydots.showSettingDlg);
+        break;
+      case 'mnuTheme':
+        subMenu = document.createElement('ul');
+        pydots.populateMainMenu(subMenu, GAME_THEMES);
+        subMenu.addEventListener('mousedown', pydots.selectNewTheme);
+        item.appendChild(subMenu);
+        break;
+      case 'mnuUndo':
+        break;
+      case 'mnuHelp':
+        item.addEventListener('mousedown', pydots.showHelpDlg);
+        break;
+    };
+  };
 }
 
 pydots.showSettingDlg = () => {
@@ -87,11 +108,8 @@ pydots.initVars = () => {
   pydots.dotgame.storage.level = GAME_SIZE;
   pydots.dotgame.storage.lines = INIT_LINES;
 
-  let parent = document.getElementById('mnuNew');
-  pydots.populateMainMenu(parent, GAME_LEVELS);
-  parent = document.getElementById('mnuTheme');
-  pydots.populateMainMenu(parent, GAME_THEMES);
-  parent.addEventListener('click', pydots.selectNewTheme);
+  pydots.initMenu();
+
   // Initialize the game size drop down on the panel
   const sizeDropDown = document.getElementById('glevel');
   if (sizeDropDown) sizeDropDown.value = GAME_SIZE;
