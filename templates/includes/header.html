@@ -1,5 +1,5 @@
 {% block body %}
-<div tabindex="0" class="mnu-button">
+<div id="mnu-button" tabindex="0" class="mnu-button">
     <span class="mnu-icon"></span>
     <span class="mnu-logo">
         <span class="mnu-short">Menu</span>
@@ -7,10 +7,10 @@
     </span>
  </div>
 <ul class="mnu-list">
-    <li>New Game<ul id="gameSize"></ul></li>
-    <li>Change Game</li>
-    <li>Theme<ul id="gameTheme"></ul></li>
+    <li>New Game<ul id="mnuNew"></ul></li>
+    <li id="mnuSetting">Change Game</li>
+    <li>Theme<ul id="mnuTheme"></ul></li>
     <li>Undo</li>
-    <li>Help</li>
+    <li id="mnuHelp">Help</li>
 </ul>
 {% endblock %}

@@ -233,28 +233,6 @@ form {
   text-align: right;
 } 
 
-.modal-dialog {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 90vmin;
-  height: 90vmin;
-  background-color: rgba(0,0,0,0.7);
-  display: none;
-}
-
-.modal-dialog-message {
-  position: absolute;
-   top: 50%;
-   left: 50%;
-   transform: translate(-50%, -50%);
-   background-color: blue;
- }
- 
-.modal-dialog-show {
-  display: block;
-}
-
 /**************************/
 /* Special for options page */
 /**************************/

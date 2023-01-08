@@ -50,11 +50,31 @@ window.addEventListener('DOMContentLoaded', () => {
   // Add event listener to update the score.
   document.addEventListener('updateScore', pydots.updateScore);
   document.addEventListener('gameOver', pydots.endGame);
+
+  document.getElementById('mnuSetting').addEventListener('click', pydots.showSettingDlg);
+  document.getElementById('mnuHelp').addEventListener('click', pydots.showHelpDlg);
+
+  const hbutton = document.getElementById('mnuTheme');
+  hbutton.addEventListener('hover', pydots.initMenu);
   pydots.initVars();
   pydots.updatePlayer();
   pydots.updateScore();
 
 });
+
+pydots.initMenu = () => {
+  let parent = document.getElementById('mnuNew');
+  parent = document.getElementById('mnuTheme');
+  parent.addEventListener('click', pydots.selectNewTheme);
+}
+
+pydots.showSettingDlg = () => {
+  document.getElementById('settingDlg').showModal();
+}
+
+pydots.showHelpDlg = () => {
+  document.getElementById('helpDlg').showModal();
+}
 
 //--------------------------------
 // INIT VARS
@@ -67,11 +87,11 @@ pydots.initVars = () => {
   pydots.dotgame.storage.level = GAME_SIZE;
   pydots.dotgame.storage.lines = INIT_LINES;
 
-  let parent = document.getElementById('gameSize');
+  let parent = document.getElementById('mnuNew');
   pydots.populateMainMenu(parent, GAME_LEVELS);
-  parent = document.getElementById('gameTheme');
+  parent = document.getElementById('mnuTheme');
   pydots.populateMainMenu(parent, GAME_THEMES);
-  parent.addEventListener('click', pydots.selectNewTheme, {useCapture: true});
+  parent.addEventListener('click', pydots.selectNewTheme);
   // Initialize the game size drop down on the panel
   const sizeDropDown = document.getElementById('glevel');
   if (sizeDropDown) sizeDropDown.value = GAME_SIZE;
@@ -133,8 +153,7 @@ pydots.playerMove = (evt) => {
 
 pydots.endGame = () => {
   pydots.dotgame.storage.clearGameValues();
-  const dlg = document.getElementById('endGameDlg');
-  dlg.classList.toggle('modal-dialog-show');
+  document.getElementById('winnerDlg').showModal();
 };
 
 // Response to drawMove event.

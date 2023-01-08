@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="The old pencil and paper dots game from school updated for the web. One to four players.">
-    <title>Play Dots and Boxes free at this website. One to four players. No ads. No signup.</title>
+    <title>Play the game Dots and Boxes</title>
     <meta name="author" content="RickApps">
     <link rel="stylesheet" href="/static/css/themes.css">
     <link rel="stylesheet" href="/static/css/layout.css">
@@ -13,12 +13,36 @@
 </head>
 <body id="mainPage">
     <div id="wrapper">
+        <dialog id="helpDlg">
+            <form method="dialog">
+            <h2>How to Play Dots</h2>
+            <p>Players take turns drawing one horizontal or vertical line that connects two adjacent dots. Diagonal lines are not
+               allowed. A player is awarded one point each time they draw the fourth side of a single square that completes a box. 
+               That player also continues drawing lines and gaining points provided each new line they draw completes another box. 
+               Remember, each time you complete a box, you must draw another line. Your turn ends and your opponent's turn starts
+               when you draw a line that does not complete a box. The game is over when there are no more dots to connect. The player 
+               that completes the most boxes wins. Play against the computer, or against another person. Your game is saved to 
+               your computer. You can return to this website anytime to resume your last game in progress.</p>
+            <button value="cancel">Return to Game</button>
+            </form>
+        </dialog>
+        <dialog id="settingDlg">
+            <form method="dialog">
+            <h2>Game Settings</h2>
+            <button value="default">OK</button>
+            </form>
+        </dialog>
+        <dialog id="winnerDlg">
+            <form method="dialog">
+                <h2>Game Over</h2>
+                <button value="default">OK</button>
+                </form>
+            </dialog>
         <header>
             {% include 'includes/header.html' %}
         </header>
         <main>
         {% include 'includes/gameboard.html' %}
-        {% include 'includes/endgame.html' %}
         </main>
         <section id="panel">
         {% include 'includes/panel.html' %}
