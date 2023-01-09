@@ -79,7 +79,15 @@ class GameStorage {
     }
 
     set level(level) {
-         if (level >= 4  && level < 10)
+        let found = false;
+        for (let val of GAME_LEVELS) {
+            if (val[1] == level)
+            {
+                found = true;
+                break;
+            }
+        }
+         if (found)
             localStorage.setItem(this.#key.level, JSON.stringify(level));
         else
             throw new Error('Invalid game level');

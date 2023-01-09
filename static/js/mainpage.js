@@ -51,11 +51,32 @@ window.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('updateScore', pydots.updateScore);
   document.addEventListener('gameOver', pydots.endGame);
 
+  document.getElementById('restartGame').addEventListener('submit', (e) => {
+      const ok = pydots.endGameInProgress();
+      if (!ok)
+        e.preventDefault();
+      return ok;
+  });
+
   pydots.initVars();
   pydots.updatePlayer();
   pydots.updateScore();
 
 });
+
+pydots.endGameInProgress = () => {
+  let isConfirmed = true;
+  const moves = pydots.dotgame.storage.history;
+  if (moves.length > 0) {
+    isConfirmed = confirm('Do you want to end your current game?');
+  }
+  // Clear our local storage values
+  if (isConfirmed) { 
+    pydots.dotgame.storage.clearGameValues(); 
+  }
+  return isConfirmed;
+}
+
 
 pydots.initMenu = () => {
   // Note - listen for mousedown rather than click. 
@@ -68,7 +89,7 @@ pydots.initMenu = () => {
       case 'mnuNew':
         subMenu = document.createElement('ul');
         pydots.populateMainMenu(subMenu, GAME_LEVELS);
-        subMenu.addEventListener('mousedown', pydots.selectNewTheme);
+        subMenu.addEventListener('mousedown', pydots.restartGame);
         item.appendChild(subMenu);
         break;
       case 'mnuSettings':
@@ -110,30 +131,19 @@ pydots.initVars = () => {
 
   pydots.initMenu();
 
-  // Initialize the game size drop down on the panel
-  const sizeDropDown = document.getElementById('glevel');
-  if (sizeDropDown) sizeDropDown.value = GAME_SIZE;
-
   // Set the theme to whatever it was before. We keep that value in localStorage
   const theme = pydots.dotgame.storage.theme;
   pydots.changeTheme(theme);
   pydots.dotgame.storage.theme = theme;
  };
 
-//--------------------------------
-// RESTART GAME
-//--------------------------------
-const restart = document.getElementById('restartGame');
-if (restart) {
-  restart.onsubmit = () => {
-    // Verify it is what our user wants to do
-    const moves = pydots.dotgame.storage.history;
-    if (moves.length > 0) {
-      const isConfirmed = confirm('Do you want to end your current game?');
-      // Clear our local storage values
-      if (isConfirmed) { pydots.dotgame.storage.clearGameValues(); } else { return false; }
-    }
-  };
+pydots.restartGame = (evt) => {
+  if (pydots.endGameInProgress())
+  {
+    const gSize = document.getElementById('glevel');
+    gSize.value = evt.target.firstElementChild.value;
+    document.getElementById('restartGame').submit();
+  }
 }
 
 //--------------------------------
