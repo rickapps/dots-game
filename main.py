@@ -37,13 +37,11 @@ def page_not_found(error):
 @app.errorhandler(500)
 def internal_error(error):
     return render_template('error.html'), 500
-    
+
 # Start a new game with values specified by the user (or not). 
-@app.route("/new/", methods = ['GET', 'POST'])
+@app.route("/new/", methods = ['POST'])
 def new_game():
-    global size
-    if request.method == 'POST':
-        size = int(request.form['glevel'])
+    size = int(request.form['glevel'])
     lines = dotgame.init_game(size)
     boxes = dotgame.game_board(size, lines)
     return render_template('mainpage.html',size=size, \
@@ -86,11 +84,17 @@ def verify_user_move():
     # Return a tuple (line, boxA, boxB) as json
     return json.dumps(dotgame.verify_move(size, lines, line))
 
+# Clear all localStorage - might be corrupt.
+@app.route("/reset/", methods = ['GET'])
+def reset_values ():
+    return render_template('startup.html', reset=True)
+
 # A catch-all for unknown requests. path is here for future use.
+# This is normal entry-point to the game.
 @app.route("/", defaults={'path': ''})
 @app.route('/<path:path>')
 def home(path):
-    return render_template('startup.html')
+    return render_template('startup.html', reset=False)
 
 if __name__ == "__main__":
     app.run(debug=True)

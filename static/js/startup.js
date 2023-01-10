@@ -17,8 +17,12 @@ window.addEventListener("DOMContentLoaded", (event) => {
 //////////////////////////////////
 // EVENT HANDLERS 
 //////////////////////////////////
-// Check if we are starting a new game or resuming current game.
+// Check if we are starting a new game, resetting, or resuming current game.
 pydots.startup.gameSetup = function () {
+    if (RESET_STORAGE)
+    {
+        pydots.dotgame.storage.resetGameValues();
+    }
     let moves = pydots.dotgame.storage.history;
     let len = moves.length;
     // Was there any progress on the previous game?
