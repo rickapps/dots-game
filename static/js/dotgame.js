@@ -324,13 +324,6 @@ class GameStorage {
         // Reset game scores to zeros
         this.clearPlayerScores();
     }
-
-    resetGameValues()
-    {
-        localStorage.removeItem(this.#key.level);
-        localStorage.removeItem(this.#key.theme);
-        this.clearGameValues();
-    }
 }
 
 pydots.dotgame.storage = new GameStorage();
