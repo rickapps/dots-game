@@ -6,40 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dot Board</title>
     <link rel="stylesheet" href="css/dotcorner.css">
+    <style>
+        @keyframes dotSize {
+            from {height: 40%;}
+            to {height: 20%;}
+        }
+        .grow {
+            animation-name: dotSize;
+            animation-duration: 4s;
+        }
+    </style>
 </head>
 <body>
     <div id="wrapper">
     <h2 class="text-center">Dot Board</h2> 
     <div class="grid-container">
-        <div class="grid-item">
+        <div id="B-01" class="grid-item">
             <div class="dot top-left"></div>
         </div> 
-        <div class="grid-item">
+        <div id="B-02" class="grid-item">
             <div class="dot top-left"></div>
         </div> 
-        <div class="grid-item right-edge">
-            <div class="dot top-left"></div>
-            <div class="dot top-right"></div>
-        </div> 
-        <div class="grid-item">
-            <div class="dot top-left"></div>
-        </div> 
-        <div class="grid-item">
-            <div class="dot top-left"></div>
-        </div> 
-        <div class="grid-item right-edge">
+        <div id="B-03" class="grid-item right-edge">
             <div class="dot top-left"></div>
             <div class="dot top-right"></div>
         </div> 
-        <div class="grid-item bottom-edge">
+        <div id="B-04" class="grid-item">
+            <div class="dot top-left"></div>
+        </div> 
+        <div id="B-05" class="grid-item">
+            <div class="dot top-left"></div>
+        </div> 
+        <div id="B-06" class="grid-item right-edge">
+            <div class="dot top-left"></div>
+            <div class="dot top-right"></div>
+        </div> 
+        <div id="B-07" class="grid-item bottom-edge">
             <div class="dot top-left"></div>
             <div class="dot bottom-left"></div>
         </div> 
-        <div class="grid-item bottom-edge">
+        <div id="B-08" class="grid-item bottom-edge">
             <div class="dot top-left"></div>
             <div class="dot bottom-left"></div>
         </div> 
-        <div class="grid-item right-edge bottom-edge">
+        <div id="B-09" class="grid-item right-edge bottom-edge">
             <div class="dot top-left"></div>
             <div class="dot top-right"></div>
             <div class="dot bottom-left"></div>
@@ -47,5 +57,10 @@
         </div> 
     </div>
     </div>
+    <script>
+        animateDot = (box) => {
+            
+        }
+    </script>
 </body>
 </html>
