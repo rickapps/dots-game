@@ -177,6 +177,7 @@ pydots.updatePlayer = () => {
 // will draw the line and claim any approprate boxes.
 pydots.playerMove = (evt) => {
   pydots.dotgame.validateMove(parseInt(evt.target.id));
+  evt.preventDefault();
 };
 
 pydots.endGame = () => {

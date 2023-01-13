@@ -14,34 +14,34 @@
     {% if box.boxType == 'Normal' %}
     <div id="{{box.boxID}}" class="grid-item {{claim}}">
         <div class="dot top-left"></div>
-        <a id="{{box.top}}" href="" class="line-top {{ 'selected' if 'top' in box.options }}" onclick="return false;"></a>
-        <a id="{{box.left}}" href="" class="line-left {{ 'selected' if 'left' in box.options }}" onclick="return false;"></a>
+        <a id="{{box.top}}" href="" class="line-top {{ 'selected' if 'top' in box.options }}"></a>
+        <a id="{{box.left}}" href="" class="line-left {{ 'selected' if 'left' in box.options }}"></a>
     </div>
     {% elif box.boxType == 'Right' %}
     <div id="{{box.boxID}}" class="grid-item right-edge {{claim}}">
         <div class="dot top-left"></div>
-        <a id="{{box.top}}" href="" class="line-top {{ 'selected' if 'top' in box.options }}" onclick="return false;"></a>
-        <a id="{{box.left}}" href="" class="line-left {{ 'selected' if 'left' in box.options }}" onclick="return false;"></a>
+        <a id="{{box.top}}" href="" class="line-top {{ 'selected' if 'top' in box.options }}"></a>
+        <a id="{{box.left}}" href="" class="line-left {{ 'selected' if 'left' in box.options }}"></a>
         <div class="dot top-right"></div>
-        <a id="{{box.right}}" href="" class="line-right {{ 'selected' if 'right' in box.options }}" onclick="return false;"></a>
+        <a id="{{box.right}}" href="" class="line-right {{ 'selected' if 'right' in box.options }}"></a>
     </div> 
     {% elif box.boxType == 'Bottom' %}
     <div id="{{box.boxID}}" class="grid-item bottom-edge {{claim}}">
         <div class="dot top-left"></div>
-        <a id="{{box.top}}" href="" class="line-top {{ 'selected' if 'top' in box.options }}" onclick="return false;"></a>
-        <a id="{{box.left}}" href="" class="line-left {{ 'selected' if 'left' in box.options }}" onclick="return false;"></a>
+        <a id="{{box.top}}" href="" class="line-top {{ 'selected' if 'top' in box.options }}"></a>
+        <a id="{{box.left}}" href="" class="line-left {{ 'selected' if 'left' in box.options }}"></a>
         <div class="dot bottom-left"></div>
-        <a id="{{box.bottom}}" href="" class="line-bottom {{ 'selected' if 'bottom' in box.options }}" onclick="return false;"></a>
+        <a id="{{box.bottom}}" href="" class="line-bottom {{ 'selected' if 'bottom' in box.options }}"></a>
     </div> 
     {% elif box.boxType == 'Both' %}
     <div id="{{box.boxID}}" class="grid-item right-edge bottom-edge {{claim}}">
         <div class="dot top-left"></div>
-        <a id="{{box.top}}" href="" class="line-top {{ 'selected' if 'top' in box.options }}" onclick="return false;"></a>
-        <a id="{{box.left}}" href="" class="line-left {{ 'selected' if 'left' in box.options }}" onclick="return false;"></a>
+        <a id="{{box.top}}" href="" class="line-top {{ 'selected' if 'top' in box.options }}"></a>
+        <a id="{{box.left}}" href="" class="line-left {{ 'selected' if 'left' in box.options }}"></a>
         <div class="dot top-right"></div>
-        <a id="{{box.right}}" href="" class="line-right {{ 'selected' if 'right' in box.options }}" onclick="return false;"></a>
+        <a id="{{box.right}}" href="" class="line-right {{ 'selected' if 'right' in box.options }}"></a>
         <div class="dot bottom-left"></div>
-        <a id="{{box.bottom}}" href="" class="line-bottom {{ 'selected' if 'bottom' in box.options }}" onclick="return false;"></a>
+        <a id="{{box.bottom}}" href="" class="line-bottom {{ 'selected' if 'bottom' in box.options }}"></a>
         <div class="dot bottom-right"></div>
     </div> 
     {% endif %}
