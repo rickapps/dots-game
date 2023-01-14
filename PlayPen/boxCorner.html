@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="css/dotcorner.css">
     <style>
         @keyframes dotSize {
-            from {height: 40%;}
-            to {height: 20%;}
+            from {padding: 20px;}
+            to {padding: 0;}
         }
         .grow {
             animation-name: dotSize;
@@ -56,10 +56,16 @@
             <div class="dot bottom-right"></div>
         </div> 
     </div>
+    <p></p>
+    <button onclick="animateDot('B-08');">Press</button>
     </div>
     <script>
         animateDot = (box) => {
-            
+            const square = document.getElementById(box);
+            const dot1 = square.firstElementChild;
+            const dot2 = square.lastElementChild;
+            dot1.classList.toggle('grow');
+            dot2.classList.toggle('grow');
         }
     </script>
 </body>

@@ -483,7 +483,7 @@ pydots.dotgame.makeMove = function ()
     return;
 }
 
-pydots.dotgame.gameOver = function (move)
+pydots.dotgame.gameOver = function(move)
 {
     return move[0] < 0;
 }
@@ -500,5 +500,49 @@ pydots.dotgame.isMachineTurn = function()
 {
     let player = pydots.dotgame.storage.player;
     return player == pydots.dotgame.storage.machinePlayer;
+}
+
+pydots.dotgame.isBottomEdge = function(lineNum)
+{
+    let maxSquare = GAME_SIZE * GAME_SIZE - 1;
+    return lineNum > maxSquare && lineNum <= maxSquare + GAME_SIZE;
+}
+
+pydots.dotgame.isRightEdge = function(lineNum)
+{
+    let numLines = 2 * (GAME_SIZE * GAME_SIZE + GAME_SIZE);
+    return lineNum >= numLines - GAME_SIZE && lineNum < numLines;
+}
+
+pydots.dotgame.getAdjacentLine = function(lineNum)
+{
+    if (lineNum >= 2 * GAME_SIZE * GAME_SIZE + GAME_SIZE - 1)
+        adj = -1;
+    else if (lineNum >= 2 * GAME_SIZE * GAME_SIZE + GAME_SIZE)
+        adj = lineNum + 1;
+    else if (lineNum >= GAME_SIZE * GAME_SIZE + GAME_SIZE) 
+        adj = lineNum + GAME_SIZE;
+    else if (lineNum + 1 % GAME_SIZE > 0)
+        adj = lineNum + 1;
+    else
+        adj = -1;
+
+    return adj;
+}
+
+pydots.dotgame.getBoxNum = function(lineNum)
+{
+    let boxNum = -1;
+    let vertical = lineNum >= GAME_SIZE * GAME_SIZE + GAME_SIZE;
+    if (pydots.dotgame.isBottomEdge(lineNum))
+        boxNum = lineNum - GAME_SIZE;
+    else if (pydots.dotgame.isRightEdge(lineNum))
+        boxNum = (lineNum % GAME_SIZE) * GAME_SIZE + GAME_SIZE -1;
+    else if (vertical)
+        boxNum = lineNum - (numSquares + GAME_SIZE);
+    else
+        boxNum = lineNum;
+    
+    return boxNum;
 }
 

@@ -341,3 +341,36 @@ pydots.displayScores = (location) => {
     }
   }
 };
+
+pydots.getDot1 = (lineNum) => {
+  let dotClass = '.top-left';
+  let boxNum = pydots.dotgame.getBoxNum(lineNum);
+  const box = document.getElementById('gameboard').getElementById('B-${boxNum}');
+  if (pydots.dotgame.isBottomEdge(lineNum)) 
+    dotClass = '.bottom-left';
+  if (pydots.dotgame.isRightEdge(lineNum))
+    dotClass = '.top-right';
+  const dot = box.querySelector(dotClass);
+
+  return dot;
+}
+
+pydots.getDot2 = (lineNum) => {
+  let dot;
+  let adj = pydots.dotgame.getAdjacentLine(lineNum);
+  if (adj >= 0) {
+    dot = pydots.getDot1(adj);
+  }
+  else {
+    let boxNum = pydots.dotgame.getBoxNum(lineNum);
+    const box = document.getElementById('gameboard').getElementById('B-${boxNum}');
+    dot = box.querySelector('.bottom-right');
+  }
+  return dot;
+}
+
+pydots.getLine = (lineNum) => {
+  const box = document.getElementById('gameboard').getElementById('B-${lineNum}');
+  const line = box.getElementById('${lineNum}');
+  return line;
+}
