@@ -516,14 +516,15 @@ pydots.dotgame.isRightEdge = function(lineNum)
 
 pydots.dotgame.getAdjacentLine = function(lineNum)
 {
-    if (lineNum >= 2 * GAME_SIZE * GAME_SIZE + GAME_SIZE - 1)
+    let lineIndex = Number(lineNum);
+    if (lineIndex >= 2 * GAME_SIZE * GAME_SIZE + GAME_SIZE - 1)
         adj = -1;
-    else if (lineNum >= 2 * GAME_SIZE * GAME_SIZE + GAME_SIZE)
-        adj = lineNum + 1;
-    else if (lineNum >= GAME_SIZE * GAME_SIZE + GAME_SIZE) 
-        adj = lineNum + GAME_SIZE;
-    else if (lineNum + 1 % GAME_SIZE > 0)
-        adj = lineNum + 1;
+    else if (lineIndex >= 2 * GAME_SIZE * GAME_SIZE + GAME_SIZE)
+        adj = lineIndex + 1;
+    else if (lineIndex >= GAME_SIZE * GAME_SIZE + GAME_SIZE) 
+        adj = lineIndex + GAME_SIZE;
+    else if (lineIndex + 1 % GAME_SIZE > 0)
+        adj = lineIndex + 1;
     else
         adj = -1;
 
@@ -539,7 +540,7 @@ pydots.dotgame.getBoxNum = function(lineNum)
     else if (pydots.dotgame.isRightEdge(lineNum))
         boxNum = (lineNum % GAME_SIZE) * GAME_SIZE + GAME_SIZE -1;
     else if (vertical)
-        boxNum = lineNum - (numSquares + GAME_SIZE);
+        boxNum = lineNum - (GAME_SIZE * GAME_SIZE + GAME_SIZE);
     else
         boxNum = lineNum;
     

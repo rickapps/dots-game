@@ -165,3 +165,14 @@ We only want to affect the anchor tags that are within class .grid-item
   padding: 2px;
 }
 
+@keyframes dotSize {
+  from {height: 40%; width: 40%;}
+  to {height: 20%; width: 20%;}
+}
+
+.grow {
+  animation-name: dotSize;
+  animation-duration: 4s;
+}
+
+

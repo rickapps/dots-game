@@ -194,6 +194,10 @@ pydots.drawMove = (evt) => {
     pydots.dotgame.storage.pushMove(move);
     // Next two statements draw our line
     const line = document.getElementById(move[0].toString());
+    const dot1 = pydots.getDot1(line.id);
+    const dot2 = pydots.getDot2(line.id);
+    dot1.classList.toggle('grow');
+    dot2.classList.toggle('grow');
     line.classList.add('selected');
     // claim any squares
     pydots.claimSquares(move, pydots.dotgame.storage.player);
@@ -345,7 +349,7 @@ pydots.displayScores = (location) => {
 pydots.getDot1 = (lineNum) => {
   let dotClass = '.top-left';
   let boxNum = pydots.dotgame.getBoxNum(lineNum);
-  const box = document.getElementById('gameboard').getElementById('B-${boxNum}');
+  const box = document.getElementById(`B-${boxNum}`);
   if (pydots.dotgame.isBottomEdge(lineNum)) 
     dotClass = '.bottom-left';
   if (pydots.dotgame.isRightEdge(lineNum))
@@ -363,14 +367,13 @@ pydots.getDot2 = (lineNum) => {
   }
   else {
     let boxNum = pydots.dotgame.getBoxNum(lineNum);
-    const box = document.getElementById('gameboard').getElementById('B-${boxNum}');
+    const box = document.getElementById(`B-${boxNum}`);
     dot = box.querySelector('.bottom-right');
   }
   return dot;
 }
 
 pydots.getLine = (lineNum) => {
-  const box = document.getElementById('gameboard').getElementById('B-${lineNum}');
-  const line = box.getElementById('${lineNum}');
+  const line = document.getElementById(`${lineNum}`);
   return line;
 }
