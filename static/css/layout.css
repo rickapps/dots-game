@@ -9,7 +9,7 @@ body {
   background-color: var(--panel-color);
 }
 
-#mainPage #wrapper {
+#wrapper {
   background-color: var(--wrapper-color);
   display: flex;
   flex-direction: row;
@@ -17,26 +17,26 @@ body {
   justify-content: center;
 }
 
-#mainPage header {
+header {
   background-color: var(--header-color);
   position: relative;
   height: 2rem;
   width: 100%;
 }
 
-#mainPage main {
+main {
   width: 90vmin;
   aspect-ratio: 1/1;
   background-color: var(--main-color);
 }
 
-#mainPage #panel {
+#panel {
   background-color: var(--panel-color);
   flex-grow: 1;
   min-width: 45vmin;
 }
 
-#mainPage footer {
+footer {
   background-color: var(--footer-color);
   width: 100%;
 }
@@ -211,10 +211,6 @@ body {
   pointer-events: none;
 }
 
-article {
-  margin: 8px;
-}
-
 input {
   box-sizing:border-box;
 }
@@ -232,38 +228,6 @@ form {
   float: right;
   text-align: right;
 } 
-
-/**************************/
-/* Special for options page */
-/**************************/
-#optionPage #content {
-  width:60%;
-}
-
-#optionPage #panel {
-  width:40%;
-}
-
-#optionPage span {
-  display: block;
-}
-
-.gameDetails {
-  background-color: green;
-  float: left; 
-  width:40%;
-}
-
-.gamePeople {
-  background-color: red;
-  float: right;
-  width:60%;
-}
-
-/* Clear the float right/left from above */
-#gamevals {
-  clear: both;
-}
 
 /***********************************************************/
 /*                 Media statements                        */
@@ -307,25 +271,3 @@ form {
       padding: 0.3rem 0.5rem 0.53rem 0.5rem;
   }
 }
-
-
-/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
-@media screen and (min-width: 150vmin) {
-
-  #optionPage #panel {
-    width: 100%;
-  }
-
-  #optionPage #content {
-    width: 100%;
-  }
-
-  .gameDetails {
-    width: 100%;
-  }
-
-  .gamePeople {
-    width: 100%;
-  }
-}
-
