@@ -24,11 +24,13 @@ class GameStorage {
         numPlayers: "NumPlayers",
         player: "Player",
         score: "Scores",
-        theme: "Theme"
+        theme: "Theme",
+        queue: "Queue"
     }
     #maxPlayers = PLAYER_NAMES.length;
     #numLevels = GAME_LEVELS.length;
     #numThemes = GAME_THEMES.length;
+
 
     constructor(size=0, lines=null) {
         if (size > 0) {
@@ -66,6 +68,18 @@ class GameStorage {
 
     set history(history) {
         localStorage.setItem(this.#key.history, JSON.stringify(history));
+    }
+
+    get queue() {
+        let queue = localStorage.getItem(this.#key.queue);
+        if (queue)
+            queue = JSON.parse(queue);
+        else
+            queue = [];
+    }
+
+    set queue(queue) {
+        localStorage.setItem(this.#key.queue, JSON.stringify(queue));
     }
 
     get level() {
@@ -292,7 +306,23 @@ class GameStorage {
         }
         return history;
     }
-     
+    
+    pushQueue(player, move, score, next) {
+        let queue = this.queue;
+        let animate = {
+            player: player,
+            move: move,
+            score: score,
+            next: next
+        };
+        queue.push(animate);
+        this.queue = queue;
+    }
+
+    get queueItem() {
+        return this.queue[0];
+    }
+
     storeNewGameSetup(numPlayers=0, machine=0) {
         if (numPlayers === 0)
             numPlayers = PARTICIPANTS[DEFAULT_PARTICIPANT_INDEX][1];
@@ -366,8 +396,9 @@ pydots.dotgame.resumeGame = function()
 // notify UI.
 pydots.dotgame.validateMove = function (line, bAnimate=true)
 {
-    let moves = [];
-    let event;
+    let player = pydots.dotgame.storage.player;
+    let next = player;
+    let score = pydots.dotgame.storage.getPlayerScore(player);
     // Send a POST request to the server informing it of our move
     // The body of the request contains the current game state.
     let specs = {
@@ -393,31 +424,27 @@ pydots.dotgame.validateMove = function (line, bAnimate=true)
                 let gameIsOver = pydots.dotgame.gameOver(move);
                 if (gameIsOver)
                 {
-                    event = new CustomEvent("gameOver");
-                    document.dispatchEvent(event);
+                    player = -1;
+                    next = -1;
                 }
                 else
                 {
-                    moves.push(move);
-                    // Send an event to update the UI
-                    event = new CustomEvent("drawMove", {detail: {move: move}});
-                    document.dispatchEvent(event);
+                    pydots.dotgame.storage.pushMove(move);
                     // Update our internal score
-                    if (pydots.dotgame.storage.updatePlayerScore(pydots.dotgame.storage.player, move) > 0)
+                    if (pydots.dotgame.storage.updatePlayerScore(player, move) > 0)
                     {
-                        // Send an event to update the scoreboard on the UI
-                        let event = new CustomEvent("updateScore");
-                        document.dispatchEvent(event);
+                        score = pydots.dotgame.storage.getPlayerScore(player);
                     }
                     else
                     {
                         // Move to the other player
-                        pydots.dotgame.storage.switchPlayer();
-                        event = new CustomEvent("updatePlayer");
-                        document.dispatchEvent(event);
+                        next = pydots.dotgame.storage.switchPlayer();
                     }
                 }
+                pydots.dotgame.storage.pushQueue(player, move, score, next);
             })
+            let event = new CustomEvent('drawMove');
+            document.dispatchEvent(event);
         });
     return;
 }
@@ -426,8 +453,9 @@ pydots.dotgame.validateMove = function (line, bAnimate=true)
 // trigger drawMove event and others to notify UI.
 pydots.dotgame.makeMove = function ()
 {
-    let moves = [];
-    let event;
+    let player = pydots.dotgame.storage.player;
+    let next = player;
+    let score = pydots.dotgame.storage.getPlayerScore(player);
     // Send a POST request to the server asking for the best move.
     // The body of the request contains the current game state.
     let specs = {
@@ -450,36 +478,32 @@ pydots.dotgame.makeMove = function ()
                 d.forEach(move => {
                     // A list of moves is returned. The final entry in the
                     // list may indicate the game has ended.
+                    
                     let gameIsOver = pydots.dotgame.gameOver(move);
                     if (gameIsOver)
                     {
-                        // Tell the UI the game is ended
-                        event = new CustomEvent("gameOver");   
-                        document.dispatchEvent(event);
+                        player = -1;
+                        next = -1;
                     }
                     else
                     {
-                        moves.push(move);
-                        // We have a valid move - update the gameboard
-                        event = new CustomEvent("drawMove", {detail: {move: move}});   
-                        document.dispatchEvent(event);
+                        pydots.dotgame.pushMove(move);
                         // Do we need to update the score?
-                        if (pydots.dotgame.storage.updatePlayerScore(pydots.dotgame.storage.machinePlayer, move) > 0)
+                        if (pydots.dotgame.storage.updatePlayerScore(machine, move) > 0)
                         {
-                            // Send event to update the score
-                            event = new CustomEvent("updateScore");
-                            document.dispatchEvent(event);
+                            score = pydots.dotgame.storage.getPlayerScore(player);
                         }
                         else
                         {
                             // Machine turn has ended. Switch to human player
-                            pydots.dotgame.storage.switchPlayer();
-                            event = new CustomEvent("updatePlayer");
-                            document.dispatchEvent(event);
+                            next = pydots.dotgame.storage.switchPlayer();
                         }
                     }
+                    pydots.dotgame.storage.pushQueue(player, move, score, next);
                 })
-            });
+                let event = new CustomEvent("drawMove");
+                document.dispatchEvent(event);
+        });
     return;
 }
 
@@ -514,13 +538,20 @@ pydots.dotgame.isRightEdge = function(lineNum)
     return lineNum >= numLines - GAME_SIZE && lineNum < numLines;
 }
 
+pydots.dotgame.isHorizontal = function(lineNum)
+{
+    return lineNum < GAME_SIZE * GAME_SIZE + GAME_SIZE;
+}
+
 pydots.dotgame.getAdjacentLine = function(lineNum)
 {
     let lineIndex = Number(lineNum);
-    if (lineIndex >= 2 * GAME_SIZE * GAME_SIZE + GAME_SIZE - 1)
+    if (lineIndex >= 2 * (GAME_SIZE * GAME_SIZE + GAME_SIZE) - 1)
         adj = -1;
     else if (lineIndex >= 2 * GAME_SIZE * GAME_SIZE + GAME_SIZE)
-        adj = lineIndex + 1;
+        adj = lineIndex + 1
+    else if (lineIndex >= 2 * GAME_SIZE * GAME_SIZE )
+        adj = -1;
     else if (lineIndex >= GAME_SIZE * GAME_SIZE + GAME_SIZE) 
         adj = lineIndex + GAME_SIZE;
     else if (lineIndex + 1 % GAME_SIZE > 0)

@@ -44,7 +44,8 @@ window.addEventListener('DOMContentLoaded', () => {
   // Add event listener to draw a line on the gameboard.
   // The arg for event is array of [line,box1,box2]
   // Drawing a single line could complete up to two boxes.
-  document.addEventListener('drawMove', pydots.drawMove, false);
+  document.addEventListener('drawMove', pydots.showMove, false);
+  document.addEventListener('animationend', pydots.endMove)
   // Add event listener to update the gameboard with current player.
   document.addEventListener('updatePlayer', pydots.updatePlayer, false);
   // Add event listener to update the score.
@@ -157,18 +158,15 @@ pydots.selectNewTheme = (evt) => {
   }
 }
 // Reset the board to indicate the current player's turn
-pydots.updatePlayer = () => {
+pydots.showCurrentPlayer = (player) => {
   // Update the scoreboard to show the current player
   const numPlayers = pydots.dotgame.storage.numPlayers;
-  const player = pydots.dotgame.storage.player;
   const element = document.getElementById('scoreBoard');
   const markers = element.getElementsByTagName('img');
   for (let i = 0; i < numPlayers; i++) {
     markers[i].classList.add('invisible');
   }
   markers[player - 1].classList.toggle('invisible');
-  // If it is the machine's turn, let the server know.
-  if (pydots.dotgame.isMachineTurn()) { pydots.dotgame.makeMove(); }
 };
 
 // Response to click event.
@@ -187,22 +185,28 @@ pydots.endGame = () => {
 
 // Response to drawMove event.
 // Draw a single move on the gameboard.
-pydots.drawMove = (evt) => {
-  const { move } = evt.detail;
-  if (move[0] >= 0) {
-    // Store the move
-    pydots.dotgame.storage.pushMove(move);
-    // Next two statements draw our line
-    const line = document.getElementById(move[0].toString());
-    const dot1 = pydots.getDot1(line.id);
-    const dot2 = pydots.getDot2(line.id);
-    dot1.classList.toggle('grow');
-    dot2.classList.toggle('grow');
-    line.classList.add('selected');
+pydots.showMove = () => {
+  const player = dotgame.pydots.storage.queueItem.player;
+  const {move} = dotgame.pydots.storage.queueItem.move;
+  if (player > 0) {
+    animateMove(move[0].toString());
     // claim any squares
-    pydots.claimSquares(move, pydots.dotgame.storage.player);
+    pydots.claimSquares(move, player);
+  }
+  else {
+    // Game is over
+    endGame();
   }
 };
+
+pydots.endMove = (evt) => {
+
+};
+
+pydots.animateMove = (lineNum) => {
+  const line = document.getElementById(lineNum);
+  line.classList.add('selected');
+}
 
 // Update our score board
 pydots.updateScore = (player, score) => {
