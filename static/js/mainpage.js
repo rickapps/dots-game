@@ -46,10 +46,6 @@ window.addEventListener('DOMContentLoaded', () => {
   // Drawing a single line could complete up to two boxes.
   document.addEventListener('drawMove', pydots.showMove, false);
   document.addEventListener('animationend', pydots.endMove)
-  // Add event listener to update the gameboard with current player.
-  document.addEventListener('updatePlayer', pydots.updatePlayer, false);
-  // Add event listener to update the score.
-  document.addEventListener('updateScore', pydots.updateScore);
   document.addEventListener('gameOver', pydots.endGame);
 
   document.getElementById('restartGame').addEventListener('submit', (e) => {
@@ -60,8 +56,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   pydots.initVars();
-  pydots.updatePlayer();
-  pydots.updateScore();
+  pydots.displayScores('panel');
 
 });
 
@@ -186,25 +181,47 @@ pydots.endGame = () => {
 // Response to drawMove event.
 // Draw a single move on the gameboard.
 pydots.showMove = () => {
-  const player = dotgame.pydots.storage.queueItem.player;
-  const {move} = dotgame.pydots.storage.queueItem.move;
+  const player = pydots.dotgame.storage.queueItem.player;
+  const move = pydots.dotgame.storage.queueItem.move;
   if (player > 0) {
-    animateMove(move[0].toString());
-    // claim any squares
-    pydots.claimSquares(move, player);
+    pydots.showCurrentPlayer(player);
+    pydots.animateMove(move[0].toString());
   }
   else {
     // Game is over
-    endGame();
+    pydots.endGame();
   }
 };
 
 pydots.endMove = (evt) => {
-
-};
+  const player = pydots.dotgame.storage.queueItem.player;
+  const next = pydots.dotgame.storage.queueItem.next;
+  const move = pydots.dotgame.storage.queueItem.move;
+  // remove animation classes
+  const line = document.getElementById(move[0].toString());
+  const dot1 = pydots.getDot1(line.id);
+  const dot2 = pydots.getDot2(line.id);
+  dot1.classList.toggle('grow');
+  dot2.classList.toggle('grow');
+  // claim any squares
+  pydots.claimSquares(move, player);
+  // update the score
+  pydots.displayPlayerScore(player, pydots.dotgame.storage.queueItem.score);
+  // Shift the queue
+  pydots.dotgame.storage.queue.shift();
+  // check if last move in turn
+  if (player == next)
+    pydots.animateMove();
+  else
+    pydots.dotgame.makeMove();
+}
 
 pydots.animateMove = (lineNum) => {
   const line = document.getElementById(lineNum);
+  const dot1 = pydots.getDot1(line.id);
+  const dot2 = pydots.getDot2(line.id);
+  dot1.classList.toggle('grow');
+  dot2.classList.toggle('grow');
   line.classList.add('selected');
 }
 
@@ -328,6 +345,12 @@ pydots.setMachineList = (dropdown, numPlayers) => {
   // Default to the last option
   dropdown.selectedIndex = numPlayers;
 };
+
+pydots.displayPlayerScore = (player, score) => {
+    const name = pydots.dotgame.storage.getPlayerName(player);
+    const span = document.getElementById(`score${player}`);
+    span.textContent = `${name}: ${score}`;
+}
 
 // Displays on main page
 pydots.displayScores = (location) => {

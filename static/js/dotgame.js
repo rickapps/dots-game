@@ -76,6 +76,7 @@ class GameStorage {
             queue = JSON.parse(queue);
         else
             queue = [];
+        return queue;
     }
 
     set queue(queue) {
@@ -487,9 +488,9 @@ pydots.dotgame.makeMove = function ()
                     }
                     else
                     {
-                        pydots.dotgame.pushMove(move);
+                        pydots.dotgame.storage.pushMove(move);
                         // Do we need to update the score?
-                        if (pydots.dotgame.storage.updatePlayerScore(machine, move) > 0)
+                        if (pydots.dotgame.storage.updatePlayerScore(player, move) > 0)
                         {
                             score = pydots.dotgame.storage.getPlayerScore(player);
                         }
