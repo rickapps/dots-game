@@ -7,29 +7,6 @@ import json
 import dotgame
 app = Flask(__name__)
 
-# Some definitions:
-# lines: a list of lines on the gameboard. A value of 1 means the line
-# has been selected. A value of 0 means the line is available to select.
-#
-# move: a three value tuple. Val0 is the line# selected, Val1 is the box# claimed.
-# Val3 is the second box claimed. (2, 2, -1) means line#2 was selected and it 
-# completes box#2. (2,-1,-1) means line#2 was selected and no boxes were completed.
-# (-1,-1,-1) means game is over, there are no lines left to select.
-#
-# moves: a list of move tuples. Whenever a player completes a box, he gets to
-# select a new line. The list of move tuples will always end with (line#, -1, -1),
-# except for the last move of the game.
-#
-# history: a list of all moves in the game. It is a list of lists of move tuples.
-#
-# claims: a list of all boxes on the gameboard. If the value is 0, the box
-# is not claimed. Values greater than zero are the player number of the box owner.
-#
-# boxes: a list of box objects representing the gameboard. boxes are used only on 
-# the server. boxes are not used by javascript. The list is generated with each 
-# server request using size, lines, and claims as input. For a new game, claims
-# is all zeros so it is not needed. 
-#### 
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('error.html'), 404

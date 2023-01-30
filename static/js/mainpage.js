@@ -3,17 +3,6 @@
 // rick@rickapps.com
 // August 1, 2022
 //
-// Edit this file to change the look and feel of the dots game.
-// You need to listen for and respond to the following four custom events:
-// 1) displayMoves - Draw one line on the game board. Use pydots.dotgame.storage.player
-// to see who the current player is.
-// 2) updatePlayer - The turn has changed. Update the board to indicate
-// whose turn it is. If it is the computer's turn, call makeMove.
-// 3) updateScore - Update the scoreboard.
-// 4) gameOver - The game has ended. Display notice to user.
-//
-// The other file, Dotgame.js, implements the business logic. You shouldn't need
-// to alter that file if you just want to change the appearance of the game.
 var pydots = pydots || {};
 
 //--------------------------------

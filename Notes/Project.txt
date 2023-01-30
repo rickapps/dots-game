@@ -67,3 +67,41 @@ until all the other vertical lines are assigned. Then the right edge is numbered
 
     startup.html - does not display. Checks to see if a previous game is stored in localStorage. If so, initiates a POST /resume/ request. If not, initiates a POST /new/ request.
 
+Start a new game. Return a web page depicting a blank gameboard of the specified size.
+POST /new/
+{
+    glevel: size 
+}
+where size is a positive integer. A size of 3 means the gameboard will have 3 squares per side for a total of nine squares. A size of 10 specifies that the gameboard would contain 100 squares.
+
+Resume a game in progress. Returns a web page depicting the specified gameboard. If lines[] and claims[] are all zeros, this would be the same as /new/.
+POST /resume/
+{
+    size: size,
+    lines: lines[],
+    claims: claims[]
+}
+where size is the number of squares per side of the gameboard, 
+lines[] indicates the dots the players have connectecd on the gameboard. A value of 1 means a line has been drawn. A value of 0 means the move is still available to a player. Lines are numbered according to the figure below.
+claims[] indicates which squares are completed on the gameboard. A value of 0 means the square is incomplete. A value of 1 means the square is claimed by player 1, 2 claimed by player 2, etc. Squares are numbered according to the figure below.
+
+Find the best move for the specified gameboard. Return a list of tuples: [(line, claimA, claim2), (line, claimA, claimB), ...]
+POST /find/
+{
+    size: size,
+    lines: lines[]
+}
+
+Validate a player's move. newline indicates the line the player wishes to draw. If the line is available, a tuple is returned: (line, box#, box#). Box# indicates which boxes were completed by the newline. If both are 0, no boxes were completed and the player's turn is over. If line is -1, the game is over.
+POST /verify/
+{
+    size: size,
+    lines: lines[],
+    line: newline
+}
+
+Clears all dot game localStorage on the client machine. Players are redirected here in response to server errors. Once localStorage is cleared, a new game is started.
+GET /reset/
+
+GET /
+The normal entry point to the game. Players are redirected to /new/ or /resume/ depending on localStorage values.

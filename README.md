@@ -1,11 +1,60 @@
 # dots-game
-## Dots game using CSS, Javascript, and Python Flask
+## Client/Server Dots game using Python Flask, Javascript, and CSS 
 
 Links: [https://dotsgame.rickapps.com](https://dotsgame.rickapps.com) or [https://playdots.uc.r.appspot.com/](https://playdots.uc.r.appspot.com/)
 
-Modify the look and feel of the game by changing the three css files located in folder **static/css.** You may also want to revise **static/js/custom.js. Custom.js** contains code to respond to three custom events; *drawLine*, *updatePlayer*, and *updateScore*. These events draw a single line connecting two dots, update the board to indicate whose turn it is, and update the scoreboard respectively. 
+### Server Commands
 
-You can code a UI that does not use Flask. The UI only needs to post the player's move to the server and request the machine move from the server. The server provides logic to detect when a square is complete and when a player's turn has ended. It can also determine the best available move at any time. The jinja code in the current UI allows the Flask server to create an initial gameboard of any size. But if you remove the jinja, you could host the UI of the dots game on any server and make POST requests to a Flask server hosted elsewhere.
+1) Start a new game. Returns a web page depicting a gameboard of the specified size.
+
+        POST /new/
+        {
+            size: size
+        }
+2) Resume a game in progress. Returns a web page depicting a gameboard of the specified state.
+
+        POST /resume/
+        {
+            size: size,
+            lines: lines[],
+            claims: claims[]
+        }
+
+3) Determine the best move(s) for a gameboard of the specified state. Typically this would be the computer's turn in the game. Returns a list of tuples: **[(line#,box#,box#), (line#,box#,box#), ...]** where line number is the line to add. A single line can complete up to two boxes. Box#  is -1 if no box is complete, otherwise the box# of the completed box. As long as at least one box is completed, the player adds an additional line. The last tuple in the list will always have -1 for both box numbers.
+        POST /find/
+        {
+            size: size,
+            lines: lines[]
+        }
+
+4) Determine squares completed by a specified line. Typically this would be a player's turn in the game. Returns a single tuple: **(line#,box#,box#)** using the same format as above. If both box#'s are -1, the player's turn has ended. If line# is -1, the game is over or the line was already taken.  
+
+        POST /verify/
+        {
+            size: size,
+            lines: lines[],
+            line: line#
+        }
+
+5) Clear localStorage used by the game in the event of corruption or updates. Players are directed here in response to server errors. Once storage is cleared, a new game is started.
+
+        GET /reset/
+
+6) Normal entry-point to the game. If localStorage contains a game in progress, player is redirected to ***/resume/***. If no game is in progress, player is redirected to ***/new/***.
+
+        GET /
+
+### Definitions of terms used in the code
+
+**claims[]:** A list of all boxes on the gameboard. If **claims[box#]** is 0, the box is not claimed. Values greater than zero are the player number of the box owner. Boxes are numbered according to the diagram below.
+
+**history[]:** A list of all moves in the game. It is a list of lists of move tuples.
+
+**lines[]:** The lines connecting the dots on the gameboard. **lines[line#]** is 1 if the line has been drawn or 0 if the line is available. Lines are numbered according to the diagram below. 
+
+**move:** A move is a tuple (line#,box#,box#) where lines and boxes are numbered according to the diagram below. A player's turn can consist of multiple moves. A single line can complete up to two boxes. If a line completes a box, that player gets another move. (2, -1, -1) means no boxes were completed by the line, (2, 2, -1) means line2 completed box2 and no other boxes. 
+
+**size:** The number of squares on each side of the gameboard. The total number of squares is size**2.
 
 ### Box and Line Numbering Scheme
  
@@ -14,19 +63,4 @@ The top left square has id=0. The bottom right square has id=squareCount-1. Each
 ![Example 4x4 game](static/img/DotNumbering2.png)
 
 For 4x4 game board, gameSize is 4. squareCount is 16. Squares are numbered 0-15. Horizontal lines on top edge of game board are numbered 0-3. Horizontal lines on bottom edge of game board are numbered 16-19. Vertical lines on the left edge are numbered 20,24,28,32. Vertical lines on the right edge of the game board are numbered 36,37,38,39. Vertical lines on the first row of the gameboard are numbered 20,21,22,23,36. The second row of vertical lines are numbered 24,25,26,27,37. The numbering scheme makes formulas for computing related squares and lines easier.
-
-### Definitions of terms used in the code
-
-**claims:** a list of all boxes on the gameboard. Indices correspond to the description above. If a list value is 0, the box is not claimed. Otherwise, the value is the player number that owns the claim.
-
-**history:** a list of all moves in the game. It is a list of lists of move tuples. 
-
-**lines:** a list of lines on the gameboard. Indices correspond to the description above. A value of 1 means the line has been selected. A value of 0 means the line is available to select.
-
-**move:** a three value tuple. Val0 is the line# selected, Val1 is the box# claimed. Val3 is the second box claimed. (2, 2, -1) means line#2 was selected and it completes box#2. (2,-1,-1) means line#2 was selected and no boxes were completed. (-1,-1,-1) means game is over, there are no lines left to select.
-
-**moves:** a list of move tuples. Whenever a player completes a box, he gets to select a new line. The list of move tuples will always end with move (line#, -1,-1), except for the last move of the game.
-
-
-
 
