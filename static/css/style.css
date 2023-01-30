@@ -102,8 +102,13 @@ img.indicator {
 .right-edge {
   border-right: 3px solid var(--box-border-color);
 }
+
 .bottom-edge {
   border-bottom: 3px solid var(--box-border-color);
+}
+
+.deactivate {
+  pointer-events: none;
 }
 
 /*----------------------------------------------------------------------------------
@@ -174,5 +179,4 @@ We only want to affect the anchor tags that are within class .grid-item
   animation-name: dotSize;
   animation-duration: 4s;
 }
-
 

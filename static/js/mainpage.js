@@ -227,6 +227,11 @@ pydots.endMove = () => {
 }
 
 pydots.lockGameboard = (lock) => {
+  const gameboard = document.getElementById('gameboard');
+  if (lock)
+    gameboard.classList.add('deactivate');
+  else
+    gameboard.classList.remove('deactivate');
 }
 
 //--------------------------------
