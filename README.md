@@ -21,6 +21,7 @@ Links: [https://dotsgame.rickapps.com](https://dotsgame.rickapps.com) or [https:
         }
 
 3) Determine the best move(s) for a gameboard of the specified state. Typically this would be the computer's turn in the game. Returns a list of tuples: **[(line#,box#,box#), (line#,box#,box#), ...]** where line number is the line to add. A single line can complete up to two boxes. Box#  is -1 if no box is complete, otherwise the box# of the completed box. As long as at least one box is completed, the player adds an additional line. The last tuple in the list will always have -1 for both box numbers.
+
         POST /find/
         {
             size: size,
