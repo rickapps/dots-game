@@ -5,7 +5,7 @@
 //
 // Edit this file to change the look and feel of the dots game.
 // You need to listen for and respond to the following four custom events:
-// 1) drawMove - Draw one line on the game board. Use pydots.dotgame.storage.player
+// 1) displayMoves - Draw one line on the game board. Use pydots.dotgame.storage.player
 // to see who the current player is.
 // 2) updatePlayer - The turn has changed. Update the board to indicate
 // whose turn it is. If it is the computer's turn, call makeMove.
@@ -44,8 +44,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // Add event listener to draw a line on the gameboard.
   // The arg for event is array of [line,box1,box2]
   // Drawing a single line could complete up to two boxes.
-  document.addEventListener('drawMove', pydots.showMove, false);
-  document.addEventListener('animationend', pydots.endMove)
+  document.addEventListener('displayMoves', pydots.showMoves, false);
   document.addEventListener('gameOver', pydots.endGame);
 
   document.getElementById('restartGame').addEventListener('submit', (e) => {
@@ -178,51 +177,66 @@ pydots.endGame = () => {
   document.getElementById('winnerDlg').showModal();
 };
 
-// Response to drawMove event.
+// Response to displayMoves event.
 // Draw a single move on the gameboard.
-pydots.showMove = () => {
-  const player = pydots.dotgame.storage.queueItem.player;
-  const move = pydots.dotgame.storage.queueItem.move;
-  if (player > 0) {
-    pydots.showCurrentPlayer(player);
-    pydots.animateMove(move[0].toString());
+pydots.showMoves = () => {
+  const turn = pydots.dotgame.storage.queueItem;
+  if (turn && turn.player > 0) {
+    pydots.showCurrentPlayer(turn.player);
+    // Disable the gameboard
+    pydots.lockGameboard(true);
   }
-  else {
-    // Game is over
-    pydots.endGame();
-  }
+  pydots.startMove();
 };
 
-pydots.endMove = (evt) => {
-  const player = pydots.dotgame.storage.queueItem.player;
-  const next = pydots.dotgame.storage.queueItem.next;
-  const move = pydots.dotgame.storage.queueItem.move;
-  // remove animation classes
+pydots.startMove = () => {
+  const turn = pydots.dotgame.storage.queueItem;
+  if (turn) {
+    if (turn.player > 0) {
+      pydots.animateMove(turn.player, turn.move);
+      setTimeout(pydots.endMove, 5000);
+    }
+    else {
+      pydots.endGame();
+    }
+  }
+  else {
+    pydots.clearAnimations('grow');
+    if (pydots.dotgame.isMachineTurn())
+      pydots.dotgame.makeMove();
+    else
+      pydots.lockGameboard(false);
+  }
+}
+
+pydots.animateMove = (player, move) => {
   const line = document.getElementById(move[0].toString());
   const dot1 = pydots.getDot1(line.id);
   const dot2 = pydots.getDot2(line.id);
-  dot1.classList.toggle('grow');
-  dot2.classList.toggle('grow');
-  // claim any squares
-  pydots.claimSquares(move, player);
-  // update the score
-  pydots.displayPlayerScore(player, pydots.dotgame.storage.queueItem.score);
-  // Shift the queue
-  pydots.dotgame.storage.queue.shift();
-  // check if last move in turn
-  if (player == next)
-    pydots.animateMove();
-  else
-    pydots.dotgame.makeMove();
+  dot1.classList.add('grow');
+  dot2.classList.add('grow');
+  line.classList.add('selected');
 }
 
-pydots.animateMove = (lineNum) => {
-  const line = document.getElementById(lineNum);
-  const dot1 = pydots.getDot1(line.id);
-  const dot2 = pydots.getDot2(line.id);
-  dot1.classList.toggle('grow');
-  dot2.classList.toggle('grow');
-  line.classList.add('selected');
+pydots.clearAnimations = (className) => {
+  let animations = document.getElementsByClassName(className);
+  while (animations.length)
+      animations[0].classList.remove(className);
+}
+
+pydots.endMove = () => {
+  const turn = pydots.dotgame.storage.shiftQueue();
+  // claim any squares
+  pydots.claimSquares(turn.move, turn.player);
+  // update the score
+  pydots.displayPlayerScore(turn.player, turn.score);
+  // check if last move in turn
+  if (turn.player != turn.next && turn.next > 0)
+    pydots.showCurrentPlayer(turn.next);
+  pydots.startMove();
+}
+
+pydots.lockGameboard = (lock) => {
 }
 
 // Update our score board
@@ -393,9 +407,16 @@ pydots.getDot2 = (lineNum) => {
     dot = pydots.getDot1(adj);
   }
   else {
+    let dotClass = '.bottom-left';
+    if (pydots.dotgame.isHorizontal(lineNum))
+      dotClass = '.top-right';
+    if (pydots.dotgame.isBottomEdge(lineNum))
+      dotClass = '.bottom-right';
+    if (pydots.dotgame.isRightEdge(lineNum)) 
+      dotClass = '.bottom-right'; 
     let boxNum = pydots.dotgame.getBoxNum(lineNum);
     const box = document.getElementById(`B-${boxNum}`);
-    dot = box.querySelector('.bottom-right');
+    dot = box.querySelector(dotClass);
   }
   return dot;
 }

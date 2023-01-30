@@ -83,6 +83,13 @@ class GameStorage {
         localStorage.setItem(this.#key.queue, JSON.stringify(queue));
     }
 
+    shiftQueue() {
+        let queue = this.queue;
+        let item = queue.shift();
+        this.queue = queue;
+        return item;
+    }
+
     get level() {
         let level = localStorage.getItem(this.#key.level);
         if (level)
@@ -321,7 +328,10 @@ class GameStorage {
     }
 
     get queueItem() {
-        return this.queue[0];
+        let queueItem = null;
+        if (this.queue.length > 0)
+            queueItem = this.queue[0];
+        return queueItem;
     }
 
     storeNewGameSetup(numPlayers=0, machine=0) {
@@ -354,6 +364,7 @@ class GameStorage {
         this.initPlayer();
         // Reset game scores to zeros
         this.clearPlayerScores();
+        this.queue = clear;
     }
 }
 
@@ -444,14 +455,14 @@ pydots.dotgame.validateMove = function (line, bAnimate=true)
                 }
                 pydots.dotgame.storage.pushQueue(player, move, score, next);
             })
-            let event = new CustomEvent('drawMove');
+            let event = new CustomEvent('displayMoves');
             document.dispatchEvent(event);
         });
     return;
 }
 
 // Ask the computer for its move(s). For each move,
-// trigger drawMove event and others to notify UI.
+// trigger displayMoves event and others to notify UI.
 pydots.dotgame.makeMove = function ()
 {
     let player = pydots.dotgame.storage.player;
@@ -502,7 +513,7 @@ pydots.dotgame.makeMove = function ()
                     }
                     pydots.dotgame.storage.pushQueue(player, move, score, next);
                 })
-                let event = new CustomEvent("drawMove");
+                let event = new CustomEvent("displayMoves");
                 document.dispatchEvent(event);
         });
     return;
