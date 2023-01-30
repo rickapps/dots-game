@@ -45,7 +45,6 @@ window.addEventListener('DOMContentLoaded', () => {
   // The arg for event is array of [line,box1,box2]
   // Drawing a single line could complete up to two boxes.
   document.addEventListener('displayMoves', pydots.showMoves, false);
-  document.addEventListener('gameOver', pydots.endGame);
 
   document.getElementById('restartGame').addEventListener('submit', (e) => {
       const ok = pydots.endGameInProgress();
@@ -130,6 +129,7 @@ pydots.initVars = () => {
   const theme = pydots.dotgame.storage.theme;
   pydots.changeTheme(theme);
   pydots.dotgame.storage.theme = theme;
+  pydots.dotgame.storage.queue = [];
  };
 
 pydots.restartGame = (evt) => {
@@ -194,7 +194,7 @@ pydots.startMove = () => {
   if (turn) {
     if (turn.player > 0) {
       pydots.animateMove(turn.player, turn.move);
-      setTimeout(pydots.endMove, 5000);
+      setTimeout(pydots.endMove, 2500);
     }
     else {
       pydots.endGame();
@@ -210,12 +210,11 @@ pydots.startMove = () => {
 }
 
 pydots.animateMove = (player, move) => {
-  const line = document.getElementById(move[0].toString());
-  const dot1 = pydots.getDot1(line.id);
-  const dot2 = pydots.getDot2(line.id);
+  const lineNum = move[0].toString();
+  const dot1 = pydots.getDot1(lineNum);
+  const dot2 = pydots.getDot2(lineNum);
   dot1.classList.add('grow');
   dot2.classList.add('grow');
-  line.classList.add('selected');
 }
 
 pydots.clearAnimations = (className) => {
@@ -226,6 +225,8 @@ pydots.clearAnimations = (className) => {
 
 pydots.endMove = () => {
   const turn = pydots.dotgame.storage.shiftQueue();
+  const line = document.getElementById(turn.move[0].toString());
+  line.classList.add('selected');
   // claim any squares
   pydots.claimSquares(turn.move, turn.player);
   // update the score
@@ -238,11 +239,6 @@ pydots.endMove = () => {
 
 pydots.lockGameboard = (lock) => {
 }
-
-// Update our score board
-pydots.updateScore = (player, score) => {
-  pydots.displayScores('panel');
-};
 
 //--------------------------------
 // HELPER FUNCTIONS
@@ -419,9 +415,4 @@ pydots.getDot2 = (lineNum) => {
     dot = box.querySelector(dotClass);
   }
   return dot;
-}
-
-pydots.getLine = (lineNum) => {
-  const line = document.getElementById(`${lineNum}`);
-  return line;
 }

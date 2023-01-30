@@ -359,12 +359,12 @@ class GameStorage {
         let clear = [];
         this.history = clear; // Remove does not remove the key
         this.claims = clear; // Remove does not remove the key
+        this.queue = clear;
         localStorage.removeItem(this.#key.lines);
         // Set the current player back to player 1
         this.initPlayer();
         // Reset game scores to zeros
         this.clearPlayerScores();
-        this.queue = clear;
     }
 }
 
