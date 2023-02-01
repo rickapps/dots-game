@@ -65,3 +65,50 @@ The top left square has id=0. The bottom right square has id=squareCount-1. Each
 
 For 4x4 game board, gameSize is 4. squareCount is 16. Squares are numbered 0-15. Horizontal lines on top edge of game board are numbered 0-3. Horizontal lines on bottom edge of game board are numbered 16-19. Vertical lines on the left edge are numbered 20,24,28,32. Vertical lines on the right edge of the game board are numbered 36,37,38,39. Vertical lines on the first row of the gameboard are numbered 20,21,22,23,36. The second row of vertical lines are numbered 24,25,26,27,37. The numbering scheme makes formulas for computing related squares and lines easier.
 
+## Important Files
+
+### startup.html, startup.js: 
+Client entry point to the game. Normally the startup page is not seen by the user. When the page is loaded, localStorage is checked for an unfinished game. If found, the user is redirected to */resume/*. Otherwise, the user is redirected to */new/*. If the load script does not complete, the startup page is displayed. The user can click a link for */reset/*. 
+
+### error.html:
+Page is displayed in response to server errors. User is given the option to clear localStorage. New versions of the dots game sometimes change the file structure of localStorage.
+
+### mainpage.html, mainpage.js:
+The dots game page and associated javascript functions that affect the user interface.
+
+### dotsgame.js:
+Javascript functions to communicate with the server, manage local storage, and other non-UI related functions.
+
+### jsconstants.html:
+This is where Flask jinja code passes values to javascript. The file also contains other javascript constants in in all script files. 
+
+### main.py
+The Flask route. Entry point for the server.
+
+### gameboard.py
+A class to represent the dots game. This is the business logic to create the gameboard, find the best move, and game functions.
+
+### dotgame.py
+Interface functions between the gameboard class and the Flask route.
+
+### themes.css
+CSS variables defining colors and other values used in *style.css* and *layout.css*. You can define multiple sets of variables grouped by theme. The user can select different game themes to change the style of the UI.
+
+### layout.css
+Overall page structure and hamburger menu.
+
+### style.css
+Styles for *mainpage.html* and *startup.html.*
+
+## Algorithm Overview
+All game data is stored locally and managed by class **GameStorage**. Each time a player draws a line on the gameboard, an AJAX post is sent to the server passing the current *lines[]* array and the line the player added. The server responds with a tuple containing **(line#,box#,box#)** where *line#* is the line the player added, and *box#* is the square completed by the line. A single line can complete up to two squares on the gameboard. If both *box#'s* are -1, the player's turn ends and the the next player can move.  On the machine's turn, an AJAX post is made to the server passing the current *lines[]* array. The machine responds with a list of tuples; **[(line#,box#,box#), (line#,box#,box#), ...]**. If the machine's turn does not complete any boxes, the list contains only one entry, **[(line#,-1, -1)]**.
+
+All moves returned by the server, both for the player and for the machine, are stored in **GameStorage**. **GameStorage** also maintains an up-to-date *lines[]* array, *claims[]* array, and player scores. **GameStorage** also maintains a *queue* array containing the moves to be drawn by the UI. The UI draws the moves at a timed, slow pace so the user can see the effects of each move. Once a move is drawn, it is discarded from the queue. A player can close the web page at anytime and the current state of the game is stored in localStorage. The next time the page is displayed, it will be restored to its previous state.
+
+
+
+
+
+
+
+
