@@ -2,6 +2,7 @@
 ## Client/Server Dots game using Python Flask, Javascript, and CSS 
 
 Links: [https://dotsgame.rickapps.com](https://dotsgame.rickapps.com) or [https://playdots.uc.r.appspot.com/](https://playdots.uc.r.appspot.com/)
+For information on how to play the game, see: [https://en.wikipedia.org/wiki/Dots_and_Boxes](https://en.wikipedia.org/wiki/Dots_and_Boxes)
 
 ### Server Commands
 
