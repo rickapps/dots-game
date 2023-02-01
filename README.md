@@ -68,10 +68,10 @@ For 4x4 game board, gameSize is 4. squareCount is 16. Squares are numbered 0-15.
 ## Important Files
 
 ### startup.html, startup.js: 
-Client entry point to the game. Normally the startup page is not seen by the user. When the page is loaded, localStorage is checked for an unfinished game. If found, the user is redirected to */resume/*. Otherwise, the user is redirected to */new/*. If the load script does not complete, the startup page is displayed. The user can click a link for */reset/*. 
+Client entry point to the game. Normally the startup page is not seen by the user. When the page is loaded, localStorage is checked for an unfinished game. If found, the user is redirected to */resume/*. Otherwise, the user is redirected to */new/*. In the rare event the load script does not complete, the startup page is displayed. The user can click a link for */reset/*. 
 
 ### error.html:
-Page is displayed in response to server errors. User is given the option to clear localStorage. New versions of the dots game sometimes change the file structure of localStorage.
+The error page is displayed in response to server errors. The user is given the option to clear localStorage. New versions of this game sometimes change the file structure of localStorage. Clearing storage might fix certain server issues.
 
 ### mainpage.html, mainpage.js:
 The dots game page and associated javascript functions that affect the user interface.
@@ -103,7 +103,9 @@ Styles for *mainpage.html* and *startup.html.*
 ## Algorithm Overview
 All game data is stored locally and managed by class **GameStorage**. Each time a player draws a line on the gameboard, an AJAX post is sent to the server passing the current *lines[]* array and the line the player added. The server responds with a tuple containing **(line#,box#,box#)** where *line#* is the line the player added, and *box#* is the square completed by the line. A single line can complete up to two squares on the gameboard. If both *box#'s* are -1, the player's turn ends and the the next player can move.  On the machine's turn, an AJAX post is made to the server passing the current *lines[]* array. The machine responds with a list of tuples; **[(line#,box#,box#), (line#,box#,box#), ...]**. If the machine's turn does not complete any boxes, the list contains only one entry, **[(line#,-1, -1)]**.
 
-All moves returned by the server, both for the player and for the machine, are stored in **GameStorage**. **GameStorage** also maintains an up-to-date *lines[]* array, *claims[]* array, and player scores. **GameStorage** also maintains a *queue* array containing the moves to be drawn by the UI. The UI draws the moves at a timed, slow pace so the user can see the effects of each move. Once a move is drawn, it is discarded from the queue. A player can close the web page at anytime and the current state of the game is stored in localStorage. The next time the page is displayed, it will be restored to its previous state.
+All moves returned by the server, both for the player and for the machine, are stored locally in **GameStorage**. **GameStorage** maintains an up-to-date *lines[]* array, *claims[]* array, and player scores. **GameStorage** also maintains a *queue* array containing the moves to be drawn by the UI. The UI draws the moves at a timed, slow pace so the user can visually follow each move. Once a move is drawn, it is discarded from the queue. A player can close the web page at anytime and the current state of the game is stored in **GameStorage.lines** and **GameStorage.claims**. The next time the game page is displayed, it will be restored to its previous state. 
+
+The gameboard UI reports player moves to the server and it slowly draws all moves stored in *GameStorage.queue*. Once the moves are drawn, they are deleted from **GameStorage.queue**. The client UI waits for the player to draw another line or requests a move from the server depending on who has the current turn. The server indicates turn changes in **GameStorage.queue**. 
 
 
 
