@@ -55,7 +55,7 @@ Links: [https://dotsgame.rickapps.com](https://dotsgame.rickapps.com) or [https:
 
 **move:** A move is a tuple (line#,box#,box#) where lines and boxes are numbered according to the diagram below. A player's turn can consist of multiple moves. A single line can complete up to two boxes. If a line completes a box, that player gets another move. (2, -1, -1) means no boxes were completed by the line, (2, 2, -1) means line2 completed box2 and no other boxes. 
 
-**size:** The number of squares on each side of the gameboard. The total number of squares is size**2.
+**size:** The number of squares on each side of the gameboard. The total number of squares is size**2. Note: The terms *boxes* and *squares* are used interchangeably. A gameboard of size three contains nine squares or boxes.
 
 ### Box and Line Numbering Scheme
  
