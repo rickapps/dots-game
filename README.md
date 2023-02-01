@@ -105,7 +105,7 @@ All game data is stored locally and managed by class **GameStorage**. Each time 
 
 All moves returned by the server, both for the player and for the machine, are stored locally in **GameStorage**. **GameStorage** maintains an up-to-date *lines[]* array, *claims[]* array, and player scores. **GameStorage** also maintains a *queue* array containing the moves to be drawn by the UI. The UI draws the moves at a timed, slow pace so the user can visually follow each move. Once a move is drawn, it is discarded from the queue. A player can close the web page at anytime and the current state of the game is stored in **GameStorage.lines** and **GameStorage.claims**. The next time the game page is displayed, it will be restored to its previous state. 
 
-The gameboard UI reports player moves to the server and it slowly draws all moves stored in *GameStorage.queue*. Once the moves are drawn, they are deleted from **GameStorage.queue**. The client UI waits for the player to draw another line or requests a move from the server depending on who has the current turn. The server indicates turn changes in **GameStorage.queue**. 
+The gameboard UI reports player moves to the server and it slowly draws all moves stored in **GameStorage.queue**. Once the moves are drawn, they are deleted from **GameStorage.queue**. The client UI waits for the player to draw another line or requests a move from the server depending on who has the current turn. The server indicates turn changes in **GameStorage.queue**. 
 
 
 
