@@ -2,6 +2,7 @@
 ## Client/Server Dots game using Python Flask, Javascript, and CSS 
 
 Links: [https://dotsgame.rickapps.com](https://dotsgame.rickapps.com) or [https://playdots.uc.r.appspot.com/](https://playdots.uc.r.appspot.com/)
+
 For information on how to play the game, see: [https://en.wikipedia.org/wiki/Dots_and_Boxes](https://en.wikipedia.org/wiki/Dots_and_Boxes)
 
 ### Server Commands
@@ -21,7 +22,7 @@ For information on how to play the game, see: [https://en.wikipedia.org/wiki/Dot
             claims: claims[]
         }
 
-3) Determine the best move(s) for a gameboard of the specified state. Typically this would be the computer's turn in the game. Returns a list of tuples: **[(line#,box#,box#), (line#,box#,box#), ...]** where line number is the line to add. A single line can complete up to two boxes. Box#  is -1 if no box is complete, otherwise the box# of the completed box. As long as at least one box is completed, the player adds an additional line. The last tuple in the list will always have -1 for both box numbers.
+3) Determine the best move(s) for a gameboard of the specified state. Typically this would be the computer's turn in the game. Returns a list of tuples: **[(line#,box#,box#), (line#,box#,box#), ...]** where line# is the line the machine is adding. A single line can complete up to two boxes. Box#  is -1 if no box is complete, otherwise the box# of the completed box. As long as at least one box is completed, the machine adds an additional tuple to the list. The last tuple in the list will always have -1 for both box numbers.
 
         POST /find/
         {
@@ -54,7 +55,7 @@ For information on how to play the game, see: [https://en.wikipedia.org/wiki/Dot
 
 **lines[]:** The lines connecting the dots on the gameboard. **lines[line#]** is 1 if the line has been drawn or 0 if the line is available. Lines are numbered according to the diagram below. 
 
-**move:** A move is a tuple (line#,box#,box#) where lines and boxes are numbered according to the diagram below. A player's turn can consist of multiple moves. A single line can complete up to two boxes. If a line completes a box, that player gets another move. (2, -1, -1) means no boxes were completed by drawing line#2, (2, 2, -1) means line#2 completed box#2 and no other boxes. 
+**move:** A move is a tuple (line#,box#,box#) where lines and boxes are numbered according to the diagram below. A player's turn can consist of multiple moves. A single line can complete up to two boxes. If a line completes a box, that player gets another move. (2, -1, -1) means no boxes were completed by drawing line#2. A move of (6, 2, -1) means line#6 completed box#2 and no other boxes. 
 
 **size:** The number of squares on each side of the gameboard. The total number of squares is size**2. Note: The terms *boxes* and *squares* are used interchangeably. A gameboard of size three contains nine squares or boxes.
 
