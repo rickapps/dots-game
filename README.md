@@ -30,7 +30,7 @@ For information on how to play the game, see: [https://en.wikipedia.org/wiki/Dot
             lines: lines[]
         }
 
-4) Determine squares completed by a specified line. Typically this would be a player's turn in the game. Returns a single tuple: **(line#,box#,box#)** using the same format as above. If both box#'s are -1, the player's turn has ended. If line# is -1, the game is over or the line was already taken.  
+4) Determine squares completed by a specified line. Typically this would be a player's move in the game. Returns a single tuple: **(line#,box#,box#)** using the same format as above. If both box#'s are -1, the player's turn has ended. If line# is -1, the game is over or the line was already taken.  
 
         POST /verify/
         {
@@ -82,7 +82,7 @@ The dots game page and associated javascript functions that affect the user inte
 Javascript functions to communicate with the server, manage local storage, and other non-UI related functions.
 
 ### jsconstants.html:
-This is where Flask jinja code passes values to javascript. The file also contains other javascript constants in in all script files. 
+This is where Flask jinja code passes values to javascript. The file also contains other javascript constants in all script files. 
 
 ### main.py
 The Flask route. Entry point for the server.
@@ -105,9 +105,9 @@ Styles for *mainpage.html* and *startup.html.*
 ## Algorithm Overview
 All game data is stored locally and managed by class **GameStorage**. Each time a player draws a line on the gameboard, an AJAX post is sent to the server passing the current *lines[]* array and the line the player added. The server responds with a tuple containing **(line#,box#,box#)** where *line#* is the line the player added, and *box#* is the square completed by the line. A single line can complete up to two squares on the gameboard. If both *box#'s* are -1, the player's turn ends and the the next player can move.  On the machine's turn, an AJAX post is made to the server passing the current *lines[]* array. The machine responds with a list of tuples; **[(line#,box#,box#), (line#,box#,box#), ...]**. If the machine's turn does not complete any boxes, the list contains only one entry, **[(line#,-1, -1)]**. If a move does complete at least one box, the machine draws another line and an additional tuple is added to the list.
 
-All moves returned by the server, both for the player and for the machine, are stored locally in **GameStorage**. **GameStorage** maintains an up-to-date *lines[]* array, *claims[]* array, and player scores. **GameStorage** also maintains a *queue* array containing the moves to be drawn by the UI. The UI draws the moves at a timed, slow pace so the user can visually follow each move. Once a move is drawn, it is discarded from the queue. A player can close the web page at anytime and the current state of the game is stored in **GameStorage.lines** and **GameStorage.claims**. The next time the game page is displayed, it will be restored to its previous state. 
+All moves returned by the server, both for human players and for the machine, are stored locally in **GameStorage**. **GameStorage** maintains an up-to-date *lines[]* array, *claims[]* array, and player scores. **GameStorage** also maintains a *queue* array containing the moves to be drawn by the UI. The UI draws the moves at a timed, slow pace so the user can visually track each move. Once a move is drawn, it is discarded from the queue. A player can close the web page at anytime and the current state of the game is stored in **GameStorage.lines** and **GameStorage.claims**. The next time the game page is displayed, it will be restored to its previous state. 
 
-The gameboard UI reports player moves to the server and it slowly draws all moves stored in **GameStorage.queue**. Once the moves are drawn, they are deleted from **GameStorage.queue**. The client UI waits for the player to draw another line or requests a move from the server depending on who has the current turn. The server indicates turn changes in **GameStorage.queue**. 
+The gameboard UI posts player moves to the server and it slowly draws all moves stored in **GameStorage.queue**. Once the moves are drawn, they are deleted from **GameStorage.queue**. The gameboard UI waits either waits for a player to draw another line or it requests a move from the server. Which action it takes depends  on who has the current turn. The server determines when turns change and that information is stored in **GameStorage.queue**. 
 
 
 
