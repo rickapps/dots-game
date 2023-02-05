@@ -182,7 +182,7 @@ pydots.startMove = () => {
   const turn = pydots.dotgame.storage.queueItem;
   if (turn) {
     if (turn.player > 0) {
-      pydots.animateMove(turn.player, turn.move);
+      pydots.addAnimations(turn.player, turn.move);
       setTimeout(pydots.endMove, 2500);
     }
     else {
@@ -190,7 +190,7 @@ pydots.startMove = () => {
     }
   }
   else {
-    pydots.clearAnimations('grow');
+    pydots.clearAnimations(['signal', 'reverse', 'extrude', 'horizontal', 'vertical']);
     if (pydots.dotgame.isMachineTurn())
       pydots.dotgame.makeMove();
     else
@@ -198,18 +198,28 @@ pydots.startMove = () => {
   }
 }
 
-pydots.animateMove = (player, move) => {
+pydots.addAnimations = (player, move) => {
   const lineNum = move[0].toString();
+  const line = document.getElementById(lineNum);
   const dot1 = pydots.getDot1(lineNum);
   const dot2 = pydots.getDot2(lineNum);
-  dot1.classList.add('grow');
-  dot2.classList.add('grow');
+  dot1.classList.add('signal');
+  dot2.classList.add('signal', 'reverse');
+  if (pydots.dotgame.isHorizontal(lineNum))
+    line.classList.add('extrude', 'horizontal');
+  else
+    line.classList.add('extrude', 'vertical');
+
+  return;
 }
 
-pydots.clearAnimations = (className) => {
-  let animations = document.getElementsByClassName(className);
-  while (animations.length)
+pydots.clearAnimations = (classList) => {
+  let animations = [];
+  for (let className of classList) {
+    animations = document.getElementsByClassName(className);
+    while (animations.length)
       animations[0].classList.remove(className);
+  }
 }
 
 pydots.endMove = () => {

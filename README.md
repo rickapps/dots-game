@@ -82,7 +82,7 @@ The dots game page and associated javascript functions that affect the user inte
 Javascript functions to communicate with the server, manage local storage, and other non-UI related functions.
 
 ### jsconstants.html:
-This is where Flask jinja code passes values to javascript. The file also contains other javascript constants in all script files. 
+This is where Flask jinja code passes values to javascript. The file defines all global javascript constants. 
 
 ### main.py
 The Flask route. Entry point for the server.

@@ -170,13 +170,44 @@ We only want to affect the anchor tags that are within class .grid-item
   padding: 2px;
 }
 
-@keyframes dotSize {
-  from {height: 40%; width: 40%;}
-  to {height: 20%; width: 20%;}
+/* Animations */
+
+.extrude {
+  animation-duration: 3s;
+  animation-timing-function: ease-in;
 }
 
-.grow {
-  animation-name: dotSize;
-  animation-duration: 4s;
+.vertical {
+  animation-name: v-grow;
 }
 
+.horizontal {
+  animation-name: h-grow;
+}
+
+.signal {
+  animation-name: dance;
+  animation-duration: 500ms;
+  animation-iteration-count: 6;
+}
+
+.reverse {
+  animation-direction: reverse;
+}
+
+@keyframes v-grow {
+  from {height: 0; background-color: purple;}
+  to {height: 100%; background-color: yellow;}
+}
+
+@keyframes h-grow {
+  from {width: 0; background-color: purple;}
+  to {width: 100%; background-color: yellow;}
+}
+
+@keyframes dance {
+  0%,100% { background-color: purple; box-shadow: 10px 10px 5px purple;}
+  25% {box-shadow: 10px -10px 5px purple;}
+  50% { background-color: yellow; box-shadow: -10px -10px 5px purple;}
+  75% {box-shadow: -10px 10px 5px purple;}
+}
