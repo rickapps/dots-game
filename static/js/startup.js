@@ -1,8 +1,6 @@
 // Copyright (c) 2022 Rick Eichhorn
 // Latest source available at: https://github.com/rickapps/dots-game
 // rick@rickapps.com
-// November 2, 2022
-
 var pydots = pydots || {};
 pydots.startup = pydots.startup || {};
 

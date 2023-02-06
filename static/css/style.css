@@ -1,12 +1,8 @@
 /* ----------------------------------------------------------------------------
-Styles for specific Dots game elements. 
 Author: RickApps
 Website: https://github.com/rickapps/
-Email: rick@rickapps.com
 -----------------------------------------------------------------------------*/
 
-/* Styles for the dots on the game board
-----------------------------------------------------------------------------*/
 .dot {
   background-color: var(--dot-color);
   height: 20%;
@@ -39,8 +35,6 @@ Email: rick@rickapps.com
   right: -10%;
 }
 
-/* Styles for our gameboard
-------------------------------------------------------------------------------*/
 .grid-container {
   display: grid;
   grid-template-columns: repeat(var(--gridSize), auto);
@@ -48,8 +42,6 @@ Email: rick@rickapps.com
   padding: 20px;
 }
 
-/* Each box on the board is a grid-item */
-/* Every box has its top and left border visible */
 .grid-item {
   position: relative;
   background-color: var(--box-background-color);
@@ -89,10 +81,6 @@ Email: rick@rickapps.com
 .deactivate {
   pointer-events: none;
 }
-
-/*----------------------------------------------------------------------------------
-Styles for the lines connecting the dots. 
------------------------------------------------------------------------------------*/
 
 .grid-item a {
   margin: 0%;

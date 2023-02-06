@@ -1,8 +1,6 @@
 // Copyright (c) 2022 Rick Eichhorn
 // Latest source available at: https://github.com/rickapps/dots-game
 // rick@rickapps.com
-// August 1, 2022
-//
 var pydots = pydots || {};
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -42,19 +40,30 @@ window.addEventListener('DOMContentLoaded', () => {
 
 });
 
-pydots.endGameInProgress = () => {
-  let isConfirmed = true;
-  const moves = pydots.dotgame.storage.history;
-  if (moves.length > 0) {
-    isConfirmed = confirm('Do you want to end your current game?');
-  }
-  // Clear our local storage values
-  if (isConfirmed) { 
-    pydots.dotgame.storage.clearGameValues(); 
-  }
-  return isConfirmed;
-}
+pydots.initVars = () => {
+  // Get the style sheet
+  const bodyStyles = document.body.style;
+  // Set variables in our style sheet.
+  bodyStyles.setProperty('--gridSize', GAME_SIZE);
+  pydots.dotgame.storage.level = GAME_SIZE;
+  pydots.dotgame.storage.lines = INIT_LINES;
 
+  pydots.initMenu();
+
+  // Set the theme to whatever it was before. We keep that value in localStorage
+  const theme = pydots.dotgame.storage.theme;
+  pydots.changeTheme(theme);
+  pydots.dotgame.storage.theme = theme;
+
+  let machine = pydots.dotgame.storage.machinePlayer;
+  let person = (machine == 2) ? 1 : 2; 
+  if (pydots.dotgame.storage.numPlayers == 2 && machine > 0)
+  {
+    pydots.dotgame.storage.updatePlayerName(person, PERSON_NAME);
+    pydots.dotgame.storage.updatePlayerName(machine, MACHINE_NAME);
+  }
+  pydots.dotgame.storage.queue = [];
+};
 
 pydots.initMenu = () => {
   // Note - listen for mousedown rather than click. 
@@ -96,23 +105,6 @@ pydots.showHelpDlg = () => {
   document.getElementById('helpDlg').showModal();
 }
 
-pydots.initVars = () => {
-  // Get the style sheet
-  const bodyStyles = document.body.style;
-  // Set variables in our style sheet.
-  bodyStyles.setProperty('--gridSize', GAME_SIZE);
-  pydots.dotgame.storage.level = GAME_SIZE;
-  pydots.dotgame.storage.lines = INIT_LINES;
-
-  pydots.initMenu();
-
-  // Set the theme to whatever it was before. We keep that value in localStorage
-  const theme = pydots.dotgame.storage.theme;
-  pydots.changeTheme(theme);
-  pydots.dotgame.storage.theme = theme;
-  pydots.dotgame.storage.queue = [];
- };
-
 pydots.restartGame = (evt) => {
   if (pydots.endGameInProgress())
   {
@@ -122,9 +114,19 @@ pydots.restartGame = (evt) => {
   }
 }
 
-//--------------------------------
-// EVENT HANDLERS
-//--------------------------------
+pydots.endGameInProgress = () => {
+  let isConfirmed = true;
+  const moves = pydots.dotgame.storage.history;
+  if (moves.length > 0) {
+    isConfirmed = confirm('Do you want to end your current game?');
+  }
+  // Clear our local storage values
+  if (isConfirmed) { 
+    pydots.dotgame.storage.clearGameValues(); 
+  }
+  return isConfirmed;
+}
+
 pydots.selectNewTheme = (evt) => {
   let value = evt.target.firstElementChild.value;
   if (value.length > 0) {
@@ -132,6 +134,7 @@ pydots.selectNewTheme = (evt) => {
     pydots.dotgame.storage.theme = value;
   }
 }
+
 // Reset the board to indicate the current player's turn
 pydots.showCurrentPlayer = (player) => {
   const numPlayers = pydots.dotgame.storage.numPlayers;
@@ -147,11 +150,6 @@ pydots.showCurrentPlayer = (player) => {
 pydots.playerMove = (evt) => {
   pydots.dotgame.validateMove(parseInt(evt.target.id));
   evt.preventDefault();
-};
-
-pydots.endGame = () => {
-  pydots.dotgame.storage.clearGameValues();
-  document.getElementById('winnerDlg').showModal();
 };
 
 // Response to displayMoves event.
@@ -184,6 +182,14 @@ pydots.startMove = () => {
     else
       pydots.lockGameboard(false);
   }
+}
+
+pydots.lockGameboard = (lock) => {
+  const gameboard = document.getElementById('gameboard');
+  if (lock)
+    gameboard.classList.add('deactivate');
+  else
+    gameboard.classList.remove('deactivate');
 }
 
 pydots.addAnimations = (player, move) => {
@@ -224,17 +230,11 @@ pydots.endMove = () => {
   pydots.startMove();
 }
 
-pydots.lockGameboard = (lock) => {
-  const gameboard = document.getElementById('gameboard');
-  if (lock)
-    gameboard.classList.add('deactivate');
-  else
-    gameboard.classList.remove('deactivate');
-}
+pydots.endGame = () => {
+  pydots.dotgame.storage.clearGameValues();
+  document.getElementById('winnerDlg').showModal();
+};
 
-//--------------------------------
-// HELPER FUNCTIONS
-//--------------------------------
 // Define a function to change our css theme
 pydots.changeTheme = (theme) => { document.documentElement.className = theme; };
 
