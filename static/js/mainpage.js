@@ -5,14 +5,10 @@
 //
 var pydots = pydots || {};
 
-//--------------------------------
-// ADD EVENT LISTENERS
-//--------------------------------
 window.addEventListener('DOMContentLoaded', () => {
   const gameboard = document.getElementById('gameboard');
   if (gameboard) {
     // Add an event listener to all the lines on our gameboard.
-    // When a player clicks on a line, we need to know about it.
     gameboard.addEventListener('click', (event) => {
       if (event.target.tagName.toLowerCase() === 'a') {
         pydots.playerMove(event);
@@ -31,8 +27,6 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   // Add event listener to draw a line on the gameboard.
-  // The arg for event is array of [line,box1,box2]
-  // Drawing a single line could complete up to two boxes.
   document.addEventListener('displayMoves', pydots.showMoves, false);
 
   document.getElementById('restartGame').addEventListener('submit', (e) => {
@@ -43,7 +37,8 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   pydots.initVars();
-  pydots.displayScores('panel');
+  pydots.displayScores();
+  pydots.showCurrentPlayer(pydots.dotgame.storage.player);
 
 });
 
@@ -357,9 +352,9 @@ pydots.displayPlayerScore = (player, score) => {
 }
 
 // Displays on main page
-pydots.displayScores = (location) => {
+pydots.displayScores = () => {
   // Get all spans within the specified location. There should be five.
-  const element = document.getElementById(location);
+  const element = document.getElementById('panel');
   const spans = element.getElementsByTagName('span');
   // Skill Level
   const level = pydots.dotgame.storage.levelName;
