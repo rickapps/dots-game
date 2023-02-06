@@ -1,16 +1,9 @@
 {% block body %}
-<!-- Javascript we want included on each page -->
-<!-- We have some globals we populate from the server -->
-<!-- This is where we transfer values from python to javascript. -->
+<!-- Transfer values from python to javascript. -->
 <script>
-    // flask jinja fills values from main.py 
-    // If GAME_SIZE is 3, there are 9 squares on the gameboard.
-    // There are (3+1)**2=16 dots on the gameboard.
     {% if size is defined %}
     const GAME_SIZE = {{size|tojson}};
     {% endif %}
-    // The array of lines in the game. If a line is not
-    // taken, it has a value of 0. Otherwise, it is set to 1.
     {% if lines is defined %}
     const INIT_LINES = {{lines|tojson}};
     {% endif %}

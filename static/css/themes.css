@@ -1,5 +1,4 @@
 /* ----------------------------------------------------------------------------
-Themes for Dots Game. These variables are used in style.css
 Author: RickApps
 Website: https://github.com/rickapps/
 Email: rick@rickapps.com
@@ -26,11 +25,17 @@ Email: rick@rickapps.com
   --play2-background-color: yellow;
   --play3-background-color: grey;
   --play4-background-color: beige;
+  --menu-logo-color: blue;
+  --menu-text-color: white;
+  --menu-text-hover: yellow;
+  --menu-back-hover: blue;
+  --dot-alert1-color: purple;
+  --dot-alert2-color: yellow;
+  -line-alert1-color: purple;
+  --line-alert2-color: yellow;
 }
 
 /* Create specific themes below.
-Only define the vars you want to override for each theme 
-Otherwise, the value defined in all-vars will be used 
 ---------------------------------------------------------------------------------*/
 :root.theme1 {
   --main-color: lightblue;

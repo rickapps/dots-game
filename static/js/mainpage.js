@@ -101,9 +101,6 @@ pydots.showHelpDlg = () => {
   document.getElementById('helpDlg').showModal();
 }
 
-//--------------------------------
-// INIT VARS
-//--------------------------------
 pydots.initVars = () => {
   // Get the style sheet
   const bodyStyles = document.body.style;
@@ -142,7 +139,6 @@ pydots.selectNewTheme = (evt) => {
 }
 // Reset the board to indicate the current player's turn
 pydots.showCurrentPlayer = (player) => {
-  // Update the scoreboard to show the current player
   const numPlayers = pydots.dotgame.storage.numPlayers;
   const element = document.getElementById('scoreBoard');
   const markers = element.getElementsByTagName('img');
@@ -153,9 +149,6 @@ pydots.showCurrentPlayer = (player) => {
 };
 
 // Response to click event.
-// Human player has selected a line. Get the line
-// number and validate it with the server. validateMove
-// will draw the line and claim any approprate boxes.
 pydots.playerMove = (evt) => {
   pydots.dotgame.validateMove(parseInt(evt.target.id));
   evt.preventDefault();
@@ -251,10 +244,7 @@ pydots.lockGameboard = (lock) => {
 pydots.changeTheme = (theme) => { document.documentElement.className = theme; };
 
 
-// Check if the move claims any squares. If so, update the
-// gameboard with the player's color, update the player's
-// score and return true. Otherwise, do nothing and return false.
-// This function can update two squares - move[1] and move[2]
+// Check if the move claims any squares. 
 pydots.claimSquares = (move, player) => {
   let points = 0;
   if (move[1] >= 0) {
@@ -387,6 +377,7 @@ pydots.displayScores = (location) => {
   }
 };
 
+// For animations
 pydots.getDot1 = (lineNum) => {
   let dotClass = '.top-left';
   let boxNum = pydots.dotgame.getBoxNum(lineNum);

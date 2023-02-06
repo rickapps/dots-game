@@ -5,23 +5,6 @@ Website: https://github.com/rickapps/
 Email: rick@rickapps.com
 -----------------------------------------------------------------------------*/
 
-.text-center {
-  text-align: center;
-}
-
-span.bold {
-  font-size: 40px;
-  font-weight: 700;
-}
-
-img.invisible {
-  visibility: hidden;
-}
-
-img.indicator {
-  width: 30px;
-}
-
 /* Styles for the dots on the game board
 ----------------------------------------------------------------------------*/
 .dot {
@@ -32,7 +15,6 @@ img.indicator {
   z-index: 5;
 }
 
-/* Next four specify the position of the dot relative to the box */
 .top-left {
   position: absolute;
   top: -10%;
@@ -58,7 +40,6 @@ img.indicator {
 }
 
 /* Styles for our gameboard
-   We specify the number of columns here. 
 ------------------------------------------------------------------------------*/
 .grid-container {
   display: grid;
@@ -97,8 +78,6 @@ img.indicator {
   background-color: var(--play4-background-color);
 }
 
-/* The grid-item class always makes the top and left box borders visible. */
-/* Some grid boxes need their bottom and right borders visible */
 .right-edge {
   border-right: 3px solid var(--box-border-color);
 }
@@ -112,8 +91,7 @@ img.indicator {
 }
 
 /*----------------------------------------------------------------------------------
-Styles for the lines connecting the dots. We use anchor tags for the lines.
-We only want to affect the anchor tags that are within class .grid-item 
+Styles for the lines connecting the dots. 
 -----------------------------------------------------------------------------------*/
 
 .grid-item a {
@@ -161,15 +139,6 @@ We only want to affect the anchor tags that are within class .grid-item
   width: 5%;
 }
 
-.anchor-btn {
-  background-color: blue;
-  color: white;
-  display: inline-block;
-  text-align: center;
-  text-decoration: none;
-  padding: 2px;
-}
-
 /* Animations */
 
 .extrude {
@@ -196,18 +165,18 @@ We only want to affect the anchor tags that are within class .grid-item
 }
 
 @keyframes v-grow {
-  from {height: 0; background-color: purple;}
-  to {height: 100%; background-color: yellow;}
+  from {height: 0; background-color: var(--line-alert1-color);}
+  to {height: 100%; background-color: var(--line-alert2-color);}
 }
 
 @keyframes h-grow {
-  from {width: 0; background-color: purple;}
-  to {width: 100%; background-color: yellow;}
+  from {width: 0; background-color: var(--line-alert1-color);}
+  to {width: 100%; background-color: var(--line-alert2-color);}
 }
 
 @keyframes dance {
-  0%,100% { background-color: purple; box-shadow: 10px 10px 5px purple;}
-  25% {box-shadow: 10px -10px 5px purple;}
-  50% { background-color: yellow; box-shadow: -10px -10px 5px purple;}
-  75% {box-shadow: -10px 10px 5px purple;}
+  0%,100% { background-color: var(--dot-alert1-color); box-shadow: 10px 10px 5px var(--dot-alert1-color);}
+  25% {box-shadow: 10px -10px 5px var(--dot-alert1-color);}
+  50% { background-color: var(--dot-alert2-color); box-shadow: -10px -10px 5px var(--dot-alert1-color);}
+  75% {box-shadow: -10px 10px 5px var(--dot-alert1-color);}
 }

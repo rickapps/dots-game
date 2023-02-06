@@ -5,8 +5,6 @@
 var pydots = pydots || {};
 pydots.dotgame= pydots.dotgame || {};
 
-// Store line state, history, and claims in local storage to make sure we do not lose the
-// values on page refresh and we can resume games.
 class GameStorage {
     #key = {
         claim: "Claims",
@@ -365,9 +363,6 @@ class GameStorage {
 pydots.dotgame.storage = new GameStorage();
 
 // Retrieve saved game from localstorage and POST it to server
-// Need to try different way. Cannot get fetch to change url.
-// Will try to use js to modify the request header, but still
-// post using an html form.
 pydots.dotgame.resumeGame = function()
 {
     let game = {
@@ -393,13 +388,6 @@ pydots.dotgame.resumeGame = function()
     });
 }
 
-// A human player has drawn one line on the gameboard.
-// Send the user's desired move to the server to determine if it
-// completes any squares. The server returns a tuple containing
-// (lineNum, box1, box2) where box1 and box2 indicate any completed
-// squares. A value of -1 means square not completed.
-// End game if move is (-1,-1,-1). Triggers other events to
-// notify UI.
 pydots.dotgame.validateMove = function (line, bAnimate=true)
 {
     let player = pydots.dotgame.storage.player;
@@ -455,15 +443,11 @@ pydots.dotgame.validateMove = function (line, bAnimate=true)
     return;
 }
 
-// Ask the computer for its move(s). For each move,
-// trigger displayMoves event and others to notify UI.
 pydots.dotgame.makeMove = function ()
 {
     let player = pydots.dotgame.storage.player;
     let next = player;
     let score = pydots.dotgame.storage.getPlayerScore(player);
-    // Send a POST request to the server asking for the best move.
-    // The body of the request contains the current game state.
     let specs = {
         "size": pydots.dotgame.storage.level,
         "lines": pydots.dotgame.storage.lines

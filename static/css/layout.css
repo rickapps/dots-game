@@ -1,5 +1,4 @@
 /* ----------------------------------------------------------------------------
-Page layout for Dots Game. 
 Author: RickApps
 Website: https://github.com/rickapps/
 Email: rick@rickapps.com
@@ -41,176 +40,6 @@ footer {
   width: 100%;
 }
 
-/***************************************/
-/* Setup the hamburger button and logo */
-/***************************************/
-
-/* Use the label as a button.     */
-/* Float the label to the left    */
-/* It is is a container for the   */
-/* icon and the logo.             */
-.mnu-button {
-  cursor: pointer;
-  float: left;
-  /* Cannot select for copy/paste */
-  user-select: none;
-}
-
-/* The logo floats to right of the icon */
-.mnu-logo {
-  padding: 0;
-  margin: 0 0.5rem;
-  float: right;
-  display: block;
-  color: blue;
-  font-size: 1.5rem;
-  text-decoration: none;
-}
-
-.mnu-long {
-  display: none;
-}
-
-.mnu-short {
-  display: inline;
-}
-
-/* Use a hamburger symbol as our icon.     */
-/* We will make the middle line (meat)     */
-/* by setting a solid background color.    */
-.mnu-icon {
-  float: left;
-  /* Left of the logo */
-  position: relative;
-  top: 1rem;
-  /* Move it down to the center */
-  display: block;
-  background: blue;
-  height: 2px;
-  width: 18px;
-  /* Make the meat disappear */
-  transition: background .2s ease-out;
-}
-
-/* Make the two buns of the hamburger.            */
-/* ::before and ::after are pseudo elements       */
-/* placed before and after the specified element. */
-/* By default, they are inline. The css content   */
-/* property specifies what the two added elements */
-/* contain.                                       */
-.mnu-icon::before,
-.mnu-icon::after {
-  background: blue;
-  /* Make an opaque background  */
-  content: '';
-  /* but keep the content empty */
-  display: block;
-  height: 100%;
-  position: absolute;
-  transition: all .2s ease-out;
-  width: 100%;
-}
-
-/* Bottom bun */
-.mnu-icon::before {
-  top: 5px;
-}
-
-/* Top bun */
-.mnu-icon::after {
-  top: -5px;
-}
-
-/*********************************************************/
-/*            Customize our menu list                    */
-/*********************************************************/
-.mnu-list {
-  clear: both;
-}
-
-/* Set properties for our <ul>s */
-.mnu-list, .mnu-list ul {
-  margin: 0;
-  padding: 0;
-  text-align: left;
-  /* Can be circle, square, none, or other shape */
-  list-style: none;
-  /* Hide both <ul>s */
-  display: none;
-}
-
-.mnu-list li {
-  position: relative;
-  display: block;
-  z-index: 10;
-  width: 8rem;
-  float: none;
-  padding: 0.5rem 0 .5rem 0.5rem;
-  background-color: var(--header-color);
-  color: var(--dot-color);
-}
-
-.mnu-list li:hover {
-  background-color: blue;
-  color: yellow;
-  cursor: grab;
-}
-
-.mnu-list ul {
-  margin: 0;
-  padding: 0;
-  /* Position the submenu */
-  position: absolute;
-  top: 0;
-  left: 8.5rem;
-}
-
-.mnu-list li:hover ul {
-  /* Display our submenu */
-  display: block;
-}
-
-/********** Hamburger Button has Focus. *****************/
-/* Turn the hamburger into an X and display the menu.  */
-/*******************************************************/
-
-/* Display the main menu */
-.mnu-button:focus~.mnu-list {
-  /* Display the menu */
-  display: block;
-}
-
-/* Make the middle line (the meat */
-/* of the hamburger) disappear if */
-/* the button has focus           */
-.mnu-button:focus .mnu-icon {
-  background: transparent;
-}
-
-/* Rotate the top line counter clock-wise */
-/* when we have focus.                    */
-.mnu-button:focus .mnu-icon::before {
-  transform: rotate(-45deg);
-}
-
-/* Rotate the bottom line clock-wise */
-/* when the button has focus.        */
-.mnu-button:focus .mnu-icon::after {
-  transform: rotate(45deg);
-}
-
-/* Change the offset of our two buns so they */
-/* intersect when the button has focus.      */
-.mnu-button:focus .mnu-icon::before,
-.mnu-button:focus .mnu-icon::after {
-  top: 0;
-}
-
-/* Allow the 'X' to close the menu */
-.mnu-button:focus {
-  pointer-events: none;
-}
-
 input {
   box-sizing:border-box;
 }
@@ -229,12 +58,170 @@ form {
   text-align: right;
 } 
 
-/***********************************************************/
-/*                 Media statements                        */
+span.bold {
+  font-size: 40px;
+  font-weight: 700;
+}
+
+img.invisible {
+  visibility: hidden;
+}
+
+img.indicator {
+  width: 30px;
+}
+
+.anchor-btn {
+  background-color: blue;
+  color: white;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  padding: 2px;
+}
+
+/***************************************/
+/* Setup the hamburger button and logo */
+/***************************************/
+
+.mnu-button {
+  cursor: pointer;
+  float: left;
+  /* Cannot select for copy/paste */
+  user-select: none;
+}
+
+.mnu-logo {
+  padding: 0;
+  margin: 0 0.5rem;
+  float: right;
+  display: block;
+  color: var(--menu-logo-color);
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
+.mnu-long {
+  display: none;
+}
+
+.mnu-short {
+  display: inline;
+}
+
+.mnu-icon {
+  float: left;
+  /* Left of the logo */
+  position: relative;
+  top: 1rem;
+  /* Move it down to the center */
+  display: block;
+  background: var(--menu-logo-color);
+  height: 2px;
+  width: 18px;
+  /* Make the meat disappear */
+  transition: background .2s ease-out;
+}
+
+.mnu-icon::before,
+.mnu-icon::after {
+  background: var(--menu-logo-color);
+  /* Make an opaque background  */
+  content: '';
+  /* but keep the content empty */
+  display: block;
+  height: 100%;
+  position: absolute;
+  transition: all .2s ease-out;
+  width: 100%;
+}
+
+/* Bottom */
+.mnu-icon::before {
+  top: 5px;
+}
+
+/* Top */
+.mnu-icon::after {
+  top: -5px;
+}
+
+/*********************************************************/
+/*            menu list                                  */
+/*********************************************************/
+.mnu-list {
+  clear: both;
+}
+
+.mnu-list, .mnu-list ul {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  list-style: none;
+  display: none;
+}
+
+.mnu-list li {
+  position: relative;
+  display: block;
+  z-index: 10;
+  width: 8rem;
+  float: none;
+  padding: 0.5rem 0 .5rem 0.5rem;
+  background-color: var(--header-color);
+  color: var(--menu-text-color);
+}
+
+.mnu-list li:hover {
+  background-color: var(--menu-back-hover);
+  color: var(--menu-text-hover);
+  cursor: grab;
+}
+
+.mnu-list ul {
+  margin: 0;
+  padding: 0;
+  /* Position the submenu */
+  position: absolute;
+  top: 0;
+  left: 8.5rem;
+}
+
+.mnu-list li:hover ul {
+  /* Display our submenu */
+  display: block;
+}
+
+/********** Hamburger Button has Focus. *****************/
+
+.mnu-button:focus~.mnu-list {
+  /* Display the menu */
+  display: block;
+}
+
+.mnu-button:focus .mnu-icon {
+  background: transparent;
+}
+
+.mnu-button:focus .mnu-icon::before {
+  transform: rotate(-45deg);
+}
+
+.mnu-button:focus .mnu-icon::after {
+  transform: rotate(45deg);
+}
+
+.mnu-button:focus .mnu-icon::before,
+.mnu-button:focus .mnu-icon::after {
+  top: 0;
+}
+
+.mnu-button:focus {
+  pointer-events: none;
+}
+
 /***********************************************************/
 
-/* For wider screens, we can display menu all the time */
-/* No need to show the hamburger, just show the logo.  */
 @media only screen and (min-width: 60rem) {
 
   /* Hide the hamburger button */
