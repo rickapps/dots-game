@@ -41,6 +41,11 @@ footer {
 
 input {
   box-sizing:border-box;
+  display: block;
+}
+
+select {
+  display: block;
 }
 
 form {
