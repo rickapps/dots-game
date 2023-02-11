@@ -39,17 +39,19 @@ footer {
   width: 100%;
 }
 
-input {
+fieldset input {
   box-sizing:border-box;
-  display: block;
-}
-
-select {
-  display: block;
 }
 
 form {
   margin: 8px;
+  font-size: 1.125rem; // 18px, usually
+  line-height: 1.5; // Unitless! 1.5x the font size
+}
+
+form *:focus {
+  outline: 2px solid slateblue;
+  outline-offset: 2px;
 }
 
 .credit {

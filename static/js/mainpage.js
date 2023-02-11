@@ -98,6 +98,7 @@ pydots.initMenu = () => {
 }
 
 pydots.showSettingDlg = () => {
+  pydots.setPlayerList(pydots.dotgame.storage.numPlayers, pydots.dotgame.storage.machinePlayer);
   document.getElementById('settingDlg').showModal();
 }
 
@@ -305,26 +306,25 @@ pydots.storePlayerInfo = () => {
   }
 };
 
-// Show the specified number of names in the name list.
-// If machine is non-zero, populate that member of the
-// list with the machine name and make it read only.
-pydots.setPlayerList = (numPlayers, machine = 0) => {
-  const fs = document.getElementById('newGamePeople');
-  const names = fs.getElementsByTagName('input');
-  const labels = fs.getElementsByTagName('label');
+pydots.setPlayerList = (numPlayers, machine=0) => {
+  const fs = document.getElementById('pNames');
+  const sections = fs.getElementsByTagName('section');
   let state = 'visible';
-  for (let i = 0; i < names.length; i++) {
+  for (let i = 0; i < sections.length; i++) {
     if (i >= numPlayers) { state = 'hidden'; }
-    names[i].style.visibility = state;
-    names[i].readOnly = false;
-    names[i].value = INIT_NAMES[i][0];
-    labels[i].style.visibility = state;
+    sections[i].style.visibility = state;
+    let player = i+1;
+    let name = sections[i].getElementsByTagName('input')[0];
+    if (machine == player) {
+      name.value = MACHINE_NAME;
+      name.readOnly = true;
+    }
+    else {
+      name.value = pydots.dotgame.storage.getPlayerName(player);
+      name.readOnly = false;
+    }
   }
-  if (machine > 0) {
-    names[machine - 1].value = COMPUTER_PLAYER;
-    names[machine - 1].readOnly = true;
-  }
-};
+}
 
 // Show the specified number of players in the
 // machine dropdown.

@@ -30,7 +30,7 @@
             <h2>Game Settings</h2>
             <form method="dialog">
                 <label for="numPlayers">Total Players:</label>
-                <select id="numPlayers" name="numPlayers">
+                <select id="numPlayers" name="numPlayers" title="How many are playing? (including the computer)">
                     <option>2 Players</option>
                     <option>3 Players</option>
                     <option>4 Players</option>
@@ -43,19 +43,27 @@
                     <option>Player 3</option>
                     <option>Player 4</option>
                 </select>
-                <fieldset>
+                <fieldset id="pNames">
                     <legend>Player Names</legend>
+                    <section>
                     <label for="player1">Player 1:</label>
-                    <input type="text" name="player1" id="player1"/>
+                    <input type="text" name="player1" id="player1" value="rick"/>
+                    </section>
+                    <section>
                     <label for="player2">Player 2:</label>
                     <input type="text" name="player2" id="player2"/>
+                    </section>
+                    <section>
                     <label for="player3">Player 3:</label>
                     <input type="text" name="player3" id="player3"/>
+                    </section>
+                    <section>
                     <label for="player4">Player 4:</label>
                     <input type="text" name="player4" id="player4"/>
+                    </section>
                 </fieldset>
-            <input type="submit" value="Save"/>
-            <button value="default">Cancel</button>
+            <button id="saveBtn" value="default">Save</button>
+            <button>Cancel</button>
             </form>
         </dialog>
         <dialog id="winnerDlg">
