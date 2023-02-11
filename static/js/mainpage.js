@@ -49,21 +49,42 @@ pydots.initVars = () => {
   pydots.dotgame.storage.lines = INIT_LINES;
 
   pydots.initMenu();
+  pydots.initSettingsDialog();
 
   // Set the theme to whatever it was before. We keep that value in localStorage
   const theme = pydots.dotgame.storage.theme;
   pydots.changeTheme(theme);
   pydots.dotgame.storage.theme = theme;
 
-  let machine = pydots.dotgame.storage.machinePlayer;
-  let person = (machine == 2) ? 1 : 2; 
-  if (pydots.dotgame.storage.numPlayers == 2 && machine > 0)
-  {
-    pydots.dotgame.storage.updatePlayerName(person, PERSON_NAME);
-    pydots.dotgame.storage.updatePlayerName(machine, MACHINE_NAME);
-  }
   pydots.dotgame.storage.queue = [];
 };
+
+pydots.initSettingsDialog = () => {
+  selectPlayers = document.getElementById('numPlayers');
+  selectMachine = document.getElementById('machinePlayer');
+  for (let i = 0; i < PARTICIPANTS.length; i++) {
+    const player = document.createElement('option');
+    player.text = PARTICIPANTS[i][0];
+    player.value = PARTICIPANTS[i][1];
+    selectPlayers.appendChild(player);
+  }
+  const option = document.createElement('option');
+  option.text = NO_MACHINE;
+  option.value = 0;
+  selectMachine.appendChild(option);
+  pydots.setPlayerList(pydots.dotgame.storage.numPlayers, pydots.dotgame.storage.machinePlayer);
+  selectPlayers.addEventListener('change', (e) => {
+    pydots.dotgame.storage.clearPlayerNames();
+    let mSelect = document.getElementById('machinePlayer');
+    pydots.setMachineList(mSelect, e.target.value);
+    pydots.setPlayerList(e.target.value, e.target.value);
+  });
+  selectMachine.addEventListener('change', (e) => {
+    pydots.dotgame.storage.clearPlayerNames();
+    let numPlayers = document.getElementById('numPlayers').value;
+    pydots.setPlayerList(numPlayers, e.target.value);
+  });
+}
 
 pydots.initMenu = () => {
   // Note - listen for mousedown rather than click. 
@@ -306,7 +327,8 @@ pydots.storePlayerInfo = () => {
   }
 };
 
-pydots.setPlayerList = (numPlayers, machine=0) => {
+pydots.setPlayerList = (numPlayers, machine) => {
+
   const fs = document.getElementById('pNames');
   const sections = fs.getElementsByTagName('section');
   let state = 'visible';
@@ -320,7 +342,7 @@ pydots.setPlayerList = (numPlayers, machine=0) => {
       name.readOnly = true;
     }
     else {
-      name.value = pydots.dotgame.storage.getPlayerName(player);
+      name.value = (numPlayers ==2 && machine > 0) ? PERSON_NAME : pydots.dotgame.storage.getPlayerName(player);
       name.readOnly = false;
     }
   }
@@ -337,12 +359,11 @@ pydots.setMachineList = (dropdown, numPlayers) => {
   }
   for (let i = 0; i < numPlayers; i++) {
     const player = document.createElement('option');
-    player.text = INIT_NAMES[i][0];
-    player.value = INIT_NAMES[i][1];
+    player.text = MACHINE_PLAYER[i][0];
+    player.value = MACHINE_PLAYER[i][1];
     dropdown.appendChild(player);
+    dropdown.selectedIndex = numPlayers;
   }
-  // Default to the last option
-  dropdown.selectedIndex = numPlayers;
 };
 
 pydots.displayPlayerScore = (player, score) => {
