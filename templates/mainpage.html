@@ -29,13 +29,13 @@
         <dialog id="settingDlg">
             <h2>Game Settings</h2>
             <form method="dialog">
-                <label for="numPlayers">Total Players:</label>
-                <select id="numPlayers" name="numPlayers" title="How many are playing? (including the computer)">
+                <label for="setDlgNumPlayers">Total Players:</label>
+                <select id="setDlgNumPlayers" name="setDlgNumPlayers" title="How many are playing? (including the computer)">
                </select>
-               <label for="machinePlayer">Computer:</label>
-               <select id="machinePlayer" name="machinePlayer">
+               <label for="setDlgMachine">Computer:</label>
+               <select id="setDlgMachine" name="setDlgMachine">
                </select>
-                <fieldset id="pNames">
+                <fieldset id="setDlgNames">
                     <legend>Player Names</legend>
                     <section>
                     <label for="player1">Player 1:</label>
@@ -54,7 +54,7 @@
                     <input type="text" name="player4" id="player4"/>
                     </section>
                 </fieldset>
-            <button id="saveBtn" value="default">Save</button>
+            <button id="setDlgSaveBtn" value="default">Save</button>
             <button>Cancel</button>
             </form>
         </dialog>
@@ -68,10 +68,10 @@
             {% include 'includes/header.html' %}
         </header>
         <main>
-        {% include 'includes/gameboard.html' %}
+            {% include 'includes/gameboard.html' %}
         </main>
         <section id="panel">
-        {% include 'includes/panel.html' %}
+            {% include 'includes/panel.html' %}
         </section>
         <footer>
             {% include 'includes/footer.html' %}

@@ -188,16 +188,16 @@ class GameStorage {
         return names[player];
     }
 
-    updatePlayerName(player, name) {
+    updatePlayerName(pNumber, name) {
         let names = localStorage.getItem(this.#key.name);
         if (names)
             names = JSON.parse(names);
         else
             names = this.clearPlayerNames();
-        names[player] = name;
+        names[pNumber] = name;
         localStorage.setItem(this.#key.name, JSON.stringify(names));
 
-        return names[player];
+        return names[pNumber];
     }
 
     get numPlayers() {
@@ -210,7 +210,7 @@ class GameStorage {
     }
 
     set numPlayers(num) {
-        if (num >= 2 && num < this.#maxPlayers)
+        if (num >= 2 && num <= this.#maxPlayers)
             localStorage.setItem(this.#key.numPlayers, JSON.stringify(num));
         else
             throw new Error('Invalid number of players');

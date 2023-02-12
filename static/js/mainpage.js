@@ -34,31 +34,31 @@ window.addEventListener('DOMContentLoaded', () => {
       return ok;
   });
 
-  const numPlayerDropDown = document.getElementById('numPlayers');
+  const numPlayerDropDown = document.getElementById('setDlgNumPlayers');
   numPlayerDropDown.addEventListener('change', (e) => {
     pydots.dotgame.storage.clearPlayerNames();
-    let mSelect = document.getElementById('machinePlayer');
-    pydots.setMachineList(mSelect, e.target.value);
-    pydots.setPlayerList(e.target.value, e.target.value);
+    let mSelect = document.getElementById('setDlgMachine');
+    pydots.setDlgMachineList(mSelect, e.target.value);
+    pydots.setDlgPlayerList(e.target.value, e.target.value);
   });
 
-  const machinePlayerDropDown = document.getElementById('machinePlayer');
+  const machinePlayerDropDown = document.getElementById('setDlgMachine');
   machinePlayerDropDown.addEventListener('change', (e) => {
     pydots.dotgame.storage.clearPlayerNames();
-    let numPlayers = document.getElementById('numPlayers').value;
-    pydots.setPlayerList(numPlayers, e.target.value);
+    let numPlayers = document.getElementById('setDlgNumPlayers').value;
+    pydots.setDlgPlayerList(numPlayers, e.target.value);
   })
 
-  const settingsConfirmButton = document.getElementById('saveBtn');
-  settingsConfirmButton.addEventListener('click', () => {
+  const settingsSaveButton = document.getElementById('setDlgSaveBtn');
+  settingsSaveButton.addEventListener('click', () => {
     pydots.dotgame.storage.clearGameValues();
-    let numPlayers = document.getElementById('numPlayers').value;
-    let machine = document.getElementById('machinePlayer').value;
-    let names = document.getElementById('pNames').getElementsByTagName('input');
+    let numPlayers = document.getElementById('setDlgNumPlayers').value;
+    let machine = document.getElementById('setDlgMachine').value;
+    let names = document.getElementById('setDlgNames').getElementsByTagName('input');
     pydots.dotgame.storage.numPlayers = numPlayers;
     pydots.dotgame.storage.machinePlayer = machine;
     for (let i = 0; i < numPlayers; i++) {
-      pydots.dotgame.storage.updatePlayerName(names[i].value, i+1);
+      pydots.dotgame.storage.updatePlayerName(i+1, names[i].value);
     }
     const gSize = document.getElementById('glevel');
     gSize.value = pydots.dotgame.storage.level;
@@ -69,6 +69,11 @@ window.addEventListener('DOMContentLoaded', () => {
   pydots.displayScores();
   pydots.showCurrentPlayer(pydots.dotgame.storage.player);
 
+});
+
+window.addEventListener('load', () => {
+  if (pydots.dotgame.isMachineTurn())
+    pydots.dotgame.makeMove();
 });
 
 pydots.initVars = () => {
@@ -91,8 +96,8 @@ pydots.initVars = () => {
 };
 
 pydots.initSettingsDialog = () => {
-  selectPlayers = document.getElementById('numPlayers');
-  selectMachine = document.getElementById('machinePlayer');
+  selectPlayers = document.getElementById('setDlgNumPlayers');
+  selectMachine = document.getElementById('setDlgMachine');
   for (let i = 0; i < PARTICIPANTS.length; i++) {
     const player = document.createElement('option');
     player.text = PARTICIPANTS[i][0];
@@ -106,8 +111,8 @@ pydots.initSettingsDialog = () => {
   let numPlayers = pydots.dotgame.storage.numPlayers;
   let machine = pydots.dotgame.storage.machinePlayer;
   selectPlayers.selectedIndex = numPlayers - 2;
-  pydots.setMachineList(selectMachine, numPlayers);
-  pydots.setPlayerList(numPlayers, machine);
+  pydots.setDlgMachineList(selectMachine, numPlayers);
+  pydots.setDlgPlayerList(numPlayers, machine);
   selectMachine.selectedIndex = machine;
 }
 
@@ -318,41 +323,8 @@ pydots.populateMainMenu = (parent, sourceArray) => {
   }
 };
 
-pydots.addComputerPlayerToMainMenu = (parent, source) => {
-  let item = document.createElement('hr');
-  parent.appendChild(item);
-  item = document.createElement('li');
-  item.dataset.lookup = 0;
-  item.innerHTML = `<a href="#" title="Is one of the players the computer?">${source}</a>`;
-  parent.appendChild(item);
-}
-
-// *********************************************************
-// We can get rid of this stuff                          
-// ******************************************************* */
-// Save the info the user entered into the startNewGame form
-// This is information that is not sent to the server
-pydots.storePlayerInfo = () => {
-  // Store the skill level
-  let element = document.getElementById('glevel');
-  const skill = element.options[element.selectedIndex].value;
-  pydots.dotgame.storeLevel(skill);
-  // Store the player count
-  element = document.getElementById('players');
-  const numPlayers = element.options[element.selectedIndex].value;
-  element = document.getElementById('machine');
-  const computer = element.options[element.selectedIndex].value;
-  pydots.dotgame.storePlayers(numPlayers, computer);
-  // Store the names
-  element = document.getElementById('newGamePeople');
-  const names = element.getElementsByTagName('input');
-  for (let i = 1; i <= numPlayers; i++) {
-    pydots.dotgame.storage.updatePlayerName(i, names[i - 1].value);
-  }
-};
-
-pydots.setPlayerList = (numPlayers, machine) => {
-  const fs = document.getElementById('pNames');
+pydots.setDlgPlayerList = (numPlayers, machine) => {
+  const fs = document.getElementById('setDlgNames');
   const sections = fs.getElementsByTagName('section');
   let state = 'visible';
   for (let i = 0; i < sections.length; i++) {
@@ -373,7 +345,7 @@ pydots.setPlayerList = (numPlayers, machine) => {
 
 // Show the specified number of players in the
 // machine dropdown.
-pydots.setMachineList = (dropdown, numPlayers) => {
+pydots.setDlgMachineList = (dropdown, numPlayers) => {
   // We assume the first option is 'Not Playing'.
   // We always leave that option intact.
   const max = dropdown.options.length;
