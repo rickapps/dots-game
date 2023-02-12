@@ -34,6 +34,37 @@ window.addEventListener('DOMContentLoaded', () => {
       return ok;
   });
 
+  const numPlayerDropDown = document.getElementById('numPlayers');
+  numPlayerDropDown.addEventListener('change', (e) => {
+    pydots.dotgame.storage.clearPlayerNames();
+    let mSelect = document.getElementById('machinePlayer');
+    pydots.setMachineList(mSelect, e.target.value);
+    pydots.setPlayerList(e.target.value, e.target.value);
+  });
+
+  const machinePlayerDropDown = document.getElementById('machinePlayer');
+  machinePlayerDropDown.addEventListener('change', (e) => {
+    pydots.dotgame.storage.clearPlayerNames();
+    let numPlayers = document.getElementById('numPlayers').value;
+    pydots.setPlayerList(numPlayers, e.target.value);
+  })
+
+  const settingsConfirmButton = document.getElementById('saveBtn');
+  settingsConfirmButton.addEventListener('click', () => {
+    pydots.dotgame.storage.clearGameValues();
+    let numPlayers = document.getElementById('numPlayers').value;
+    let machine = document.getElementById('machinePlayer').value;
+    let names = document.getElementById('pNames').getElementsByTagName('input');
+    pydots.dotgame.storage.numPlayers = numPlayers;
+    pydots.dotgame.storage.machinePlayer = machine;
+    for (let i = 0; i < numPlayers; i++) {
+      pydots.dotgame.storage.updatePlayerName(names[i].value, i+1);
+    }
+    const gSize = document.getElementById('glevel');
+    gSize.value = pydots.dotgame.storage.level;
+    document.getElementById('restartGame').submit();
+   });
+
   pydots.initVars();
   pydots.displayScores();
   pydots.showCurrentPlayer(pydots.dotgame.storage.player);
@@ -72,18 +103,12 @@ pydots.initSettingsDialog = () => {
   option.text = NO_MACHINE;
   option.value = 0;
   selectMachine.appendChild(option);
-  pydots.setPlayerList(pydots.dotgame.storage.numPlayers, pydots.dotgame.storage.machinePlayer);
-  selectPlayers.addEventListener('change', (e) => {
-    pydots.dotgame.storage.clearPlayerNames();
-    let mSelect = document.getElementById('machinePlayer');
-    pydots.setMachineList(mSelect, e.target.value);
-    pydots.setPlayerList(e.target.value, e.target.value);
-  });
-  selectMachine.addEventListener('change', (e) => {
-    pydots.dotgame.storage.clearPlayerNames();
-    let numPlayers = document.getElementById('numPlayers').value;
-    pydots.setPlayerList(numPlayers, e.target.value);
-  });
+  let numPlayers = pydots.dotgame.storage.numPlayers;
+  let machine = pydots.dotgame.storage.machinePlayer;
+  selectPlayers.selectedIndex = numPlayers - 2;
+  pydots.setMachineList(selectMachine, numPlayers);
+  pydots.setPlayerList(numPlayers, machine);
+  selectMachine.selectedIndex = machine;
 }
 
 pydots.initMenu = () => {
@@ -119,7 +144,6 @@ pydots.initMenu = () => {
 }
 
 pydots.showSettingDlg = () => {
-  pydots.setPlayerList(pydots.dotgame.storage.numPlayers, pydots.dotgame.storage.machinePlayer);
   document.getElementById('settingDlg').showModal();
 }
 
@@ -328,7 +352,6 @@ pydots.storePlayerInfo = () => {
 };
 
 pydots.setPlayerList = (numPlayers, machine) => {
-
   const fs = document.getElementById('pNames');
   const sections = fs.getElementsByTagName('section');
   let state = 'visible';
@@ -342,7 +365,7 @@ pydots.setPlayerList = (numPlayers, machine) => {
       name.readOnly = true;
     }
     else {
-      name.value = (numPlayers ==2 && machine > 0) ? PERSON_NAME : pydots.dotgame.storage.getPlayerName(player);
+      name.value = (numPlayers == 2 && machine > 0) ? PERSON_NAME : pydots.dotgame.storage.getPlayerName(player);
       name.readOnly = false;
     }
   }
