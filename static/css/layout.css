@@ -43,10 +43,22 @@ fieldset input {
   box-sizing:border-box;
 }
 
+dialog h2, h5 {
+  margin: 0;
+}
+
+dialog article {
+  padding: 0 20px;
+  margin: 10px 0;
+  width: 350px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
 form {
   margin: 8px;
-  font-size: 1.125rem; // 18px, usually
-  line-height: 1.5; // Unitless! 1.5x the font size
+  font-size: 1.125rem; 
+  line-height: 1.5; 
 }
 
 form *:focus {
