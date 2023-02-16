@@ -48,6 +48,19 @@ class GameStorage {
         localStorage.setItem(this.#key.claim, JSON.stringify(claims));
     }
 
+    get playerNames() {
+        let names = localStorage.getItem(this.#key.name);
+        if (names)
+            names = JSON.parse(names);
+        else
+            names = initPlayerNames(this.numPlayers, this.machinePlayer);
+        return names;
+    }
+
+    set playerNames(names) {
+        localStorage.setItem(this.#key.name, JSON.stringify(names));
+    }
+
     get history() {
         let history = localStorage.getItem(this.#key.history);
         if (history)
@@ -166,36 +179,36 @@ class GameStorage {
             throw new Error('Invalid theme specified');
     }
 
-    clearPlayerNames() {
+    initPlayerNames(numPlayers, machinePlayer) {
         let names = [];
+        let name = '';
         names.push('');
         for (let i = 0; i < this.#maxPlayers; i++)
         {
             // Player zero is the machine. The array[0] is not used
             names.push(PLAYER_NAMES[i][0]);
         }
-        localStorage.setItem(this.#key.name, JSON.stringify(names));
+        names[machinePlayer] = MACHINE_NAME;
+        if (numPlayers == 2 && machinePlayer > 0) {
+            if (machinePlayer == 1)
+                names[0] = PERSON_NAME;
+            else
+                names[1] = PERSON_NAME;
+        }
+        this.playerNames = names;
         return names;
     }
 
-    getPlayerName(player) {
-        let names = localStorage.getItem(this.#key.name);
-        if (names)
-            names = JSON.parse(names);
-        else
-            names = this.clearPlayerNames();
+    getPlayerName(pNumber) {
+        let names = this.playerNames;
     
-        return names[player];
+        return names[pNumber];
     }
 
     updatePlayerName(pNumber, name) {
-        let names = localStorage.getItem(this.#key.name);
-        if (names)
-            names = JSON.parse(names);
-        else
-            names = this.clearPlayerNames();
+        let names = this.playerNames;
         names[pNumber] = name;
-        localStorage.setItem(this.#key.name, JSON.stringify(names));
+        this.playerNames = names;
 
         return names[pNumber];
     }
@@ -332,7 +345,7 @@ class GameStorage {
             machine = DEFAULT_MACHINE_PLAYER;
         this.numPlayers = numPlayers;
         this.machinePlayer = machine;
-        this.clearPlayerNames();
+        this.initPlayerNames(numPlayers, machine);
         this.clearGameValues();
     }
     
