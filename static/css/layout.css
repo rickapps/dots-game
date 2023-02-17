@@ -23,7 +23,7 @@ header {
 }
 
 main {
-  width: 90vmin;
+  width: 92vmin;
   aspect-ratio: 1/1;
   background-color: var(--main-color);
 }
@@ -36,6 +36,7 @@ main {
 
 footer {
   background-color: var(--footer-color);
+  height: 2rem;
   width: 100%;
 }
 
@@ -273,6 +274,6 @@ img.indicator {
 
   .mnu-list li {
       float: left;
-      padding: 0.3rem 0.5rem 0.53rem 0.5rem;
+      padding: 0.22rem 0.5rem 0.32rem 0.5rem;
   }
 }
