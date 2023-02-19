@@ -41,10 +41,30 @@ Website: https://github.com/rickapps/
   --play1-background-color: green;
 }
 :root.theme2 {
-  --dot-color: green;
-  --box-border-color: violet;
-  --line-hover-color: purple;
-  --line-selected-color: skyblue;
+  --wrapper-color: #607D8B;
+  --header-color: #546e7a;
+  --main-color: yellow;
+  --panel-color: #37474f;
+  --footer-color: #546e7a;;
+  --dot-color: #ff5722;
+  --box-background-color: #263238;
+  --box-border-color: #455a64;
+  --line-available-color: transparent;
+  --line-selected-color: #607d8b;
+  --line-hover-color: #ff6e40;
+  --machine-background-color: purple;
+  --play1-background-color: pink;
+  --play2-background-color: yellow;
+  --play3-background-color: grey;
+  --play4-background-color: beige;
+  --menu-logo-color: blue;
+  --menu-text-color: white;
+  --menu-text-hover: yellow;
+  --menu-back-hover: blue;
+  --dot-alert1-color: purple;
+  --dot-alert2-color: yellow;
+  -line-alert1-color: purple;
+  --line-alert2-color: yellow;
 }
 :root.theme3 {
   --panel-color: pink;

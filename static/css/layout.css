@@ -9,6 +9,12 @@ body {
 
 #wrapper {
   background-color: var(--wrapper-color);
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+#flex-container {
+  background-color: var(--wrapper-color);
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -19,7 +25,6 @@ header {
   background-color: var(--header-color);
   position: relative;
   height: 2rem;
-  width: 100%;
 }
 
 main {
@@ -30,14 +35,13 @@ main {
 
 #panel {
   background-color: var(--panel-color);
-  flex-grow: 1;
-  min-width: 45vmin;
+  flex-grow: 0.90;
+  min-width: 25vmin;
 }
 
 footer {
   background-color: var(--footer-color);
   height: 2rem;
-  width: 100%;
 }
 
 fieldset input {
@@ -116,7 +120,7 @@ img.indicator {
   float: right;
   display: block;
   color: var(--menu-logo-color);
-  font-size: 1.5rem;
+  font-size: 1.46rem;
   text-decoration: none;
 }
 
