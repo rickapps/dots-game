@@ -580,3 +580,10 @@ pydots.dotgame.getBoxNum = function(lineNum)
     return boxNum;
 }
 
+pydots.dotgame.sanitizeString = function(str)
+{
+    //From StackOverflow
+    str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim,"");
+    return str.trim();
+}
+

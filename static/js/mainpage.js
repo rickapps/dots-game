@@ -58,7 +58,7 @@ window.addEventListener('DOMContentLoaded', () => {
     pydots.dotgame.storage.numPlayers = numPlayers;
     pydots.dotgame.storage.machinePlayer = machine;
     for (let i = 0; i < numPlayers; i++) {
-      pydots.dotgame.storage.updatePlayerName(i+1, names[i].value);
+      pydots.dotgame.storage.updatePlayerName(i+1, pydots.dotgame.sanitizeString(names[i].value));
     }
     const gSize = document.getElementById('glevel');
     gSize.value = pydots.dotgame.storage.level;
