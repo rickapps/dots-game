@@ -118,7 +118,7 @@ def find_move(size, lines):
                 break
 
     # We are out of the loop. Add a move to end our turn
-    move.extend(find_best_nonscoring_move(size, lines))
+    move.extend(find_best_nonscoring_move(size, game.lines))
 
     return move   
 

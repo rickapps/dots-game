@@ -159,6 +159,8 @@ class GameBoard:
             boxes = self.get_adjacent_boxes(line)
         # Figure out the next box in the chain
         for box in boxes:
+            if box <= 0:
+                continue
             if self.is_box_complete(box):
                 points += 1
             else:
