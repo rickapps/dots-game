@@ -153,7 +153,10 @@ pydots.showSettingDlg = () => {
 }
 
 pydots.showHelpDlg = () => {
-  document.getElementById('helpDlg').showModal();
+  let dlg = document.getElementById('helpDlg');
+  let article = dlg.querySelector('article');
+  dlg.showModal();
+  article.scroll({top:0,behavior:'smooth'});
 }
 
 pydots.restartGame = (evt) => {

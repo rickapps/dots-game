@@ -28,6 +28,7 @@ header {
 }
 
 main {
+  margin: 15px;
   width: 92vmin;
   aspect-ratio: 1/1;
   background-color: var(--main-color);
