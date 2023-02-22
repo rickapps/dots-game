@@ -56,8 +56,10 @@ dialog h2, h5 {
 dialog article {
   padding: 10px 20px;
   margin: 10px 0;
-  width: 350px;
-  max-height: 200px;
+  width: 60vw;
+  height: 50vw;
+  max-width: 600px;
+  max-height: 300px;
   overflow-y: auto;
   border-style: groove;
 }
@@ -74,6 +76,10 @@ form *:focus {
 }
 
 #settingDlg form {
+  width: 60vw;
+  height: 70vw;
+  max-width: 600px;
+  max-height: 290px;
   border-style: solid;
   border-width: 1px;
   padding: 15px;
@@ -81,6 +87,9 @@ form *:focus {
 }
 #setDlgNames {
   margin: 10px;
+  max-height: 200px;
+  height: 40vw;
+  overflow-y: auto;
 }
 
 .credit {
