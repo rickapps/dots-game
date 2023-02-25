@@ -49,7 +49,7 @@ fieldset input {
   box-sizing:border-box;
 }
 
-dialog h2, h5 {
+dialog h2, h3, h5 {
   margin: 0;
 }
 
@@ -90,6 +90,17 @@ form *:focus {
   max-height: 200px;
   height: 40vw;
   overflow-y: auto;
+}
+
+#winnerDlg article {
+  padding: 5px 20px;
+  margin: 10px 0;
+  width: 40vw;
+  height: 35vw;
+  max-width: 200px;
+  max-height: 150px;
+  overflow-y: auto;
+  border-style: groove;
 }
 
 .credit {

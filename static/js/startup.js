@@ -11,7 +11,11 @@ window.addEventListener("DOMContentLoaded", (event) => {
 pydots.startup.gameSetup = function () {
     if (RESET_STORAGE)
     {
+        try {
         localStorage.clear();
+        } catch (e) {
+            pydots.dotgame.storage.history = [];
+        }
     }
     let moves = pydots.dotgame.storage.history;
     let len = moves.length;

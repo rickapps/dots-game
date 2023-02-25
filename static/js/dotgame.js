@@ -587,3 +587,51 @@ pydots.dotgame.sanitizeString = function(str)
     return str.trim();
 }
 
+pydots.dotgame.winnerMsg = function()
+{
+    let numPlayers = pydots.dotgame.storage.numPlayers;
+    let score = 0;
+    let maxScore = 0;
+    let maxPlayer = 0;
+    for (let i = 1; i <= numPlayers; i++) 
+    {
+        score = pydots.dotgame.storage.getPlayerScore(i);
+        if (score == maxScore) {
+            maxPlayer = 0;
+        }
+        if (score > maxScore) {
+            maxScore = score;
+            maxPlayer = i;
+        } 
+    } 
+    let msg = 'The score is tied!';
+    if (maxPlayer > 0) {
+        let winner = pydots.dotgame.storage.getPlayerName(maxPlayer);
+        msg = `Winner is ${winner}!`
+        if (numPlayers == 2 && pydots.dotgame.storage.machinePlayer > 0) {
+            if (maxPlayer == pydots.dotgame.storage.machinePlayer) {
+                msg = 'Give it another try!';
+            } else {
+                msg = 'You Won!!!';
+            }
+        }
+    }
+    return msg;
+}
+
+pydots.dotgame.scoreList = function()
+{
+    let scores = [];
+    let numPlayers = pydots.dotgame.storage.numPlayers;
+    let msg = '';
+    for (let i = 1; i <= numPlayers; i++) 
+    {
+        msg = `${pydots.dotgame.storage.getPlayerName(i)}: ${pydots.dotgame.storage.getPlayerScore(i)}`;
+        scores.push(msg);
+    }
+    scores.sort(function(a, b) {
+        return b.split(':')[1] - a.split(':')[1];
+    });
+    return scores;
+}
+

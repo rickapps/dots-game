@@ -34,6 +34,10 @@ window.addEventListener('DOMContentLoaded', () => {
       return ok;
   });
 
+  document.getElementById('dlgPlayAgain').addEventListener('click', () => {
+    document.getElementById('restartGame').submit();
+  });
+
   const numPlayerDropDown = document.getElementById('setDlgNumPlayers');
   numPlayerDropDown.addEventListener('change', (e) => {
     let mSelect = document.getElementById('setDlgMachine');
@@ -285,8 +289,23 @@ pydots.endMove = () => {
 }
 
 pydots.endGame = () => {
+  let dlg = document.getElementById('winnerDlg');
+  let article = dlg.querySelector('article');
+  let heading = document.createElement('h3');
+  let text = document.createTextNode(pydots.dotgame.winnerMsg());
+  heading.appendChild(text);
+  article.appendChild(heading);
+  let list = document.createElement('ol');
+  let scores = pydots.dotgame.scoreList();
+  for (const msg of scores) {
+    item = document.createElement('li');
+    text = document.createTextNode(msg);
+    item.appendChild(text);
+    list.appendChild(item);
+  }
+  article.appendChild(list);
   pydots.dotgame.storage.clearGameValues();
-  document.getElementById('winnerDlg').showModal();
+  dlg.showModal();
 };
 
 // Define a function to change our css theme
