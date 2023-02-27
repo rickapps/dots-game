@@ -205,6 +205,7 @@ img.indicator {
 /*            menu list                                  */
 /*********************************************************/
 .mnu-list {
+  display: inline-block;
   clear: both;
 }
 
@@ -296,10 +297,10 @@ img.indicator {
   /* Display the menu and move it to the left */
   .mnu-list {
       clear: none;
-      display: block;
+      display: inline-block;
       text-align: center;
+      margin: 0;
       padding: 0 0.5rem;
-      float: left;
   }
 
   .mnu-list ul {
@@ -310,6 +311,6 @@ img.indicator {
 
   .mnu-list li {
       float: left;
-      padding: 0.22rem 0.5rem 0.32rem 0.5rem;
+      padding: 0.45rem;
   }
 }
