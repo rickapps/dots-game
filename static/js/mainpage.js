@@ -14,16 +14,6 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // Change the theme when requested
-  const colorDropDown = document.getElementById('gcolors');
-  if (colorDropDown) {
-    colorDropDown.addEventListener('change', (e) => {
-      pydots.changeTheme(e.target.value);
-      // Save the value of the theme so we can retrieve it after a POST
-      pydots.dotgame.storage.theme = e.target.value;
-    });
-  };
-
   // Add event listener to draw a line on the gameboard.
   document.addEventListener('displayMoves', pydots.showMoves, false);
 
