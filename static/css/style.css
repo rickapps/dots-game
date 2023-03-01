@@ -129,19 +129,6 @@ Website: https://github.com/rickapps/
 
 /* Animations */
 
-.extrude {
-  animation-duration: 3s;
-  animation-timing-function: ease-in;
-}
-
-.vertical {
-  animation-name: v-grow;
-}
-
-.horizontal {
-  animation-name: h-grow;
-}
-
 .signal {
   animation-name: dance;
   animation-duration: 500ms;
@@ -150,6 +137,30 @@ Website: https://github.com/rickapps/
 
 .reverse {
   animation-direction: reverse;
+}
+
+.extrude {
+  animation-duration: 3s;
+  animation-timing-function: ease-in;
+}
+
+.horizontal {
+  animation-name: h-grow;
+}
+
+.vertical {
+  animation-name: v-grow;
+}
+
+.qsignal {
+  animation-name: dance;
+  animation-duration: 500ms;
+  animation-iteration-count: 3;
+}
+
+.qextrude {
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in;
 }
 
 @keyframes v-grow {

@@ -214,27 +214,35 @@ pydots.playerMove = (evt) => {
 // Draw a single move on the gameboard.
 pydots.showMoves = () => {
   const turn = pydots.dotgame.storage.queueItem;
+  goFast = (pydots.dotgame.soloPlayer() && turn.player != pydots.dotgame.storage.machinePlayer);
   if (turn && turn.player > 0) {
     pydots.showCurrentPlayer(turn.player);
     // Disable the gameboard
     pydots.lockGameboard(true);
   }
-  pydots.startMove();
+  pydots.startMove(goFast);
 };
 
-pydots.startMove = () => {
+pydots.startMove = (quick) => {
   const turn = pydots.dotgame.storage.queueItem;
+  let timer = 2500;
+  let animations = ['signal', 'reverse', 'extrude', 'horizontal', 'vertical'];
+  if (quick) {
+    timer = 1500;
+    animations = ['qsignal', 'reverse', 'qextrude', 'horizontal', 'vertical'];
+  }
+  
   if (turn) {
     if (turn.player > 0) {
-      pydots.addAnimations(turn.player, turn.move);
-      setTimeout(pydots.endMove, 2500);
+      pydots.addAnimations(turn.player, turn.move, animations);
+      setTimeout(pydots.endMove, timer, quick);
     }
     else {
       pydots.endGame();
     }
   }
   else {
-    pydots.clearAnimations(['signal', 'reverse', 'extrude', 'horizontal', 'vertical']);
+    pydots.clearAnimations(animations);
     if (pydots.dotgame.isMachineTurn())
       pydots.dotgame.makeMove();
     else
@@ -250,17 +258,17 @@ pydots.lockGameboard = (lock) => {
     gameboard.classList.remove('deactivate');
 }
 
-pydots.addAnimations = (player, move) => {
+pydots.addAnimations = (player, move, animations) => {
   const lineNum = move[0].toString();
   const line = document.getElementById(lineNum);
   const dot1 = pydots.getDot1(lineNum);
   const dot2 = pydots.getDot2(lineNum);
-  dot1.classList.add('signal');
-  dot2.classList.add('signal', 'reverse');
+  dot1.classList.add(animations[0]);
+  dot2.classList.add(animations[0], animations[1]);
   if (pydots.dotgame.isHorizontal(lineNum))
-    line.classList.add('extrude', 'horizontal');
+    line.classList.add(animations[2], animations[3]);
   else
-    line.classList.add('extrude', 'vertical');
+    line.classList.add(animations[2], animations[4]);
 
   return;
 }

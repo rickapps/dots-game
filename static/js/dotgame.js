@@ -189,7 +189,7 @@ class GameStorage {
             names.push(PLAYER_NAMES[i][0]);
         }
         names[machinePlayer] = MACHINE_NAME;
-        if (numPlayers == 2 && machinePlayer > 0) {
+        if (pydots.dotgame.soloPlayer()) {
             if (machinePlayer == 1)
                 names[0] = PERSON_NAME;
             else
@@ -608,7 +608,7 @@ pydots.dotgame.winnerMsg = function()
     if (maxPlayer > 0) {
         let winner = pydots.dotgame.storage.getPlayerName(maxPlayer);
         msg = `Winner is ${winner}!`
-        if (numPlayers == 2 && pydots.dotgame.storage.machinePlayer > 0) {
+        if (pydots.dotgame.soloPlayer()) {
             if (maxPlayer == pydots.dotgame.storage.machinePlayer) {
                 msg = 'Give it another try!';
             } else {
@@ -633,5 +633,10 @@ pydots.dotgame.scoreList = function()
         return b.split(':')[1] - a.split(':')[1];
     });
     return scores;
+}
+
+pydots.dotgame.soloPlayer = function()
+{
+    return pydots.dotgame.storage.numPlayers == 2 && pydots.dotgame.storage.machinePlayer > 0;
 }
 
