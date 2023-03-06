@@ -13,12 +13,17 @@ Website: https://github.com/rickapps/
   --main-color: yellow;
   --panel-color: #6d1b7b;
   --footer-color: #9c27b0;
-  --dot-color: #faf0fc;
+  --dot-color1: #ffff00;
+  --dot-color2: #774400;
+  --dot-alert1-color: purple;
+  --dot-alert2-color: yellow;
   --box-background-color: #4e1358;
   --box-border-color: #9c27b0;
   --line-available-color: transparent;
   --line-selected-color: blue;
   --line-hover-color: #efcef4;
+  --line-alert1-color: purple;
+  --line-alert2-color: yellow;
   --machine-background-color: purple;
   --play1-background-color: pink;
   --play2-background-color: yellow;
@@ -28,10 +33,6 @@ Website: https://github.com/rickapps/
   --menu-text-color: white;
   --menu-text-hover: yellow;
   --menu-back-hover: blue;
-  --dot-alert1-color: purple;
-  --dot-alert2-color: yellow;
-  -line-alert1-color: purple;
-  --line-alert2-color: yellow;
 }
 
 /* Create specific themes below.
@@ -46,7 +47,7 @@ Website: https://github.com/rickapps/
   --main-color: yellow;
   --panel-color: #37474f;
   --footer-color: #546e7a;;
-  --dot-color: #ff5722;
+  --dot-color1: #ff5722;
   --box-background-color: #263238;
   --box-border-color: #455a64;
   --line-available-color: transparent;

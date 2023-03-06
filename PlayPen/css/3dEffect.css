@@ -1,0 +1,23 @@
+@keyframes spill {
+    100% {
+      box-shadow: inset 0px 0px 0px -2vmin #b9ffe7, 0px 5vmin 10vmin 0px #c5ffd0;
+      height: 0vh;
+      width: 100vw;
+    }
+  }
+  .runneth-over {
+    animation: spill 5s cubic-bezier(0, 0.25, 1, 0.75) alternate infinite;
+    border-radius: 100%;
+    box-shadow: inset -5vmin -5vmin 10vmin 0px #b9ffe7, 0px 0px 0px -2vmin #c5ffd0;
+    box-sizing: border-box;
+    height: 50vh;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 10vw;
+  }
+  
+  body {
+    background: #292A2B;
+  }
