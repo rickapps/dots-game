@@ -189,9 +189,9 @@ class GameStorage {
             names.push(PLAYER_NAMES[i][0]);
         }
         names[machinePlayer] = MACHINE_NAME;
-        if (pydots.dotgame.soloPlayer()) {
+        if (pydots.dotgame.soloPlayer(numPlayers, machinePlayer)) {
             if (machinePlayer == 1)
-                names[0] = PERSON_NAME;
+                names[2] = PERSON_NAME;
             else
                 names[1] = PERSON_NAME;
         }
@@ -635,8 +635,14 @@ pydots.dotgame.scoreList = function()
     return scores;
 }
 
-pydots.dotgame.soloPlayer = function()
+pydots.dotgame.soloPlayer = function(numPlayers=0,machine=-1)
 {
-    return pydots.dotgame.storage.numPlayers == 2 && pydots.dotgame.storage.machinePlayer > 0;
+    if (numPlayers == 0) {
+        numPlayers = pydots.dotgame.storage.numPlayers;
+    }
+    if (machine == -1) {
+        machine = pydots.dotgame.storage.machinePlayer;
+    }
+    return numPlayers == 2 && machine > 0;
 }
 
