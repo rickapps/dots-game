@@ -4,6 +4,8 @@
 var pydots = pydots || {};
 
 window.addEventListener('DOMContentLoaded', () => {
+  // Allow refresh 
+  history.replaceState({}, '', '/resume/');
   const gameboard = document.getElementById('gameboard');
   if (gameboard) {
     // Add an event listener to all the lines on our gameboard.
