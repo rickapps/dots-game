@@ -1,5 +1,5 @@
 {% block body %}
-<div id="gameboard" class="grid-container">
+<div id="gameboard" tabindex="1" class="grid-container">
     {% for box in boxes %}
     {% if 1 in box.options %}
     {% set claim = 'claim1' %}

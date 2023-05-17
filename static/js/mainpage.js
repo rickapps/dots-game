@@ -145,10 +145,12 @@ pydots.initMenu = () => {
 }
 
 pydots.showSettingDlg = () => {
+  document.getElementById('gameboard').focus();
   document.getElementById('settingDlg').showModal();
 }
 
 pydots.showHelpDlg = () => {
+  document.getElementById('gameboard').focus();
   let dlg = document.getElementById('helpDlg');
   let article = dlg.querySelector('article');
   dlg.showModal();
