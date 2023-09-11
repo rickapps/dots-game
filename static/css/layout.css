@@ -294,6 +294,11 @@ img.indicator {
       display: inline;
   }
 
+  .mnu-button:focus~.mnu-list {
+    /* Display the menu */
+    display: inline-block;
+  }
+  
   /* Display the menu and move it to the left */
   .mnu-list {
       clear: none;
