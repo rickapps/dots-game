@@ -219,7 +219,7 @@ pydots.showMoves = () => {
 
 pydots.startMove = (quick) => {
   const turn = pydots.dotgame.storage.queueItem;
-  let timer = 2500;
+  let timer = 3000;
   let animations = ['signal', 'reverse', 'extrude', 'horizontal', 'vertical'];
   if (quick) {
     timer = 1500;
@@ -229,7 +229,7 @@ pydots.startMove = (quick) => {
   if (turn) {
     if (turn.player > 0) {
       pydots.addAnimations(turn.player, turn.move, animations);
-      setTimeout(pydots.endMove, timer, quick);
+      setTimeout(pydots.endMove, timer, quick, animations);
     }
     else {
       pydots.endGame();
@@ -237,8 +237,9 @@ pydots.startMove = (quick) => {
   }
   else {
     pydots.clearAnimations(animations);
+
     if (pydots.dotgame.isMachineTurn())
-      pydots.dotgame.makeMove();
+      setTimeout(pydots.dotgame.makeMove, 500);
     else
       pydots.lockGameboard(false);
   }
@@ -267,16 +268,18 @@ pydots.addAnimations = (player, move, animations) => {
   return;
 }
 
-pydots.clearAnimations = (classList) => {
-  let animations = [];
-  for (let className of classList) {
-    animations = document.getElementsByClassName(className);
-    while (animations.length)
-      animations[0].classList.remove(className);
+pydots.clearAnimations = (classes) => {
+  for (let myclass of classes) {
+    const animations = document.querySelectorAll('.' + myclass);
+    animations.forEach((animation) => {
+      animation.classList.remove(myclass);
+      animation.offsetHeight;  //reset
+    });
   }
 }
 
-pydots.endMove = () => {
+pydots.endMove = (goFast, animations) => {
+  pydots.clearAnimations(animations)
   const turn = pydots.dotgame.storage.shiftQueue();
   const line = document.getElementById(turn.move[0].toString());
   line.classList.add('selected');
@@ -287,7 +290,7 @@ pydots.endMove = () => {
   // check if last move in turn
   if (turn.player != turn.next && turn.next > 0)
     pydots.showCurrentPlayer(turn.next);
-  pydots.startMove();
+  pydots.startMove(goFast);
 }
 
 pydots.endGame = () => {
