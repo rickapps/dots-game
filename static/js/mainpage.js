@@ -87,13 +87,13 @@ pydots.initVars = () => {
   const theme = pydots.dotgame.storage.theme;
   pydots.changeTheme(theme);
   pydots.dotgame.storage.theme = theme;
-
+  
   pydots.dotgame.storage.queue = [];
 };
 
 pydots.initSettingsDialog = () => {
-  selectPlayers = document.getElementById('setDlgNumPlayers');
-  selectMachine = document.getElementById('setDlgMachine');
+  let selectPlayers = document.getElementById('setDlgNumPlayers');
+  let selectMachine = document.getElementById('setDlgMachine');
   for (let i = 0; i < PARTICIPANTS.length; i++) {
     const player = document.createElement('option');
     player.text = PARTICIPANTS[i][0];
@@ -208,8 +208,9 @@ pydots.playerMove = (evt) => {
 // Draw a single move on the gameboard.
 pydots.showMoves = () => {
   const turn = pydots.dotgame.storage.queueItem;
-  goFast = (pydots.dotgame.soloPlayer() && turn.player != pydots.dotgame.storage.machinePlayer);
-  if (turn && turn.player > 0) {
+  let goFast = false;
+   if (turn && turn.player > 0) {
+    goFast = (pydots.dotgame.soloPlayer() && turn.player != pydots.dotgame.storage.machinePlayer);
     pydots.showCurrentPlayer(turn.player);
     // Disable the gameboard
     pydots.lockGameboard(true);
@@ -297,15 +298,15 @@ pydots.endGame = () => {
   let dlg = document.getElementById('winnerDlg');
   let article = dlg.querySelector('article');
   let heading = document.createElement('h3');
-  let text = document.createTextNode(pydots.dotgame.winnerMsg());
+  const text = document.createTextNode(pydots.dotgame.winnerMsg());
   heading.appendChild(text);
   article.appendChild(heading);
   let list = document.createElement('ol');
   let scores = pydots.dotgame.scoreList();
   for (const msg of scores) {
-    item = document.createElement('li');
-    text = document.createTextNode(msg);
-    item.appendChild(text);
+    let item = document.createElement('li');
+    const itemText = document.createTextNode(msg);
+    item.appendChild(itemText);
     list.appendChild(item);
   }
   article.appendChild(list);

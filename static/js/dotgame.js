@@ -148,9 +148,7 @@ class GameStorage {
 
     get machinePlayer() {
         let machine = JSON.parse(localStorage.getItem(this.#key.machine));
-        if (machine)
-            machine = JSON.parse(machine);
-        else
+        if (!machine)
             machine = this.numPlayers;
         return machine;
     }
@@ -548,6 +546,7 @@ pydots.dotgame.isHorizontal = function(lineNum)
 pydots.dotgame.getAdjacentLine = function(lineNum)
 {
     let lineIndex = Number(lineNum);
+    let adj;
     if (lineIndex >= 2 * (GAME_SIZE * GAME_SIZE + GAME_SIZE) - 1)
         adj = -1;
     else if (lineIndex >= 2 * GAME_SIZE * GAME_SIZE + GAME_SIZE)
