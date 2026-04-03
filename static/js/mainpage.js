@@ -89,6 +89,7 @@ pydots.initVars = () => {
   pydots.dotgame.storage.theme = theme;
   
   pydots.dotgame.storage.queue = [];
+  pydots.hintLevel = 1;
 };
 
 pydots.initSettingsDialog = () => {
@@ -135,7 +136,8 @@ pydots.initMenu = () => {
         subMenu.addEventListener('mousedown', pydots.selectNewTheme);
         item.appendChild(subMenu);
         break;
-      case 'mnuUndo':
+      case 'mnuHint':
+        item.addEventListener('mousedown', pydots.showHint);
         break;
       case 'mnuHelp':
         item.addEventListener('mousedown', pydots.showHelpDlg);
@@ -200,8 +202,27 @@ pydots.showCurrentPlayer = (player) => {
 
 // Response to click event.
 pydots.playerMove = (evt) => {
+  pydots.hintLevel = 1;
   pydots.dotgame.validateMove(parseInt(evt.target.id));
   evt.preventDefault();
+};
+
+pydots.showHint = (evt) => {
+  if (document.getElementById('gameboard').classList.contains('deactivate')) return;
+  document.getElementById('gameboard').focus();
+  const rect = evt.currentTarget.getBoundingClientRect();
+  pydots.showToast(`Hint Level ${pydots.hintLevel}`, rect.bottom, rect.left);
+  if (pydots.hintLevel < 3) pydots.hintLevel++;
+};
+
+pydots.showToast = (message, top, left) => {
+  const toast = document.getElementById('hintToast');
+  toast.textContent = message;
+  toast.style.top = `${top}px`;
+  toast.style.left = `${left}px`;
+  toast.classList.add('show');
+  clearTimeout(pydots._toastTimer);
+  pydots._toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
 };
 
 // Response to displayMoves event.

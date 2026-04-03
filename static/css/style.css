@@ -183,6 +183,24 @@ Website: https://github.com/rickapps/
   75% {box-shadow: -10px 10px 5px var(--dot-alert1-color);}
 }
 
+/* Toast notification */
+#hintToast {
+  position: fixed;
+  background-color: var(--menu-back-hover);
+  color: var(--menu-text-hover);
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+  z-index: 100;
+}
+
+#hintToast.show {
+  opacity: 1;
+}
+
 @keyframes lightsource {
   0%,100% { background-position: 10% 70%;}
   50% { background-position: 90% 30%;}
