@@ -122,6 +122,39 @@ def find_move(size, lines):
 
     return move   
 
+# Analyze the current board and return a Level 1 hint message.
+# Priority: scoring move > free move > optimal (min-cost) move.
+def get_hint(size, lines):
+    game = gameboard.GameBoard(size, lines)
+    available = [i for i in range(len(lines)) if lines[i] == 0]
+
+    # Check for any scoring move first
+    for line in available:
+        if game.is_scoring_line(line):
+            return "You have a scoring move!"
+
+    # Count free moves (cost == 0) and find minimum cost
+    free_count = 0
+    min_cost = None
+    for line in available:
+        cost = game.get_line_cost(line)
+        if cost == 0:
+            free_count += 1
+        else:
+            if min_cost is None or cost < min_cost:
+                min_cost = cost
+
+    if free_count > 0:
+        if free_count == 1:
+            return "You have one free move available."
+        return f"You have {free_count} free moves available!"
+
+    # All moves give the opponent something; report the minimum
+    if min_cost is None:
+        min_cost = 0
+    return f"Your best move allows your opponent to complete {min_cost} square{'s' if min_cost != 1 else ''}."
+
+
 # Main purpose is to indicate if a box color should
 # change (claim a square). The return value is a tuple,
 # (line, box1, box2). If both boxes are -1, the turn is ended. 

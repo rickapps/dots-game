@@ -61,6 +61,15 @@ def verify_user_move():
     # Return a tuple (line, boxA, boxB) as json
     return json.dumps(dotgame.verify_move(size, lines, line))
 
+# Return a Level 1 hint message based on the current board state.
+@app.route("/hint/", methods = ['POST'])
+def get_hint():
+    mydata = request.json
+    size = mydata['size']
+    lines = mydata['lines']
+    hint = dotgame.get_hint(size, lines)
+    return json.dumps({'hint': hint})
+
 # Clear all localStorage - might be corrupt.
 @app.route("/reset/", methods = ['GET'])
 def reset_values ():

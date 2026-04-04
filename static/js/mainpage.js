@@ -211,7 +211,11 @@ pydots.showHint = (evt) => {
   if (document.getElementById('gameboard').classList.contains('deactivate')) return;
   document.getElementById('gameboard').focus();
   const rect = evt.currentTarget.getBoundingClientRect();
-  pydots.showToast(`Hint Level ${pydots.hintLevel}`, rect.bottom, rect.left);
+  if (pydots.hintLevel === 1) {
+    pydots.dotgame.getHint(msg => pydots.showToast(msg, rect.bottom, rect.left));
+  } else {
+    pydots.showToast(`Hint Level ${pydots.hintLevel}`, rect.bottom, rect.left);
+  }
   if (pydots.hintLevel < 3) pydots.hintLevel++;
 };
 

@@ -507,6 +507,24 @@ pydots.dotgame.makeMove = function ()
     return;
 }
 
+pydots.dotgame.getHint = function(callback)
+{
+    let specs = {
+        "size": GAME_SIZE,
+        "lines": pydots.dotgame.storage.lines
+    }
+    let options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(specs)
+    }
+    fetch('/hint/', options)
+        .then(res => res.json())
+        .then(data => callback(data.hint));
+}
+
 pydots.dotgame.gameOver = function(move)
 {
     return move[0] < 0;
