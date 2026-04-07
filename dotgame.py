@@ -122,37 +122,110 @@ def find_move(size, lines):
 
     return move   
 
-# Analyze the current board and return a Level 1 hint message.
-# Priority: scoring move > free move > optimal (min-cost) move.
+# Returns 'top', 'bottom', 'left', 'right', or 'center' for a Level 2 hint.
+# Randomly divides the board into top/bottom or left/right halves. If the
+# chosen dividing line shares any point with the game line segment, the
+# orientation is switched. If both orientations share a point, returns 'center'.
+#
+# Horizontal game lines are tested against a vertical (left/right) boundary by
+# checking whether the boundary falls strictly within the segment's column span.
+# Vertical game lines are tested against a horizontal (top/bottom) boundary the
+# same way using the row span. A line that coincides with a boundary (only
+# possible on even-sized boards) always fails that orientation's test.
+def _get_level2_hint(size, line):
+    N = size
+    half = N / 2.0
+    numH = N * (N + 1)
+
+    if line < numH:
+        # Horizontal line: fixed at dot_row, spanning dot cols [col_start, col_start+1]
+        dot_row = line // N
+        col_start = line % N
+        intersects_lr = col_start < half < col_start + 1
+        intersects_tb = (dot_row == half)
+
+        orientation = random.choice(['tb', 'lr'])
+        if orientation == 'lr' and intersects_lr:
+            orientation = 'tb'
+        elif orientation == 'tb' and intersects_tb:
+            orientation = 'lr'
+
+        if orientation == 'tb':
+            return 'center' if intersects_tb else ('top' if dot_row < half else 'bottom')
+        else:
+            return 'center' if intersects_lr else ('left' if col_start + 0.5 < half else 'right')
+    else:
+        # Vertical line: fixed at dot_col, spanning dot rows [row_start, row_start+1]
+        v = line - numH
+        if v < N * N:
+            dot_col, row_start = v % N, v // N
+        else:                          # right-edge lines
+            dot_col, row_start = N, v - N * N
+
+        intersects_tb = row_start < half < row_start + 1
+        intersects_lr = (dot_col == half)
+
+        orientation = random.choice(['tb', 'lr'])
+        if orientation == 'tb' and intersects_tb:
+            orientation = 'lr'
+        elif orientation == 'lr' and intersects_lr:
+            orientation = 'tb'
+
+        if orientation == 'lr':
+            return 'center' if intersects_lr else ('left' if dot_col < half else 'right')
+        else:
+            return 'center' if intersects_tb else ('top' if row_start + 0.5 < half else 'bottom')
+
+# Analyze the current board and return hint data for all three levels.
+# Returns a dict with keys:
+#   'hint'     - Level 1 message string
+#   'quadrant' - Level 2 quadrant string (e.g. 'top-left')
+#   'line'     - Level 3 exact best line index (int)
+# Priority: scoring move > free move (cost==0) > min-cost move.
 def get_hint(size, lines):
     game = gameboard.GameBoard(size, lines)
     available = [i for i in range(len(lines)) if lines[i] == 0]
 
     # Check for any scoring move first
+    scoring_line = None
     for line in available:
         if game.is_scoring_line(line):
-            return "You have a scoring move!"
+            scoring_line = line
+            break
 
-    # Count free moves (cost == 0) and find minimum cost
-    free_count = 0
-    min_cost = None
-    for line in available:
-        cost = game.get_line_cost(line)
-        if cost == 0:
-            free_count += 1
+    if scoring_line is not None:
+        best_line = scoring_line
+        msg = "You have a scoring move!"
+    else:
+        # Count free moves (cost == 0) and track the min-cost move
+        free_count = 0
+        first_free = None
+        min_cost = None
+        min_cost_line = None
+        for line in available:
+            cost = game.get_line_cost(line)
+            if cost == 0:
+                free_count += 1
+                if first_free is None:
+                    first_free = line
+            else:
+                if min_cost is None or cost < min_cost:
+                    min_cost = cost
+                    min_cost_line = line
+
+        if free_count > 0:
+            best_line = first_free
+            if free_count == 1:
+                msg = "You have one free move available."
+            else:
+                msg = f"You have {free_count} free moves available!"
         else:
-            if min_cost is None or cost < min_cost:
-                min_cost = cost
+            best_line = min_cost_line
+            if min_cost is None:
+                min_cost = 0
+            msg = f"Your best move allows your opponent to complete {min_cost} square{'s' if min_cost != 1 else ''}."
 
-    if free_count > 0:
-        if free_count == 1:
-            return "You have one free move available."
-        return f"You have {free_count} free moves available!"
-
-    # All moves give the opponent something; report the minimum
-    if min_cost is None:
-        min_cost = 0
-    return f"Your best move allows your opponent to complete {min_cost} square{'s' if min_cost != 1 else ''}."
+    return {'hint': msg, 'half': _get_level2_hint(size, best_line), 'line': best_line}
 
 
 # Main purpose is to indicate if a box color should

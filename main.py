@@ -68,7 +68,7 @@ def get_hint():
     size = mydata['size']
     lines = mydata['lines']
     hint = dotgame.get_hint(size, lines)
-    return json.dumps({'hint': hint})
+    return json.dumps(hint)
 
 # Clear all localStorage - might be corrupt.
 @app.route("/reset/", methods = ['GET'])

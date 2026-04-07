@@ -211,12 +211,29 @@ pydots.showHint = (evt) => {
   if (document.getElementById('gameboard').classList.contains('deactivate')) return;
   document.getElementById('gameboard').focus();
   const rect = evt.currentTarget.getBoundingClientRect();
-  if (pydots.hintLevel === 1) {
-    pydots.dotgame.getHint(msg => pydots.showToast(msg, rect.bottom, rect.left));
-  } else {
-    pydots.showToast(`Hint Level ${pydots.hintLevel}`, rect.bottom, rect.left);
-  }
-  if (pydots.hintLevel < 3) pydots.hintLevel++;
+  const level = pydots.hintLevel;
+  pydots.dotgame.getHint(data => {
+    if (level === 1) {
+      pydots.showToast(data.hint, rect.bottom, rect.left);
+    } else if (level === 2) {
+      const half = data.half;
+      const msg = half === 'center'
+        ? 'Your best move is near the center of the board.'
+        : `Look in the ${half} half of the board.`;
+      pydots.showToast(msg, rect.bottom, rect.left);
+    } else {
+      pydots.showToast('Here is the best move!', rect.bottom, rect.left);
+      pydots.highlightHintLine(data.line);
+    }
+  });
+  if (level < 3) pydots.hintLevel++;
+};
+
+pydots.highlightHintLine = (lineNum) => {
+  const line = document.getElementById(lineNum.toString());
+  if (!line) return;
+  line.classList.add('hint-highlight');
+  setTimeout(() => line.classList.remove('hint-highlight'), 3000);
 };
 
 pydots.showToast = (message, top, left) => {

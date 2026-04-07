@@ -522,7 +522,7 @@ pydots.dotgame.getHint = function(callback)
     }
     fetch('/hint/', options)
         .then(res => res.json())
-        .then(data => callback(data.hint));
+        .then(data => callback(data));
 }
 
 pydots.dotgame.gameOver = function(move)
