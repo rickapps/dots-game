@@ -232,8 +232,28 @@ pydots.showHint = (evt) => {
 pydots.highlightHintLine = (lineNum) => {
   const line = document.getElementById(lineNum.toString());
   if (!line) return;
-  line.classList.add('hint-highlight');
-  setTimeout(() => line.classList.remove('hint-highlight'), 3000);
+  pydots.spotlightHintLine(lineNum);
+  setTimeout(() => {
+    line.classList.add('hint-highlight');
+    setTimeout(() => line.classList.remove('hint-highlight'), 3000);
+  }, 500);
+};
+
+pydots.spotlightHintLine = (lineNum) => {
+  const line = document.getElementById(lineNum.toString());
+  if (!line) return;
+  const rect = line.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  [0, 350].forEach(delay => {
+    const spot = document.createElement('div');
+    spot.classList.add('hint-spotlight');
+    spot.style.left = `${cx}px`;
+    spot.style.top = `${cy}px`;
+    if (delay > 0) spot.style.animationDelay = `${delay}ms`;
+    document.body.appendChild(spot);
+    setTimeout(() => spot.remove(), delay + 1300);
+  });
 };
 
 pydots.showToast = (message, top, left) => {
@@ -271,8 +291,16 @@ pydots.startMove = (quick) => {
   
   if (turn) {
     if (turn.player > 0) {
-      pydots.addAnimations(turn.player, turn.move, animations);
-      setTimeout(pydots.endMove, timer, quick, animations);
+      if (turn.player == pydots.dotgame.storage.machinePlayer) {
+        pydots.spotlightHintLine(turn.move[0]);
+        setTimeout(() => {
+          pydots.addAnimations(turn.player, turn.move, animations);
+          setTimeout(pydots.endMove, timer, quick, animations);
+        }, 500);
+      } else {
+        pydots.addAnimations(turn.player, turn.move, animations);
+        setTimeout(pydots.endMove, timer, quick, animations);
+      }
     }
     else {
       pydots.endGame();

@@ -33,6 +33,7 @@ Website: https://github.com/rickapps/
   --menu-text-color: white;
   --menu-text-hover: yellow;
   --menu-back-hover: blue;
+  --highlight-color: white;
 }
 
 /* Create specific themes below.
