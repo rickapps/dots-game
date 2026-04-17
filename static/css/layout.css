@@ -329,6 +329,10 @@ img.indicator {
   cursor: grab;
 }
 
+.mnu-list li.active-theme::before {
+  content: '✓ ';
+}
+
 .mnu-list ul {
   margin: 0;
   padding: 0;

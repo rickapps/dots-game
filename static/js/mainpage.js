@@ -133,6 +133,7 @@ pydots.initMenu = () => {
       case 'mnuTheme':
         subMenu = document.createElement('ul');
         pydots.populateMainMenu(subMenu, GAME_THEMES);
+        pydots.markCurrentTheme(subMenu);
         subMenu.addEventListener('mousedown', pydots.selectNewTheme);
         item.appendChild(subMenu);
         break;
@@ -181,11 +182,20 @@ pydots.endGameInProgress = () => {
   return isConfirmed;
 }
 
+pydots.markCurrentTheme = (subMenu) => {
+  const current = pydots.dotgame.storage.theme;
+  for (let li of subMenu.children) {
+    const data = li.querySelector('data');
+    li.classList.toggle('active-theme', data !== null && data.value === current);
+  }
+};
+
 pydots.selectNewTheme = (evt) => {
   let value = evt.target.firstElementChild.value;
   if (value.length > 0) {
     pydots.changeTheme(value);
     pydots.dotgame.storage.theme = value;
+    pydots.markCurrentTheme(evt.currentTarget);
   }
 }
 
