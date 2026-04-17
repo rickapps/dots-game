@@ -49,7 +49,36 @@ fieldset input {
   box-sizing:border-box;
 }
 
-dialog h2, h3, h5 {
+/* ===== Dialog base ===== */
+
+dialog {
+  background-color: var(--wrapper-color);
+  color: var(--menu-text-color);
+  border: 2px solid var(--menu-back-hover);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+dialog form {
+  margin: 0;
+}
+
+dialog h2 {
+  margin: -1.5rem -1.5rem 1rem -1.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--header-color);
+  border-bottom: 2px solid var(--menu-back-hover);
+  font-size: 1.2rem;
+}
+
+/* Duplicated selectors from original; h3/h5 remain zero-margin as before */
+h3, h5 {
   margin: 0;
 }
 
@@ -61,36 +90,101 @@ dialog article {
   max-width: 600px;
   max-height: 300px;
   overflow-y: auto;
-  border-style: groove;
+  border: 1px solid var(--menu-back-hover);
+  border-radius: 4px;
 }
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+dialog button {
+  background-color: var(--menu-back-hover);
+  color: var(--menu-text-hover);
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem 1.1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+dialog button:hover {
+  opacity: 0.8;
+}
+
+/* ===== Form base ===== */
 
 form {
   margin: 8px;
-  font-size: 1.125rem; 
-  line-height: 1.5; 
+  font-size: 1.125rem;
+  line-height: 1.5;
 }
 
 form *:focus {
-  outline: 2px solid slateblue;
+  outline: 2px solid var(--menu-back-hover);
   outline-offset: 2px;
 }
 
+/* ===== Settings dialog ===== */
+
 #settingDlg form {
-  width: 60vw;
-  height: 70vw;
-  max-width: 600px;
-  max-height: 290px;
-  border-style: solid;
-  border-width: 1px;
-  padding: 15px;
-  margin: 5px 2px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  max-width: min(400px, 85vw);
 }
+
+#settingDlg fieldset,
+#settingDlg .dialog-actions {
+  grid-column: 1 / -1;
+}
+
+#settingDlg fieldset {
+  border: 1px solid var(--menu-back-hover);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem 0.75rem;
+}
+
+#settingDlg legend {
+  padding: 0 0.25rem;
+}
+
 #setDlgNames {
-  margin: 10px;
+  margin: 0.25rem 0 0;
   max-height: 200px;
   height: 40vw;
   overflow-y: auto;
 }
+
+#setDlgNames section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+#setDlgNames label {
+  min-width: 5.5rem;
+}
+
+#settingDlg input[type="text"],
+#settingDlg select {
+  background-color: var(--box-background-color);
+  color: var(--menu-text-color);
+  border: 1px solid var(--menu-back-hover);
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ===== Winner dialog ===== */
 
 #winnerDlg article {
   padding: 5px 20px;
@@ -100,7 +194,8 @@ form *:focus {
   max-width: 200px;
   max-height: 150px;
   overflow-y: auto;
-  border-style: groove;
+  border: 1px solid var(--menu-back-hover);
+  border-radius: 4px;
 }
 
 .credit {
