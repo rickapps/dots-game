@@ -1,11 +1,31 @@
 {% block body %}
 <fieldset id="scoreBoard">
     <legend>Scores:</legend>
-    <span id="level"></span><br>
-    <img class="indicator invisible" src='/static/img/indicator.svg' alt="=>"><span class="bold claim1" id="score1"></span><br>
-    <img class="indicator invisible" src='/static/img/indicator.svg' alt="=>"><span class="bold claim2" id="score2"></span><br>
-    <img class="indicator invisible" src='/static/img/indicator.svg' alt="=>"><span class="bold claim3" id="score3"></span><br>
-    <img class="indicator invisible" src='/static/img/indicator.svg' alt="=>"><span class="bold claim4" id="score4"></span>
+    <div class="score-row" id="row1">
+        <img class="indicator invisible" src='/static/img/indicator.svg' alt="=>">
+        <div class="player-color claim1"></div>
+        <span class="player-name" id="name1"></span>
+        <span class="player-score" id="score1"></span>
+    </div>
+    <div class="score-row" id="row2">
+        <img class="indicator invisible" src='/static/img/indicator.svg' alt="=>">
+        <div class="player-color claim2"></div>
+        <span class="player-name" id="name2"></span>
+        <span class="player-score" id="score2"></span>
+    </div>
+    <div class="score-row" id="row3">
+        <img class="indicator invisible" src='/static/img/indicator.svg' alt="=>">
+        <div class="player-color claim3"></div>
+        <span class="player-name" id="name3"></span>
+        <span class="player-score" id="score3"></span>
+    </div>
+    <div class="score-row" id="row4">
+        <img class="indicator invisible" src='/static/img/indicator.svg' alt="=>">
+        <div class="player-color claim4"></div>
+        <span class="player-name" id="name4"></span>
+        <span class="player-score" id="score4"></span>
+    </div>
+    <span id="level"></span>
 </fieldset>
 <form action="/new/" method="POST" id="restartGame">
     <fieldset>

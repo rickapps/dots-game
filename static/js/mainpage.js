@@ -304,11 +304,11 @@ pydots.startMove = (quick) => {
       if (turn.player == pydots.dotgame.storage.machinePlayer) {
         pydots.spotlightHintLine(turn.move[0]);
         setTimeout(() => {
-          pydots.addAnimations(turn.player, turn.move, animations);
+          pydots.addAnimations(turn.move, animations);
           setTimeout(pydots.endMove, timer, quick, animations);
         }, 500);
       } else {
-        pydots.addAnimations(turn.player, turn.move, animations);
+        pydots.addAnimations(turn.move, animations);
         setTimeout(pydots.endMove, timer, quick, animations);
       }
     }
@@ -334,7 +334,7 @@ pydots.lockGameboard = (lock) => {
     gameboard.classList.remove('deactivate');
 }
 
-pydots.addAnimations = (player, move, animations) => {
+pydots.addAnimations = (move, animations) => {
   const lineNum = move[0].toString();
   const line = document.getElementById(lineNum);
   const dot1 = pydots.getDot1(lineNum);
@@ -464,28 +464,21 @@ pydots.setDlgMachineList = (dropdown, numPlayers) => {
 };
 
 pydots.displayPlayerScore = (player, score) => {
-    const name = pydots.dotgame.storage.getPlayerName(player);
-    const span = document.getElementById(`score${player}`);
-    span.textContent = `${name}: ${score}`;
+    document.getElementById(`score${player}`).textContent = score;
 }
 
 // Displays on main page
 pydots.displayScores = () => {
-  // Get all spans within the specified location. There should be five.
-  const element = document.getElementById('panel');
-  const spans = element.getElementsByTagName('span');
-  // Skill Level
   const level = pydots.dotgame.storage.levelName;
-  spans[0].textContent = `Skill Level: ${level}`;
-  // Update the scores
+  document.getElementById('level').textContent = `Skill Level: ${level}`;
   const numPlayers = pydots.dotgame.storage.numPlayers;
   for (let i = 1; i < 5; i++) {
+    const row = document.getElementById(`row${i}`);
     if (i > numPlayers) {
-      spans[i].style.display = 'none';
+      row.style.display = 'none';
     } else {
-      const name = pydots.dotgame.storage.getPlayerName(i);
-      const score = pydots.dotgame.storage.getPlayerScore(i);
-      spans[i].textContent = `${name}: ${score}`;
+      document.getElementById(`name${i}`).textContent = pydots.dotgame.storage.getPlayerName(i);
+      document.getElementById(`score${i}`).textContent = pydots.dotgame.storage.getPlayerScore(i);
     }
   }
 };
