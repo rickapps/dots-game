@@ -20,7 +20,7 @@ class GameStorage {
     }
     #maxPlayers = PLAYER_NAMES.length;
     #numLevels = GAME_LEVELS.length;
-    #numThemes = GAME_THEMES.length;
+
 
 
     constructor(size=0, lines=null) {
@@ -53,7 +53,7 @@ class GameStorage {
         if (names)
             names = JSON.parse(names);
         else
-            names = initPlayerNames(this.numPlayers, this.machinePlayer);
+            names = this.initPlayerNames(this.numPlayers, this.machinePlayer);
         return names;
     }
 
@@ -179,7 +179,6 @@ class GameStorage {
 
     initPlayerNames(numPlayers, machinePlayer) {
         let names = [];
-        let name = '';
         names.push('');
         for (let i = 0; i < this.#maxPlayers; i++)
         {
@@ -372,33 +371,7 @@ class GameStorage {
 
 pydots.dotgame.storage = new GameStorage();
 
-// Retrieve saved game from localstorage and POST it to server
-pydots.dotgame.resumeGame = function()
-{
-    let game = {
-        "size": pydots.dotgame.storage.level,
-        "theme": pydots.dotgame.storage.theme,
-        "lines": pydots.dotgame.storage.lines,
-        "claims": pydots.dotgame.storage.claims
-    }
-    // Tell fetch we want a POST using JSON data
-    // and send the request.
-    let options = {
-        method: 'POST',
-        headers: {
-            'Content-Type':
-                'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(game)
-    }
-    let fetchRes = fetch('/resume/', options);
-    fetchRes.then(res => res.text()).then((data) =>
-    {
-        return data;
-    });
-}
-
-pydots.dotgame.validateMove = function (line, bAnimate=true)
+pydots.dotgame.validateMove = function (line)
 {
     let player = pydots.dotgame.storage.player;
     let next = player;
@@ -530,12 +503,6 @@ pydots.dotgame.gameOver = function(move)
     return move[0] < 0;
 }
 
-// Remove the indicated lines and box claims from the game board.
-// moves is a list of tuples (line_id, box_id), (line_id, box_id), ...
-pydots.dotgame.eraseMove = function (moves, bAnimate=true)
-{
-    return;
-}
 
 // Return true if it is the machine's turn.
 pydots.dotgame.isMachineTurn = function()
@@ -600,7 +567,7 @@ pydots.dotgame.getBoxNum = function(lineNum)
 pydots.dotgame.sanitizeString = function(str)
 {
     //From StackOverflow
-    str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim,"");
+    str = str.replace(/[^a-zA-Z0-9áéíóúñüÁÉÍÓÚÑÜ \.,_-]/gm,"");
     return str.trim();
 }
 
@@ -638,18 +605,17 @@ pydots.dotgame.winnerMsg = function()
 
 pydots.dotgame.scoreList = function()
 {
-    let scores = [];
     let numPlayers = pydots.dotgame.storage.numPlayers;
-    let msg = '';
-    for (let i = 1; i <= numPlayers; i++) 
+    let scores = [];
+    for (let i = 1; i <= numPlayers; i++)
     {
-        msg = `${pydots.dotgame.storage.getPlayerName(i)}: ${pydots.dotgame.storage.getPlayerScore(i)}`;
-        scores.push(msg);
+        scores.push({
+            name: pydots.dotgame.storage.getPlayerName(i),
+            score: pydots.dotgame.storage.getPlayerScore(i)
+        });
     }
-    scores.sort(function(a, b) {
-        return b.split(':')[1] - a.split(':')[1];
-    });
-    return scores;
+    scores.sort((a, b) => b.score - a.score);
+    return scores.map(e => `${e.name}: ${e.score}`);
 }
 
 pydots.dotgame.soloPlayer = function(numPlayers=0,machine=-1)

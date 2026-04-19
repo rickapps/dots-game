@@ -2,10 +2,33 @@
 # rick@rickapps.com
 # August 1, 2022
 #
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, abort
 import json
 import dotgame
 app = Flask(__name__)
+
+VALID_SIZES = {3, 5, 7, 10}
+
+def _validate_size(size):
+    if size not in VALID_SIZES:
+        abort(400)
+
+def _validate_lines(size, lines):
+    expected = 2 * (size * size + size)
+    if len(lines) != expected or not all(v in (0, 1) for v in lines):
+        abort(400)
+
+def _validate_claims(size, claims):
+    if len(claims) != size * size or not all(0 <= v <= 4 for v in claims):
+        abort(400)
+
+def _validate_newline(lines, line):
+    if not (0 <= line < len(lines)) or lines[line] != 0:
+        abort(400)
+
+@app.errorhandler(400)
+def bad_request(error):
+    return render_template('error.html'), 400
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -15,36 +38,47 @@ def page_not_found(error):
 def internal_error(error):
     return render_template('error.html'), 500
 
-# Start a new game with values specified by the user (or not). 
+# Start a new game with values specified by the user (or not).
 @app.route("/new/", methods = ['POST'])
 def new_game():
-    size = int(request.form['glevel'])
+    try:
+        size = int(request.form['glevel'])
+    except (KeyError, ValueError):
+        abort(400)
+    _validate_size(size)
     lines = dotgame.init_game(size)
     boxes = dotgame.game_board(size, lines)
-    return render_template('mainpage.html',size=size, \
-        lines=lines, boxes=boxes)
+    return render_template('mainpage.html', size=size, lines=lines, boxes=boxes)
 
 # Resume a game using values from local storage
 # The post is done from javascript.
 @app.route("/resume/", methods = ['POST'])
 def resume_game():
-    size = int(request.form['size'])
-    # There has got to be a better way to do this! How can I
-    # send array data on a form?
-    lines = list(map(int, request.form['lines'][1:-1].split(',')))
-    claims = list(map(int, request.form['claims'][1:-1].split(',')))
+    try:
+        size = int(request.form['size'])
+        # Arrays arrive as JSON-stringified values from localStorage
+        lines = list(map(int, request.form['lines'][1:-1].split(',')))
+        claims = list(map(int, request.form['claims'][1:-1].split(',')))
+    except (KeyError, ValueError):
+        abort(400)
+    _validate_size(size)
+    _validate_lines(size, lines)
+    _validate_claims(size, claims)
     boxes = dotgame.game_board(size, lines, claims)
-    return render_template('mainpage.html',size=size, \
-        lines=lines, boxes=boxes)
+    return render_template('mainpage.html', size=size, lines=lines, boxes=boxes)
 
 # Return a list of moves to make for the specified lines array.
 # This is where the 'computer' calculates the best move
 @app.route("/find/", methods = ['POST'])
 def find_best_move():
-    # Get the game size and line array. Return a list of tuples.
-    mydata = request.json
-    size = mydata['size'] 
-    lines = mydata['lines']
+    try:
+        mydata = request.json
+        size = int(mydata['size'])
+        lines = list(map(int, mydata['lines']))
+    except (TypeError, KeyError, ValueError):
+        abort(400)
+    _validate_size(size)
+    _validate_lines(size, lines)
     move = dotgame.find_move(size, lines)
     # Return a list of tuples [(line,boxA,boxB), (...)]
     return json.dumps(move)
@@ -53,20 +87,30 @@ def find_best_move():
 # completes any squares and return the info to the client.
 @app.route("/verify/", methods = ['POST'])
 def verify_user_move():
-    # Get game size, line array, and the move to be made.
-    mydata = request.json
-    size = mydata['size'] 
-    lines = mydata['lines']
-    line = mydata['newline']
+    try:
+        mydata = request.json
+        size = int(mydata['size'])
+        lines = list(map(int, mydata['lines']))
+        line = int(mydata['newline'])
+    except (TypeError, KeyError, ValueError):
+        abort(400)
+    _validate_size(size)
+    _validate_lines(size, lines)
+    _validate_newline(lines, line)
     # Return a tuple (line, boxA, boxB) as json
     return json.dumps(dotgame.verify_move(size, lines, line))
 
 # Return a Level 1 hint message based on the current board state.
 @app.route("/hint/", methods = ['POST'])
 def get_hint():
-    mydata = request.json
-    size = mydata['size']
-    lines = mydata['lines']
+    try:
+        mydata = request.json
+        size = int(mydata['size'])
+        lines = list(map(int, mydata['lines']))
+    except (TypeError, KeyError, ValueError):
+        abort(400)
+    _validate_size(size)
+    _validate_lines(size, lines)
     hint = dotgame.get_hint(size, lines)
     return json.dumps(hint)
 
@@ -84,4 +128,3 @@ def home(path):
 
 if __name__ == "__main__":
     app.run(debug=True)
-
