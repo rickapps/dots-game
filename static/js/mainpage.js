@@ -20,10 +20,12 @@ window.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('displayMoves', pydots.showMoves, false);
 
   document.getElementById('restartGame').addEventListener('submit', (e) => {
-      const ok = pydots.endGameInProgress();
-      if (!ok)
-        e.preventDefault();
-      return ok;
+      const moves = pydots.dotgame.storage.history;
+      if (moves.length === 0) return;
+      e.preventDefault();
+      pydots.endGameInProgress().then(ok => {
+        if (ok) document.getElementById('restartGame').submit();
+      });
   });
 
   document.getElementById('dlgPlayAgain').addEventListener('click', () => {
@@ -124,6 +126,7 @@ pydots.initMenu = () => {
       case 'mnuNew':
         subMenu = document.createElement('ul');
         pydots.populateMainMenu(subMenu, GAME_LEVELS);
+        pydots.markCurrentLevel(subMenu);
         subMenu.addEventListener('mousedown', pydots.restartGame);
         item.appendChild(subMenu);
         break;
@@ -161,26 +164,39 @@ pydots.showHelpDlg = () => {
 }
 
 pydots.restartGame = (evt) => {
-  if (pydots.endGameInProgress())
-  {
-    const gSize = document.getElementById('glevel');
-    gSize.value = evt.target.firstElementChild.value;
-    document.getElementById('restartGame').submit();
-  }
+  const newSize = evt.target.firstElementChild.value;
+  pydots.endGameInProgress().then(ok => {
+    if (ok) {
+      document.getElementById('glevel').value = newSize;
+      document.getElementById('restartGame').submit();
+    }
+  });
 }
 
 pydots.endGameInProgress = () => {
-  let isConfirmed = true;
   const moves = pydots.dotgame.storage.history;
-  if (moves.length > 0) {
-    isConfirmed = confirm('Do you want to end your current game?');
+  if (moves.length === 0) {
+    pydots.dotgame.storage.clearGameValues();
+    return Promise.resolve(true);
   }
-  // Clear our local storage values
-  if (isConfirmed) { 
-    pydots.dotgame.storage.clearGameValues(); 
-  }
-  return isConfirmed;
+  return new Promise((resolve) => {
+    const dlg = document.getElementById('confirmDlg');
+    dlg.addEventListener('close', () => {
+      const confirmed = dlg.returnValue === 'confirm';
+      if (confirmed) pydots.dotgame.storage.clearGameValues();
+      resolve(confirmed);
+    }, { once: true });
+    dlg.showModal();
+  });
 }
+
+pydots.markCurrentLevel = (subMenu) => {
+  const current = pydots.dotgame.storage.level;
+  for (let li of subMenu.children) {
+    const data = li.querySelector('data');
+    li.classList.toggle('active-theme', data !== null && Number(data.value) === current);
+  }
+};
 
 pydots.markCurrentTheme = (subMenu) => {
   const current = pydots.dotgame.storage.theme;
