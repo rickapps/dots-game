@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Background -->
+  <rect width="32" height="32" rx="5" fill="#6d1b7b"/>
+  <!-- Claimed box (player 1 = pink) -->
+  <rect x="8" y="8" width="7" height="7" fill="#ffb3c6" rx="1"/>
+  <!-- Unclaimed boxes -->
+  <rect x="17" y="8" width="7" height="7" fill="#4e1358" rx="1"/>
+  <rect x="8" y="17" width="7" height="7" fill="#4e1358" rx="1"/>
+  <!-- Claimed box (player 2 = yellow) -->
+  <rect x="17" y="17" width="7" height="7" fill="#ffff00" rx="1"/>
+  <!-- Horizontal lines -->
+  <line x1="8" y1="8" x2="15" y2="8" stroke="#5599ff" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="17" y1="8" x2="24" y2="8" stroke="#5599ff" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="8" y1="16" x2="15" y2="16" stroke="#5599ff" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="17" y1="16" x2="24" y2="16" stroke="#5599ff" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="8" y1="24" x2="15" y2="24" stroke="#5599ff" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="17" y1="24" x2="24" y2="24" stroke="#5599ff" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- Vertical lines -->
+  <line x1="8" y1="8" x2="8" y2="15" stroke="#5599ff" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="16" y1="8" x2="16" y2="15" stroke="#5599ff" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="24" y1="8" x2="24" y2="15" stroke="#5599ff" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="8" y1="17" x2="8" y2="24" stroke="#5599ff" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="16" y1="17" x2="16" y2="24" stroke="#5599ff" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="24" y1="17" x2="24" y2="24" stroke="#5599ff" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- Dots (3x3 grid) -->
+  <circle cx="8"  cy="8"  r="2.2" fill="#ffff00"/>
+  <circle cx="16" cy="8"  r="2.2" fill="#ffff00"/>
+  <circle cx="24" cy="8"  r="2.2" fill="#ffff00"/>
+  <circle cx="8"  cy="16" r="2.2" fill="#ffff00"/>
+  <circle cx="16" cy="16" r="2.2" fill="#ffff00"/>
+  <circle cx="24" cy="16" r="2.2" fill="#ffff00"/>
+  <circle cx="8"  cy="24" r="2.2" fill="#ffff00"/>
+  <circle cx="16" cy="24" r="2.2" fill="#ffff00"/>
+  <circle cx="24" cy="24" r="2.2" fill="#ffff00"/>
+</svg>
