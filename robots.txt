@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /reset/
+Disallow: /resume/
+Disallow: /verify/
+Disallow: /find/
+Disallow: /new/
+
+Sitemap: https://dotsgame.rickapps.com/sitemap.xml

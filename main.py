@@ -2,7 +2,7 @@
 # rick@rickapps.com
 # August 1, 2022
 #
-from flask import Flask, render_template, request, abort
+from flask import Flask, render_template, request, abort, send_from_directory
 import json
 import dotgame
 app = Flask(__name__)
@@ -113,6 +113,14 @@ def get_hint():
     _validate_lines(size, lines)
     hint = dotgame.get_hint(size, lines)
     return json.dumps(hint)
+
+@app.route("/robots.txt")
+def robots():
+    return send_from_directory(app.root_path, 'robots.txt')
+
+@app.route("/sitemap.xml")
+def sitemap():
+    return send_from_directory(app.root_path, 'sitemap.xml', mimetype='application/xml')
 
 # Clear all localStorage - might be corrupt.
 @app.route("/reset/", methods = ['GET'])
