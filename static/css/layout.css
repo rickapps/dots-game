@@ -65,7 +65,7 @@ main {
 
 .score-row {
   display: grid;
-  grid-template-columns: auto 1fr auto 1.2rem;
+  grid-template-columns: auto 1.2rem 1fr auto;
   align-items: center;
   gap: 0.4rem;
 }
@@ -173,6 +173,18 @@ dialog button {
 
 dialog button:hover {
   opacity: 0.8;
+}
+
+dialog a {
+  color: var(--menu-text-hover);
+}
+
+dialog a:visited {
+  color: var(--menu-text-hover);
+}
+
+dialog a:hover {
+  color: var(--highlight-color);
 }
 
 /* ===== Form base ===== */
@@ -388,8 +400,14 @@ img.indicator {
   cursor: grab;
 }
 
+.mnu-list ul li {
+  padding-left: 1.5rem;
+}
+
 .mnu-list li.active-theme::before {
-  content: '✓ ';
+  content: '✓';
+  position: absolute;
+  left: 0.4rem;
 }
 
 .mnu-list ul {
@@ -469,7 +487,7 @@ img.indicator {
   .mnu-list ul {
       top: 2rem;
       left: 0;
-      text-align: center;
+      text-align: left;
   }
 
   .mnu-list li {
