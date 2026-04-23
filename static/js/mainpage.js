@@ -74,6 +74,52 @@ window.addEventListener('load', () => {
     pydots.dotgame.makeMove();
 });
 
+pydots.applyTranslations = () => {
+  document.documentElement.lang = LOCALE;
+  // Menu
+  document.querySelector('[value="mnuNew"]').textContent = T.menu.newGame;
+  document.querySelector('[value="mnuSettings"]').textContent = T.menu.changeGame;
+  document.querySelector('[value="mnuTheme"]').textContent = T.menu.theme;
+  document.querySelector('[value="mnuHint"]').textContent = T.menu.hint;
+  document.querySelector('[value="mnuHelp"]').textContent = T.menu.help;
+  document.querySelector('.mnu-short').textContent = T.menu.menuLabel;
+  // Panel
+  document.querySelector('#scoreBoard legend').textContent = T.panel.scores;
+  document.querySelector('#restartGame input[type=submit]').value = T.panel.restartGame;
+  // Help dialog
+  document.getElementById('helpTitle').textContent = T.helpDlg.title;
+  document.getElementById('helpObjectiveHeading').textContent = T.helpDlg.objectiveHeading;
+  document.getElementById('helpObjectiveText').textContent = T.helpDlg.objectiveText;
+  document.getElementById('helpInstructionsHeading').textContent = T.helpDlg.instructionsHeading;
+  document.getElementById('helpInstructionsText1').textContent = T.helpDlg.instructionsText1;
+  document.getElementById('helpInstructionsText2').textContent = T.helpDlg.instructionsText2;
+  document.getElementById('helpInstructionsText3').textContent = T.helpDlg.instructionsText3;
+  document.getElementById('helpLearnMoreHeading').textContent = T.helpDlg.learnMoreHeading;
+  const wikiLink = document.getElementById('helpWikiLink');
+  wikiLink.href = T.helpDlg.wikiUrl;
+  wikiLink.textContent = T.helpDlg.wikiText;
+  document.getElementById('helpCloseBtn').textContent = T.helpDlg.closeBtn;
+  // Settings dialog
+  document.getElementById('settingsTitle').textContent = T.settingsDlg.title;
+  document.getElementById('settingsTotalPlayersLabel').textContent = T.settingsDlg.totalPlayers;
+  document.getElementById('settingsComputerLabel').textContent = T.settingsDlg.computer;
+  document.getElementById('settingsPlayerNamesLegend').textContent = T.settingsDlg.playerNamesLegend;
+  document.querySelectorAll('#setDlgNames label').forEach((label, i) => {
+    label.textContent = T.settingsDlg.playerLabel.replace('{0}', i + 1);
+  });
+  document.getElementById('setDlgSaveBtn').textContent = T.settingsDlg.save;
+  document.getElementById('settingsCancelBtn').textContent = T.settingsDlg.cancel;
+  // Winner dialog
+  document.getElementById('winnerTitle').textContent = T.winnerDlg.title;
+  document.getElementById('dlgPlayAgain').textContent = T.winnerDlg.playAgain;
+  document.getElementById('dlgClose').textContent = T.winnerDlg.close;
+  // Confirm dialog
+  document.getElementById('confirmTitle').textContent = T.confirmDlg.title;
+  document.getElementById('confirmMessage').textContent = T.confirmDlg.message;
+  document.getElementById('confirmYes').textContent = T.confirmDlg.yes;
+  document.getElementById('confirmNo').textContent = T.confirmDlg.no;
+};
+
 pydots.initVars = () => {
   // Get the style sheet
   const bodyStyles = document.body.style;
@@ -82,6 +128,7 @@ pydots.initVars = () => {
   pydots.dotgame.storage.level = GAME_SIZE;
   pydots.dotgame.storage.lines = INIT_LINES;
 
+  pydots.applyTranslations();
   pydots.initMenu();
   pydots.initSettingsDialog();
 
@@ -244,11 +291,11 @@ pydots.showHint = (evt) => {
     } else if (level === 2) {
       const half = data.half;
       const msg = half === 'center'
-        ? 'Your best move is near the center of the board.'
-        : `Look in the ${half} half of the board.`;
+        ? T.hintCenter
+        : T.hintHalf.replace('{0}', T.directions[half] || half);
       pydots.showToast(msg, rect.bottom, rect.left);
     } else {
-      pydots.showToast('Here is the best move!', rect.bottom, rect.left);
+      pydots.showToast(T.hintBest, rect.bottom, rect.left);
       pydots.highlightHintLine(data.line);
     }
   });
@@ -486,7 +533,7 @@ pydots.displayPlayerScore = (player, score) => {
 // Displays on main page
 pydots.displayScores = () => {
   const level = pydots.dotgame.storage.levelName;
-  document.getElementById('level').textContent = `Skill Level: ${level}`;
+  document.getElementById('level').textContent = T.skillLevel.replace('{0}', level);
   const numPlayers = pydots.dotgame.storage.numPlayers;
   for (let i = 1; i < 5; i++) {
     const row = document.getElementById(`row${i}`);

@@ -567,7 +567,7 @@ pydots.dotgame.getBoxNum = function(lineNum)
 pydots.dotgame.sanitizeString = function(str)
 {
     //From StackOverflow
-    str = str.replace(/[^a-zA-Z0-9áéíóúñüÁÉÍÓÚÑÜ \.,_-]/gm,"");
+    str = str.replace(/[^a-zA-Z0-9áéíóúñäöüÁÉÍÓÚÑÄÖÜß \.,_-]/gm,"");
     return str.trim();
 }
 
@@ -588,15 +588,15 @@ pydots.dotgame.winnerMsg = function()
             maxPlayer = i;
         } 
     } 
-    let msg = 'The score is tied!';
+    let msg = T.scoreTied;
     if (maxPlayer > 0) {
         let winner = pydots.dotgame.storage.getPlayerName(maxPlayer);
-        msg = `Winner is ${winner}!`
+        msg = T.winnerIs.replace('{0}', winner);
         if (pydots.dotgame.soloPlayer()) {
             if (maxPlayer == pydots.dotgame.storage.machinePlayer) {
-                msg = 'Give it another try!';
+                msg = T.tryAgain;
             } else {
-                msg = 'You Won!!!';
+                msg = T.youWon;
             }
         }
     }

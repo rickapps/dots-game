@@ -18,39 +18,33 @@
     <div id="wrapper">
         <dialog id="helpDlg">
             <form method="dialog">
-            <h2>How to Play Dots</h2>
+            <h2 id="helpTitle">How to Play Dots</h2>
             <article>
-                <h5>Objective:</h5>
-                <p>The player that completes the most squares wins the game.</p>
-                <h5>Instructions:</h5>
-                <p>Players take turns drawing horizontal or vertical lines that connect two adjacent dots. If a player draws a 
-                    line that completes a square of four adjacent dots, the player claims the square. But, the player must also
-                    draw an additional line to finish their turn. A player's turn ends only when the player draws a line that
-                    does not complete a square. 
-                </p>
-                <p>The game is over when all squares are claimed. The player with the most squares wins.</p>
-                <p>Play against the computer, or against another person. Your game is saved to your computer so you can return to 
-                    this website anytime to finish a game in progress.
-                </p>
-                <h5>Learn More:</h5>
-                <p><a href='https://en.wikipedia.org/wiki/Dots_and_boxes'>Wikipedia - Dots and Boxes</a></p>
+                <h5 id="helpObjectiveHeading">Objective:</h5>
+                <p id="helpObjectiveText">The player that completes the most squares wins the game.</p>
+                <h5 id="helpInstructionsHeading">Instructions:</h5>
+                <p id="helpInstructionsText1">Players take turns drawing horizontal or vertical lines that connect two adjacent dots. If a player draws a line that completes a square of four adjacent dots, the player claims the square. But, the player must also draw an additional line to finish their turn. A player's turn ends only when the player draws a line that does not complete a square.</p>
+                <p id="helpInstructionsText2">The game is over when all squares are claimed. The player with the most squares wins.</p>
+                <p id="helpInstructionsText3">Play against the computer, or against another person. Your game is saved to your computer so you can return to this website anytime to finish a game in progress.</p>
+                <h5 id="helpLearnMoreHeading">Learn More:</h5>
+                <p><a id="helpWikiLink" href='https://en.wikipedia.org/wiki/Dots_and_boxes'>Wikipedia - Dots and Boxes</a></p>
             </article>
             <div class="dialog-actions">
-                <button value="cancel">Return to Game</button>
+                <button id="helpCloseBtn" value="cancel">Return to Game</button>
             </div>
         </form>
         </dialog>
         <dialog id="settingDlg">
-            <h2>Game Settings</h2>
+            <h2 id="settingsTitle">Game Settings</h2>
             <form method="dialog">
-                <label for="setDlgNumPlayers">Total Players:</label>
+                <label id="settingsTotalPlayersLabel" for="setDlgNumPlayers">Total Players:</label>
                 <select id="setDlgNumPlayers" name="setDlgNumPlayers" title="How many are playing? (including the computer)">
                </select>
-               <label for="setDlgMachine">Computer:</label>
+               <label id="settingsComputerLabel" for="setDlgMachine">Computer:</label>
                <select id="setDlgMachine" name="setDlgMachine">
                </select>
                 <fieldset id="setDlgNames">
-                    <legend>Player Names</legend>
+                    <legend id="settingsPlayerNamesLegend">Player Names</legend>
                     <section>
                     <label for="player1">Player 1:</label>
                     <input type="text" name="player1" id="player1" maxlength="15"/>
@@ -70,26 +64,26 @@
                 </fieldset>
             <div class="dialog-actions">
                 <button id="setDlgSaveBtn" value="default">Save</button>
-                <button>Cancel</button>
+                <button id="settingsCancelBtn">Cancel</button>
             </div>
             </form>
         </dialog>
         <dialog id="winnerDlg">
             <form method="dialog">
-                <h2>Game Over</h2>
+                <h2 id="winnerTitle">Game Over</h2>
                 <article>
                 </article>
                 <button id="dlgPlayAgain" value="default">Play Again</button>
-                <button>Close</button>
+                <button id="dlgClose">Close</button>
                 </form>
             </dialog>
         <dialog id="confirmDlg">
             <form method="dialog">
-                <h2>End Current Game</h2>
-                <p>Do you want to end your current game?</p>
+                <h2 id="confirmTitle">End Current Game</h2>
+                <p id="confirmMessage">Do you want to end your current game?</p>
                 <div class="dialog-actions">
-                    <button value="confirm">Yes</button>
-                    <button value="cancel">No</button>
+                    <button id="confirmYes" value="confirm">Yes</button>
+                    <button id="confirmNo" value="cancel">No</button>
                 </div>
             </form>
         </dialog>
