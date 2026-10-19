@@ -287,7 +287,19 @@ pydots.showHint = (evt) => {
   const level = pydots.hintLevel;
   pydots.dotgame.getHint(data => {
     if (level === 1) {
-      pydots.showToast(data.hint, rect.bottom, rect.left);
+      let msg;
+      if (data.hintType === 'scoring') {
+        msg = T.hint1.scoring;
+      } else if (data.hintType === 'free') {
+        msg = data.hintCount === 1
+          ? T.hint1.freeOne
+          : T.hint1.freeMany.replace('{0}', data.hintCount);
+      } else {
+        msg = data.hintCount === 1
+          ? T.hint1.costOne
+          : T.hint1.costMany.replace('{0}', data.hintCount);
+      }
+      pydots.showToast(msg, rect.bottom, rect.left);
     } else if (level === 2) {
       const half = data.half;
       const msg = half === 'center'

@@ -195,7 +195,8 @@ def get_hint(size, lines):
 
     if scoring_line is not None:
         best_line = scoring_line
-        msg = "You have a scoring move!"
+        hint_type = 'scoring'
+        hint_count = 0
     else:
         # Count free moves (cost == 0) and track the min-cost move
         free_count = 0
@@ -215,17 +216,14 @@ def get_hint(size, lines):
 
         if free_count > 0:
             best_line = first_free
-            if free_count == 1:
-                msg = "You have one free move available."
-            else:
-                msg = f"You have {free_count} free moves available!"
+            hint_type = 'free'
+            hint_count = free_count
         else:
             best_line = min_cost_line
-            if min_cost is None:
-                min_cost = 0
-            msg = f"Your best move allows your opponent to complete {min_cost} square{'s' if min_cost != 1 else ''}."
+            hint_type = 'cost'
+            hint_count = min_cost if min_cost is not None else 0
 
-    return {'hint': msg, 'half': _get_level2_hint(size, best_line), 'line': best_line}
+    return {'hintType': hint_type, 'hintCount': hint_count, 'half': _get_level2_hint(size, best_line), 'line': best_line}
 
 
 # Main purpose is to indicate if a box color should
