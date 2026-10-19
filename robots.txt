@@ -1,9 +1,11 @@
 User-agent: *
 Allow: /
-Disallow: /reset/
-Disallow: /resume/
-Disallow: /verify/
-Disallow: /find/
 Disallow: /new/
+
+# /reset/, /resume/, /verify/, /find/ were indexed as duplicate pages
+# before this file existed. Temporarily left crawlable so Google can
+# recrawl, see the canonical tag pointing at "/", and drop them from
+# the index. Re-add Disallow rules for them once Search Console shows
+# the stale entries cleared.
 
 Sitemap: https://dotsgame.rickapps.com/sitemap.xml
