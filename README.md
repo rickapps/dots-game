@@ -39,11 +39,30 @@ For information on how to play the game, see: [https://en.wikipedia.org/wiki/Dot
             line: line#
         }
 
-5) Clear localStorage used by the game in the event of corruption or updates. Players are directed here in response to server errors. Once storage is cleared, a new game is started.
+5) Get a hint for the current player. Typically this is called when the player selects *Hint* from the menu. Returns a JSON object with data for all three hint levels:
+
+        POST /hint/
+        {
+            size: size,
+            lines: lines[]
+        }
+
+    Response:
+
+        {
+            hintType: 'scoring' | 'free' | 'cost',
+            hintCount: count,
+            half: 'top' | 'bottom' | 'left' | 'right' | 'center',
+            line: line#
+        }
+
+    The server picks a best move: a line that completes a box (**scoring**), otherwise a line that gives the opponent no box (**free**), otherwise the line that gives the opponent the fewest boxes (**cost**). *hintCount* is the number of free moves available for **free**, the number of boxes the opponent can complete for **cost**, and 0 for **scoring**. Level 1 hints describe *hintType* and *hintCount*; the client builds the message so it can be translated. Level 2 hints name the *half* of the board containing the best move. Level 3 hints highlight *line*.
+
+6) Clear localStorage used by the game in the event of corruption or updates. Players are directed here in response to server errors. Once storage is cleared, a new game is started.
 
         GET /reset/
 
-6) Normal entry-point to the game. If localStorage contains a game in progress, player is redirected to ***/resume/***. If no game is in progress, player is redirected to ***/new/***.
+7) Normal entry-point to the game. If localStorage contains a game in progress, player is redirected to ***/resume/***. If no game is in progress, player is redirected to ***/new/***.
 
         GET /
 

@@ -178,9 +178,10 @@ def _get_level2_hint(size, line):
 
 # Analyze the current board and return hint data for all three levels.
 # Returns a dict with keys:
-#   'hint'     - Level 1 message string
-#   'quadrant' - Level 2 quadrant string (e.g. 'top-left')
-#   'line'     - Level 3 exact best line index (int)
+#   'hintType'  - Level 1 hint kind: 'scoring', 'free', or 'cost'
+#   'hintCount' - Level 1 count: free moves ('free'), boxes conceded ('cost'), 0 ('scoring')
+#   'half'      - Level 2 board half: 'top', 'bottom', 'left', 'right', or 'center'
+#   'line'      - Level 3 exact best line index (int)
 # Priority: scoring move > free move (cost==0) > min-cost move.
 def get_hint(size, lines):
     game = gameboard.GameBoard(size, lines)
