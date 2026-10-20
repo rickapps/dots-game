@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 python main.py          # run locally with Flask dev server (debug=True)
 ```
 
-The live site (https://dotsgame.rickapps.com) is hosted on a Synology NAS; deployed files live at `~/NASDrive/vhosts/dotsgame` (a plain file copy, not a git checkout). `app.yaml` is a leftover from the old Google App Engine hosting and is no longer used. There are no tests and no build step.
+The live site (https://dotsgame.rickapps.com) is hosted on a Synology NAS; deployed files live at `~/NASDrive/vhosts/dotsgame` (a plain file copy, not a git checkout). (It was previously on Google App Engine; that config has been removed.) There are no tests and no build step.
 
 ## Architecture Overview
 
