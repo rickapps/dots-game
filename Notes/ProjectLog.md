@@ -45,3 +45,10 @@ events triggered by business logic.
 2. Need to restructure storage to serialize claimed squares. This is
 needed only so we can continue a game from one session to another.
 
+**2026-10-19 20:30:00**   
+Moved hosting from Google App Engine to my Synology NAS. The live site, https://dotsgame.rickapps.com,
+is served from ~/NASDrive/vhosts/dotsgame. To deploy, copy the app files (*.py, robots.txt, sitemap.xml,
+static/, templates/) from the latest commit into that folder; it is a plain copy, not a git checkout.
+The gcloud steps in the 2022-05-24 entry no longer apply. App Engine app (playdots.uc.r.appspot.com)
+is disabled, and app.yaml and .gcloudignore were removed from the repo.
+
