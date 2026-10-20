@@ -118,6 +118,10 @@ def get_hint():
 def robots():
     return send_from_directory(app.root_path, 'robots.txt')
 
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(app.static_folder, 'img/favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 @app.route("/sitemap.xml")
 def sitemap():
     return send_from_directory(app.root_path, 'sitemap.xml', mimetype='application/xml')
