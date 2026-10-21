@@ -34,6 +34,11 @@ def bad_request(error):
 def page_not_found(error):
     return render_template('error.html'), 404
 
+# GET on a POST-only route such as /new/ or /verify/.
+@app.errorhandler(405)
+def method_not_allowed(error):
+    return render_template('error.html'), 405
+
 @app.errorhandler(500)
 def internal_error(error):
     return render_template('error.html'), 500
@@ -131,11 +136,9 @@ def sitemap():
 def reset_values ():
     return render_template('startup.html', reset=True)
 
-# A catch-all for unknown requests. path is here for future use.
-# This is normal entry-point to the game.
-@app.route("/", defaults={'path': ''})
-@app.route('/<path:path>')
-def home(path):
+# Normal entry-point to the game. Unknown paths get a real 404.
+@app.route("/")
+def home():
     return render_template('startup.html', reset=False)
 
 if __name__ == "__main__":
