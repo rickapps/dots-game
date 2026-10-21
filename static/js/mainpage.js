@@ -118,6 +118,9 @@ pydots.applyTranslations = () => {
   document.getElementById('confirmMessage').textContent = T.confirmDlg.message;
   document.getElementById('confirmYes').textContent = T.confirmDlg.yes;
   document.getElementById('confirmNo').textContent = T.confirmDlg.no;
+  // Footer
+  document.querySelector('footer .credit').textContent = T.footer.credit;
+  document.querySelector('footer .source').textContent = T.footer.source;
 };
 
 pydots.initVars = () => {

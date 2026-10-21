@@ -5,9 +5,20 @@ var pydots = pydots || {};
 pydots.startup = pydots.startup || {};
 
 window.addEventListener("DOMContentLoaded", (event) => {
+    pydots.startup.applyTranslations();
     window.addEventListener("load", pydots.startup.gameSetup);
 });
- 
+
+pydots.startup.applyTranslations = function () {
+    document.documentElement.lang = LOCALE;
+    document.getElementById('startupHeading').textContent = T.startup.heading;
+    document.getElementById('startupIntro').textContent = T.startup.intro;
+    document.getElementById('startupStartBtn').textContent = T.startup.startBtn;
+    // Footer
+    document.querySelector('footer .credit').textContent = T.footer.credit;
+    document.querySelector('footer .source').textContent = T.footer.source;
+};
+
 pydots.startup.gameSetup = function () {
     if (RESET_STORAGE)
     {
