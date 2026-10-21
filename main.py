@@ -57,8 +57,12 @@ def new_game():
 
 # Resume a game using values from local storage
 # The post is done from javascript.
-@app.route("/resume/", methods = ['POST'])
+@app.route("/resume/", methods = ['GET', 'POST'])
 def resume_game():
+    # mainpage.js rewrites the URL to /resume/, so a browser refresh
+    # arrives here as a GET. The startup page re-posts saved state.
+    if request.method == 'GET':
+        return render_template('startup.html', reset=False)
     try:
         size = int(request.form['size'])
         # Arrays arrive as JSON-stringified values from localStorage

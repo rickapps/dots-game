@@ -4,7 +4,7 @@ Disallow: /new/
 
 # /reset/, /resume/, /verify/, /find/ were indexed as duplicate pages
 # before this file existed. Left crawlable so Google can recrawl and
-# drop them: /resume/, /verify/, /find/ now return 405 on GET, and
-# /reset/ carries a canonical tag pointing at "/".
+# drop them: /verify/, /find/ now return 405 on GET, and /resume/
+# and /reset/ carry a canonical tag pointing at "/".
 
 Sitemap: https://dotsgame.rickapps.com/sitemap.xml
