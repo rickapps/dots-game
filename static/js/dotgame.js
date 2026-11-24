@@ -291,6 +291,9 @@ class GameStorage {
 
     pushMove(move) {
         let history = this.history;
+        // The first move of a fresh game marks its start (resumed games already have history)
+        if (history.length === 0)
+            pydots.dotgame.trackGameEvent('game_start');
         // Add the move to our history
         history.push(move);
         this.history = history;
@@ -571,7 +574,8 @@ pydots.dotgame.sanitizeString = function(str)
     return str.trim();
 }
 
-pydots.dotgame.winnerMsg = function()
+// Returns the winning player number, or 0 if the top score is tied
+pydots.dotgame.winningPlayer = function()
 {
     let numPlayers = pydots.dotgame.storage.numPlayers;
     let score = 0;
@@ -588,6 +592,12 @@ pydots.dotgame.winnerMsg = function()
             maxPlayer = i;
         } 
     } 
+    return maxPlayer;
+}
+
+pydots.dotgame.winnerMsg = function()
+{
+    let maxPlayer = pydots.dotgame.winningPlayer();
     let msg = T.scoreTied;
     if (maxPlayer > 0) {
         let winner = pydots.dotgame.storage.getPlayerName(maxPlayer);
@@ -601,6 +611,31 @@ pydots.dotgame.winnerMsg = function()
         }
     }
     return msg;
+}
+
+// Send a Google Analytics event describing the current game.
+// Never include player names - they are user-entered text.
+pydots.dotgame.trackGameEvent = function(name)
+{
+    if (typeof gtag !== 'function')
+        return;
+    let storage = pydots.dotgame.storage;
+    let machine = Number(storage.machinePlayer);
+    let params = {
+        board_size: Number(storage.level),
+        num_players: Number(storage.numPlayers),
+        machine_playing: machine > 0
+    };
+    if (name === 'game_complete') {
+        let winner = pydots.dotgame.winningPlayer();
+        if (winner == 0)
+            params.outcome = 'tie';
+        else if (winner == machine)
+            params.outcome = 'machine_won';
+        else
+            params.outcome = 'human_won';
+    }
+    gtag('event', name, params);
 }
 
 pydots.dotgame.scoreList = function()

@@ -468,6 +468,7 @@ pydots.endGame = () => {
     list.appendChild(item);
   }
   article.appendChild(list);
+  pydots.dotgame.trackGameEvent('game_complete');
   pydots.dotgame.storage.clearGameValues();
   dlg.showModal();
 };
